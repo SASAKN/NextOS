@@ -16,7 +16,32 @@
 #define _MACHINE_X64    1
 #define _MACHINE_X86    2
 
-/*Boot Systems*/
+/* Non-EFI_PC definitions are not currently used */
+
+/* Boot Systems */
+#define _EFI_PC         1
+#define _BIOS_PC        2
+
+/* CPU Chips */
+#define _CHIP_INTEL 1
+
+/* CPU Chip */
+#if (_TOYX_MACHINE == _MACHINE_X64)
+#define _TOYX_CHIP      _CHIP_INTEL
+#endif
+
+/* Errors */
+#ifndef _TOYX_MACHINE
+error "In <toyx/machine.h> please define _TOYX_MACHINE"
+#endif
+
+#ifndef _TOYX_CHIP
+error "In <toyx/machine.h> please define _TOYX_CHIP"
+#endif
+
+#if (_TOYX_MACHINE == 0)
+error "_TOYX_MACHINE has incorrect value (0)"
+#endif
 
 #endif
 
