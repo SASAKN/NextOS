@@ -6,6 +6,10 @@
 #define OS_RELEASE "1" /* OS Version */
 #define OS_VERSION "1.0.0" /* OS Release */
 
+/* Machine Definitions */
 #include <toyx/machine.h>
 
-#endif
+
+
+
+#endif /* _CONFIG_H */
