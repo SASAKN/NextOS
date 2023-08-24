@@ -10,11 +10,13 @@
 /*Default Toyx Boot Systems*/
 #define _TOYX_BOOT_SYSTEM   _EFI_PC
 
+/* Non-X64_PC definitions are not currently used */
+
 /* CPU Architectures */
-#define _MACHINE_X64
-#define _MACHINE_X86
-#define _MACHINE_RISCV
-#define _MACHINE_ARM
+#define _MACHINE_X64    1
+#define _MACHINE_X86    2
+
+/*Boot Systems*/
 
 #endif
 
