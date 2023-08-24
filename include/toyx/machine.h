@@ -1,7 +1,27 @@
+/*===========================================================================*
+ *		sys_config.h		     *
+ *===========================================================================*/
+#ifndef _TOYX_SYS_CONFIG_H
+#define _TOYX_SYS_CONFIG_H 1
+
+/* Default Toyx CPU */
+#define _TOYX_MACHINE   _MACHINE_X64
+
+/*Default Toyx Boot Systems*/
+#define _TOYX_BOOT_SYSTEM   _EFI_PC
+
+/* CPU Architectures */
+#define _MACHINE_X64
+#define _MACHINE_X86
+#define _MACHINE_RISCV
+#define _MACHINE_ARM
+
+#endif
+
+/*===========================================================================*
+ *		machine.h	     *
+ *===========================================================================*/
 /* Machine Definitions */
-#ifndef
-
-
 #ifndef _TOYX_MACHINE_H
 #define _TOYX_MACHINE_H
 
@@ -14,9 +34,7 @@
 
 /* CPU Definitions */
 #define X64_PC      _MACHINE_X64    
-#define X86_PC      _MACHINE_X86 
-#define RISCV_PC    _MACHINE_RISCV 
-#define ARM_PC      _MACHINE_ARM    
+#define X86_PC      _MACHINE_X86
 
 /* Non-EFI_PC definitions are not currently used */
 
