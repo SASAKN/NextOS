@@ -1,5 +1,6 @@
-#ifndef _NEOX_SYS_CONFIG_H
-#define _NEOX_SYS_CONFIG_H 1
+/* Machine Definitions */
+#ifndef _NEOX_MACHINE_H
+#define _NEOX_MACHINE_H
 
 /* Default NEOX CPU */
 #define _NEOX_MACHINE   _MACHINE_X64
@@ -39,15 +40,6 @@ error "In <neox/machine.h> please define _NEOX_CHIP"
 #if (_NEOX_MACHINE == 0)
 error "_NEOX_MACHINE has incorrect value (0)"
 #endif
-
-#endif
-
-/*===========================================================================*
- *		machine.h	     *
- *===========================================================================*/
-/* Machine Definitions */
-#ifndef _NEOX_MACHINE_H
-#define _NEOX_MACHINE_H
 
 #define MACHINE     _NEOX_MACHINE
 
