@@ -29,11 +29,11 @@
 
 /* Errors */
 #ifndef _NEOX_MACHINE
-error "In <NEOX/machine.h> please define _NEOX_MACHINE"
+error "In <neox/machine.h> please define _NEOX_MACHINE"
 #endif
 
 #ifndef _NEOX_CHIP
-error "In <NEOX/machine.h> please define _NEOX_CHIP"
+error "In <neox/machine.h> please define _NEOX_CHIP"
 #endif
 
 #if (_NEOX_MACHINE == 0)
