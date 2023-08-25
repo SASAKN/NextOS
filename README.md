@@ -1,2 +1,44 @@
-# my-operating-system
-The micro kernel operating system like Unix, Linux and Minix
+# Neox
+
+Neox is a operating system like Unix.
+
+## Kernel
+
+カーネルフォルダーには、アーキテクチャー非依存のファイルがあります。
+
+## Arch
+
+アーキテクチャーフォルダーには、アーキテクチャー依存があるファイルがあります。
+
+## Drivers
+
+OSの第二階層に当たるドライバーのためのソースがあるディレクトリーです。
+
+## Syscall
+
+システムコールの中でも、カーネルコールの実装のソースコードが置いてあるディレクトリーです。
+
+## Setup
+
+Linuxの中では、"Init"と呼ばれているシステムのようなものです。
+
+## Servers
+
+マイクロカーネルで実装しているため、ファイルシステムのソースコードなどは、ここに置くことになります。
+
+## Bin
+
+Catなどのものが置いてあります
+
+## Neox Boot Loader
+
+EDK2で書かれているNeoxのブートローダーです。
+ELFで出力されたファイルを開いて、OSを起動させています。
+
+## Include
+
+"#include<neox/config.h>"のように、Includeで、カーネルなどから読み出されるファイルが置いてあります。
+
+## 以上
+
+これ以外のファイルは、ソースコードを読んで自分で頑張って読み解いてください。
