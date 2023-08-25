@@ -10,9 +10,4 @@
 /* Machine Definitions */
 #include <neox/machine.h>
 
-/* Settings */
-
-
-
-
 #endif /* _CONFIG_H */
