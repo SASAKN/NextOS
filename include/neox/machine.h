@@ -1,14 +1,14 @@
 /*===========================================================================*
  *		sys_config.h		     *
  *===========================================================================*/
-#ifndef _TOYX_SYS_CONFIG_H
-#define _TOYX_SYS_CONFIG_H 1
+#ifndef _NEOX_SYS_CONFIG_H
+#define _NEOX_SYS_CONFIG_H 1
 
-/* Default Toyx CPU */
-#define _TOYX_MACHINE   _MACHINE_X64
+/* Default NEOX CPU */
+#define _NEOX_MACHINE   _MACHINE_X64
 
-/*Default Toyx Boot Systems*/
-#define _TOYX_BOOT_SYSTEM   _EFI_PC
+/*Default NEOX Boot Systems*/
+#define _NEOX_BOOT_SYSTEM   _EFI_PC
 
 /* Non-X64_PC definitions are not currently used */
 
@@ -26,21 +26,21 @@
 #define _CHIP_INTEL 1
 
 /* CPU Chip */
-#if (_TOYX_MACHINE == _MACHINE_X64)
-#define _TOYX_CHIP      _CHIP_INTEL
+#if (_NEOX_MACHINE == _MACHINE_X64)
+#define _NEOX_CHIP      _CHIP_INTEL
 #endif
 
 /* Errors */
-#ifndef _TOYX_MACHINE
-error "In <toyx/machine.h> please define _TOYX_MACHINE"
+#ifndef _NEOX_MACHINE
+error "In <NEOX/machine.h> please define _NEOX_MACHINE"
 #endif
 
-#ifndef _TOYX_CHIP
-error "In <toyx/machine.h> please define _TOYX_CHIP"
+#ifndef _NEOX_CHIP
+error "In <NEOX/machine.h> please define _NEOX_CHIP"
 #endif
 
-#if (_TOYX_MACHINE == 0)
-error "_TOYX_MACHINE has incorrect value (0)"
+#if (_NEOX_MACHINE == 0)
+error "_NEOX_MACHINE has incorrect value (0)"
 #endif
 
 #endif
@@ -49,10 +49,10 @@ error "_TOYX_MACHINE has incorrect value (0)"
  *		machine.h	     *
  *===========================================================================*/
 /* Machine Definitions */
-#ifndef _TOYX_MACHINE_H
-#define _TOYX_MACHINE_H
+#ifndef _NEOX_MACHINE_H
+#define _NEOX_MACHINE_H
 
-#define MACHINE     _TOYX_MACHINE
+#define MACHINE     _NEOX_MACHINE
 
 
 /* CPU Architectures */
@@ -71,4 +71,4 @@ error "_TOYX_MACHINE has incorrect value (0)"
 
 
 
-#endif /* _TOYX_MACHINE_H */
+#endif /* _NEOX_MACHINE_H */
