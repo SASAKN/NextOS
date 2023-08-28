@@ -4,8 +4,4 @@
 /* Kernel SystemCall */ 
 #define _NEOX_CALL  500 /* Calls above this value will block. */
 
-#if (_NEOX_CALL > 500) /* Kernel Panic */
-
-#endif
-
 #endif /* _NEOX_SYSCALL_H */
