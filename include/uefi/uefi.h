@@ -9,6 +9,12 @@ typedef uint64_t Status;  // Status の再定義
 typedef uint64_t AllocateType;  // AllocateType の再定義
 typedef uint64_t TimerDelay; 
 typedef uint64_t TimerTick;  
+typedef struct TableHeader TableHeader;
+typedef struct SimpleTextInputProtocol SimpleTextInputProtocol;
+typedef struct SimpleTextOutputProtocol SimpleTextOutputProtocol;
+typedef struct RuntimeServices RuntimeServices;
+typedef struct BootServices BootServices;
+typedef struct ConfigurationTable ConfigurationTable;
 
 typedef enum{
     kFalse = 0,
@@ -210,8 +216,40 @@ typedef struct {
     uint64_t (*FreePool)(void* Buffer);
     uint64_t (*CreateEvent)(unsigned int Type, uint64_t NotifyTpl, void (*NotifyFunction)(void* Event, void* Context), void* NotifyContext, void* Event);
     uint64_t (*SetTimer)(void* Event, TimerDelay, TimerTick);
-    uint64_t ()
+    uint64_t (*WaitForEvent)(uint64_t NumberOfEvents, void** Event, uint64_t* Index);
+    uint64_t _buf4_2[3];
+    uint64_t _buf_5[9];
+    uint64_t (*LoadImage)(unsigned char BootPolicy, void* ParentImageHandle, DevicePathProtocol*, void* SourceBuffer, uint64_t SourceSize, void** ImageHandle);
+    uint64_t (*StartImage) (void* ImageHandle, uint64_t* ExitDataSize, unsigned short** ExitData);
+    uint64_t _buf6[2];
+    Status (*ExitBootServices)(void* image_handle, UINTN map_key);
+    uint64_t _buf7[2];
+    uint64_t (*SetWatchdogTimer)(uint64_t Timeout, uint64_t WatchdogCode, uint64_t DataSize, unsigned short* WarchdogData);
+    uint64_t _buf8[2];
+    uint64_t (*OpenProtocol)(void* Handle, GUID* Protocol, void** Interface, void* AgentHandle, void* ControllerHandle, unsigned int Attributes);
+    uint64_t _buf9[2];
+    uint64_t _buf10_2[2];
+    uint64_t _buf11;
+    void (*CopyMem)(void* Destination, void* Source, uint64_t Length);
+    void (*SetMem)(void* Buffer, uint64_t Size, unsigned char Value);
+    uint64_t _buf12;
 } BootServices;
+
+typedef struct {
+    TableHeader header;
+    wchar_t* firmwware_vendor;
+    uint32_t firmwware_revision;
+    Handle console_in_handle;
+    SimpleTextInputProtocol* con_in;
+    Handle console_out_handle;
+    SimpleTextOutputProtocol con_out;
+    Handle standard_error_handle;
+    SimpleTextOutputProtocol* std_err;
+    RuntimeServices* runtime_services;
+    BootServices* boot_services;
+    UINTN number_of_table_entries;
+    ConfigurationTable* configuration_table;
+} SystemTable;
 
 
 
