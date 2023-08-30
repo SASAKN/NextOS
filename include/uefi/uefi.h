@@ -394,6 +394,4 @@ GraphicsOutputProtocol* graphics_output_protocol_;
 SimpleFileSystemProtocol* simple_fs_;
 FileProtocol* root_file_;
 
-/* Types Structure */
-
 #endif
