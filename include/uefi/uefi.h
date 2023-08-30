@@ -277,6 +277,42 @@ typedef struct {
     } * mode;
 } GraphicsOutputProtocol;
 
+typedef struct {
+    int RelactiveMovementX;
+    int RelactiveMovementY;
+    int RelactiveMovementZ;
+    unsigned char LeftButton;
+    unsigned char RightButton;
+} _SIMPLE_POINTER_STATE;
+
+typedef struct {
+    uint64_t (*Reset)(_SIMPLE_POINTER_PROTOCOL* This, unsigned char ExtendedVertification);
+    uint64_t (*GetState)(_SIMPLE_POINTER_PROTOCOL* This, _SIMPLE_POINTER_STATE* State);
+    void* WaitForInput;
+} _SIMPLE_POINTER_PROTOCOL;
+
+typedef struct {
+    unsigned int KeyShiftState;
+    unsigned char KeyToggleState;
+} KeyState;
+
+typedef struct {
+    struct InputKey Key;
+    struct KeyState KeyState;
+} _KEY_DATA;
+
+typedef struct {
+    uint64_t (*Reset)(_SIMPLE_TEXT_INPUT_EX_PROTOCOL* This, unsigned char ExtendedVertification);
+    uint64_t (*ReadKeyStrokeEx)(_SIMPLE_TEXT_INPUT_EX_PROTOCOL* This, _KEY_DATA* KeyData);
+    void* WaitForKeyEx;
+    uint64_t (*SetState)(_SIMPLE_TEXT_INPUT_EX_PROTOCOL* This, unsigned char* KeyToggleState);
+    uint64_t (*RegisterKeyNotify)(_SIMPLE_TEXT_INPUT_EX_PROTOCOL* This, _KEY_DATA* KeyData, uint64_t (*KeyNotificationFunction)(_KEY_DATA* KeyData), void** NotifyHandle);
+    uint64_t (*UnregisterKeyNotify)(_SIMPLE_TEXT_INPUT_EX_PROTOCOL* This, void* NotificationHandle);
+} _SIMPLE_TEXT_INPUT_EX_PROTOCOL;
+
+
+
+
 
 
 
