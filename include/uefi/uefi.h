@@ -310,14 +310,89 @@ typedef struct {
     uint64_t (*UnregisterKeyNotify)(_SIMPLE_TEXT_INPUT_EX_PROTOCOL* This, void* NotificationHandle);
 } _SIMPLE_TEXT_INPUT_EX_PROTOCOL;
 
+typedef struct {
+    unsigned int Revision;
+    void* ParentHandle;
+    SystemTable* SystemTable;
+    void* DeviceHandle;
+    _DEVICE_PATH_PROTOCOL* FilePath;
+    void* Reserved;
+    unsigned int LoadOptionsSize;
+    void* LoadOptions;
+    void* ImageBase;
+    uint64_t ImageSize;
+    MemoryType ImageCodeType;
+    MemoryType ImageDataType;
+    uint64_t (*Unload)(void* ImageHandle);
+} _LOADED_IMAGE_PROTOCOL;
 
+typedef struct {
+    uint64_t _buf;
+    unsigned short* (*ConvertDevicePathToText)(
+        const _DEVICE_PATH_PROTOCOL* DeviceNode,
+        unsigned char DisplayOnly,
+        unsigned char AllowShortcuts);
+} _DEVICE_PATH_TO_TEXT_PROTOCOL;
 
+typedef struct {
+    _DEVICE_PATH_PROTOCOL* (*ConvertTextToDeviceNode)(const unsigned short* TextDeviceNode);
+    _DEVICE_PATH_PROTOCOL* (*ConvertTextToDevicePath)(const unsigned short* TextDisplayPath);
+} _DEVICE_PATH_FROM_TEXT_PROTOCOL;
 
+typedef struct {
+    uint64_t _buf[3];
+    _DEVICE_PATH_PROTOCOL* (*AppendDeviceNode)(
+        const _DEVICE_PATH_PROTOCOL* DevicePath,
+        const _DEVICE_PATH_PROTOCOL* DeviceNode);
+} _DEVICE_PATH_UTILITIES_PROTOCOL;
 
+typedef struct {
+    UINTN key;
+    UINTN bytes_used;
+    UINTN descriptor_size;
+    uint8_t buf[0x8000];
+} MemoryMap;
 
+void MemoryMap_Init(MemoryMap* map);
+void MemoryMap_Print(const MemoryMap* map);
+int MemoryMap_GetNumberOfEntries(const MemoryMap* map);
+const MemoryDescriptor* MemoryMap_GetDescriptor(const MemoryMap* map, int index);
+UINTN MemoryMap_GetKey(const MemoryMap* map);
 
+void MemoryMap_Init(MemoryMap* map) {
+};
 
+void MemoryMap_Print(const MemoryMap* map) {
+};
 
+int MemoryMap_GetNumberOfEntries(const MemoryMap* map) {
+    return map->bytes_used / map->descriptor_size;
+};
+
+const MemoryDescriptor* MemoryMap_GetDescriptor(const MemoryMap* map, int index) {
+    return (const MemoryDescriptor*)&map->buf[index * map->descriptor_size];
+};
+
+UINTN MemoryMap_GetKey(const MemoryMap* map) {
+    // キーを取得する
+    return map->key;
+};
+
+void ClearScreen(void);
+void PutWChar(wchar_t c);
+wchar_t GetChar(void);
+void* GetConfigurationTableByUUID(const GUID* guid);
+void GetMemoryMapAndExitBootServices(Handle image_handle, MemoryMap* map);
+EFI_FileProtocol* OpenFile(const wchar_t* path);
+void ReadFileInfo(FileProtocol* file, FileInfo* info);
+void* AllocatePages(UINTN pages);
+void Init(SystemTable* system_table);
+const GraphicsOutputProtocol_ModeInfo* GetGraphicsModeInfo(void);
+
+SystemTable* system_table_;
+GraphicsOutputProtocol* graphics_output_protocol_;
+SimpleFileSystemProtocol* simple_fs_;
+FileProtocol* root_file_;
 
 /* Types Structure */
 
