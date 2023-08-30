@@ -5,10 +5,6 @@
 /* Defines */
 typedef uint64_t UINTN;
 typedef void* Handle;
-typedef uint64_t Status;  // Status の再定義
-typedef uint64_t AllocateType;  // AllocateType の再定義
-typedef uint64_t TimerDelay; 
-typedef uint64_t TimerTick;
 
 typedef enum{
     kFalse = 0,
