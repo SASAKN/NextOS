@@ -8,13 +8,7 @@ typedef void* Handle;
 typedef uint64_t Status;  // Status の再定義
 typedef uint64_t AllocateType;  // AllocateType の再定義
 typedef uint64_t TimerDelay; 
-typedef uint64_t TimerTick;  
-typedef struct TableHeader TableHeader;
-typedef struct SimpleTextInputProtocol SimpleTextInputProtocol;
-typedef struct SimpleTextOutputProtocol SimpleTextOutputProtocol;
-typedef struct RuntimeServices RuntimeServices;
-typedef struct BootServices BootServices;
-typedef struct ConfigurationTable ConfigurationTable;
+typedef uint64_t TimerTick;
 
 typedef enum{
     kFalse = 0,
@@ -250,6 +244,38 @@ typedef struct {
     UINTN number_of_table_entries;
     ConfigurationTable* configuration_table;
 } SystemTable;
+
+typedef enum {
+    kPixelRedGreenBlueReserved8BitPerColor,
+    kPixelBlueGreenRedReserved8BitPerColor,
+    kPixelBitMask,
+    kPixelBltOnly,
+    kPixelFormatMax
+} _GRAPHICS_PIXEL_FORMAT;
+
+typedef struct {
+    uint64_t _buf[3];
+    struct ModeInfo {
+        uint32_t max_mode;
+        uint32_t mode;
+        struct {
+            uint32_t version;
+            uint32_t horizontal_resolution;
+            uint32_t vertical_resolution;
+            uint32_t pixel_format;
+            struct {
+                uint32_t red_mask;
+                uint32_t green_mask;
+                uint32_t blue_mask;
+                uint32_t reserved_mask;
+            } pixel_info;
+            uint32_t pixels_per_scan_line;
+        } * info;
+        UINTN size_of_info;
+        void* frame_buffer_base;
+        UINTN frame_buffer_size;
+    } * mode;
+} GraphicsOutputProtocol;
 
 
 
