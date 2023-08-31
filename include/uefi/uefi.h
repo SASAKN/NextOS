@@ -127,7 +127,13 @@ typedef struct {
             struct EFI_INPUT_KEY *key);
         void *WaitForKey;  
     } *ConIn;
-
+    unsigned long long _buf2;
+    struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
+        unsigned long long _buf;
+        unsigned long long (*OutpuutString)(
+            struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
+            unsigned long long *String);
+    }
 
 } EFI_SYSTEM_TABLE;
 
