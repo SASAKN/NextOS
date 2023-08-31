@@ -1,6 +1,9 @@
 #ifndef _UEFI_H
 #define _UEFI_H
 
+//Always First
+#include <neox/types.h>
+
 //Don't Need Defines
 #define EFI_BLACK	0x00
 #define EFI_BLUE	0x01
@@ -65,19 +68,19 @@ typedef struct {
 
 // Need Defines
 
-struct EFI_INPUT_KEY{
+typedef struct{
     unsigned short ScanCode;
     unsigned short UnicodeChar;
-};
+} EFI_INPUT_KEY;
 
-struct EFI_GUID {
+typedef struct{
     unsigned int Data1;
     unsigned short Data2;
     unsigned short Data3;
     unsigned char Data4[8];
-};
+} EFI_GUID;
 
-enum EFI_MEMORY_TYPE {
+ typedef enum {
     EfiReservedMemoryType,
     EfiLoaderCode,
     EfiLoaderData,
@@ -88,8 +91,45 @@ enum EFI_MEMORY_TYPE {
     EfiConventionalMemory,
     EfiUnusableMemory,
     EfiACPIReclaim
-}
-ty
+} EFI_MEMORY_TYPE;
+
+typedef enum {
+    AllHandles,
+    ByRegisterNotify,
+    ByProtocol
+} EFI_LOCATE_SEARCH_TYPE;
+
+typedef enum {
+    EfiResetCold,
+    EfiResetWarm,
+    EfiResetShutdown,
+    EfiResetPlatformSpecific
+} EFI_RESET_TYPE;
+
+typedef enum {
+    TimerCancel,
+    TimerPeriodic,
+    TimerRelactive
+} EFI_TIMER_DELAY;
+
+typedef struct {
+    unsigned char Type;
+    unsigned char SubType;
+    unsigned char Length[2];
+} EFI_DEVICE_PATH_PROTOCOL;
+
+typedef struct {
+    char _buf1[44];
+    struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL{
+        unsigned long long _buf;
+        unsigned long long (*ReadKeyStroke)(
+            struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This,
+            struct EFI_INPUT_KEY *key);
+        void *WaitForKey;  
+    } *ConIn;
+
+
+} EFI_SYSTEM_TABLE;
 
 
 
