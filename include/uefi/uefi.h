@@ -8,7 +8,10 @@
 #define EFI_FILE_READ_ONLY 0x0000000000000001
 
 // Need
+#define MEDIA_DEVICE_PATH 0x04
+#define MEDIA_FILEPATH_DP 0x04
 
+#define END
 
 
 
