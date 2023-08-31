@@ -58,6 +58,11 @@
 
 #define EFI_SC_ESC	0x0017
 
+typedef struct {
+    kFalse = 0,
+    kTrue = 1
+} Boolean;
+
 // Need Defines
 
 struct EFI_INPUT_KEY{
@@ -78,7 +83,11 @@ enum EFI_MEMORY_TYPE {
     EfiLoaderData,
     EfiBootServicesCode,
     EfiBootServicesData,
-    
+    EfiRuntimeServicesCode,
+    EfiRuntimeServicesData,
+    EfiConventionalMemory,
+    EfiUnusableMemory,
+    EfiACPIReclaim
 }
 
 

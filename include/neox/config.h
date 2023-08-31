@@ -8,6 +8,7 @@
 #define OS_VERSION "1.0.0" //OS Release
 #define OS_DEVELOPER "SASAKEN" //OS Developer
 #define OS_EDITION "DEV" //OS Editions (DEV, NONE, RELEASE)
+#define OS_PLATFORM "ALL" //OS PLATFORMS (UEFI_X64, ALL)
 
 
 /* Machine Definitions */
