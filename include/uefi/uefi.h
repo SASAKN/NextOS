@@ -89,9 +89,7 @@ enum EFI_MEMORY_TYPE {
     EfiUnusableMemory,
     EfiACPIReclaim
 }
-
-
-#define END
+ty
 
 
 
