@@ -370,7 +370,6 @@ const MemoryDescriptor* MemoryMap_GetDescriptor(const MemoryMap* map, int index)
 };
 
 UINTN MemoryMap_GetKey(const MemoryMap* map) {
-    // キーを取得する
     return map->key;
 };
 
