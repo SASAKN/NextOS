@@ -12,9 +12,4 @@ typedef unsigned int            uint16;
 
 
 
-//Int Types
-typedef signed int              sint16;
-typedef signed long int 
-
-
 #endif
