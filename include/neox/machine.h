@@ -58,6 +58,4 @@ error "_NEOX_MACHINE has incorrect value (0)"
 #define EFI_PC      _EFI_PC     /* Supported UEFI Computer */
 #define BIOS_PC     _BIOS_PC    /* Supported BIOS Computer */
 
-
-
 #endif /* _NEOX_MACHINE_H */
