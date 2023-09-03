@@ -6,11 +6,9 @@
 
 /* IN OUT */
 #ifndef IN
-
 #define IN
 #define OUT
 #define OPTIONAL
-
 #endif
 
 /* EFIAPI */
@@ -23,9 +21,8 @@
   { 0xFEDF8E0C, 0xE147, 0x11E3,\
   { 0x99, 0x03, 0xB8, 0xE8, 0x56, 0x2C, 0xBA, 0xFA } }
 
-
 /* Boolean */
-typedef unsigned char Boolean;
+typedef unsigned char BOOLEAN;
 
 /* INTN */
 typedef signed long INTN;
@@ -72,7 +69,6 @@ typedef struct {
     UINT16 UnicodeChar;
 } EFI_INPUT_KEY;
 
-
 /* EFI_KEY_OPTION */
 typedef struct {
   EFI_BOOT_KEY_DATA         KeyData;
@@ -99,7 +95,20 @@ typedef union {
 /* EFI_MEMORY_TYPE */
 typedef enum {
     EfiReservedMemoryType,
-    EfiLoaderCode
+    EfiLoaderCode,
+    EfiLoaderData,
+    EfiBootServicesCode,
+    EfiBootServicesData,
+    EfiRuntimeServicesCode,
+    EfiRuntimeServicesData,
+    EfiConventionalMemory,
+    EfiUnusableMemory,
+    EfiACPIReclaimMemory,
+    EfiACPIMemoryNVS,
+    EfiMemoryMappedIO,
+    EfiMemoryMappedIOPortSpace,
+    EfiPalCode,
+    EfiMaxMemoryType
 } EFI_MEMORY_TYPE;
 
 
@@ -110,6 +119,39 @@ typedef struct {
     UINT16 Data3;
     UINT8 Data4[8];
 } EFI_GUID; 
+
+/* EFI_TIMER_DELAY */
+typedef enum {
+    TimerCancel,
+    TimerPeriodic,
+    TimerRelactive
+} EFI_TIMER_DELAY;
+
+/* EFI_RESET_TYPE */
+typedef enum {
+    EfiResetCold,
+    EfiResetWarm,
+    EfiResetShutdown,
+    EfiResetPlatformSpecific
+} EFI_RESET_TYPE;
+
+/* EFI_DEVICE_PATH_PROTOCOL */
+typedef struct {
+    UINT8 Type;
+    UINT8 SubType;
+    UINT8 Length[2];
+} EFI_DEVICE_PATH_PROTOCOL;
+
+/* EFI_MEMORY_DESCRIPTOR */
+typedef struct {
+    UINT32 Type;
+    EFI_STATUS PhysicalStart;
+    EFI_STATUS VirtualStart;
+    EFI_STATUS NumberOfPages;
+    EFI_STATUS Attribute;
+} EFI_MEMORY_DESCRIPTOR;
+
+
 
 /* EFI_STATUS */
 typedef unsigned long long EFI_STATUS;
