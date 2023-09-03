@@ -2,14 +2,12 @@
 #define _TYPES_H
 
 //Char Types
-typedef unsigned char           uchar; 
-typedef signed char             schar;
+typedef unsigned char           uchar_t; 
+typedef signed char             char_t;
 
 //Int Types
-typedef unsigned long long int  uint64;
-typedef unsigned long int       uint32;
-typedef unsigned int            uint16;
-typedef unsigned short          uint8;
+typedef signed long             int64_t;
+typedef unsigned long           uint64_t;
 
 
 
