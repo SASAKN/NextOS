@@ -3,6 +3,7 @@
 
 #include <neox/types.h>
 #include "../arch.h"
+#include "guid.h"
 
 /* IN OUT */
 #ifndef IN
@@ -17,13 +18,6 @@
 #endif
 
 /* GUID */
-#define EFI_BOOT_MANAGER_POLICY_PROTOCOL_GUID              \
-    {                                                      \
-        0xFEDF8E0C, 0xE147, 0x11E3,                        \
-        {                                                  \
-            0x99, 0x03, 0xB8, 0xE8, 0x56, 0x2C, 0xBA, 0xFA \
-        }                                                  \
-    }
 
 /* Boolean */
 typedef unsigned char BOOLEAN;
@@ -209,6 +203,8 @@ typedef struct
     UINTN NumberOfTableEntries;
     EFI_CONFIGURATION_TABLE *ConfigurationTable;
 } EFI_SYSTEM_TABLE;
+
+
 
 /* EFI_STATUS */
 typedef unsigned long long EFI_STATUS;
