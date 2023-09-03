@@ -69,7 +69,7 @@ typedef struct {
 } EFI_GUID; 
 
 /* EFI_STATUS */
-typedef UINTN EFI_STATUS;
+typedef unsigned long long EFI_STATUS;
 
 /* EFI_HANDLE */
 typedef VOID *EFI_HANDLE;
