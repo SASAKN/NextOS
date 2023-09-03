@@ -17,9 +17,13 @@
 #endif
 
 /* GUID */
-#define EFI_BOOT_MANAGER_POLICY_PROTOCOL_GUID \
-  { 0xFEDF8E0C, 0xE147, 0x11E3,\
-  { 0x99, 0x03, 0xB8, 0xE8, 0x56, 0x2C, 0xBA, 0xFA } }
+#define EFI_BOOT_MANAGER_POLICY_PROTOCOL_GUID              \
+    {                                                      \
+        0xFEDF8E0C, 0xE147, 0x11E3,                        \
+        {                                                  \
+            0x99, 0x03, 0xB8, 0xE8, 0x56, 0x2C, 0xBA, 0xFA \
+        }                                                  \
+    }
 
 /* Boolean */
 typedef unsigned char BOOLEAN;
@@ -64,36 +68,41 @@ typedef unsigned short CHAR16;
 typedef void VOID;
 
 /* EFI_INPUT_KEY */
-typedef struct {
+typedef struct
+{
     UINT16 ScanCode;
     UINT16 UnicodeChar;
 } EFI_INPUT_KEY;
 
 /* EFI_KEY_OPTION */
-typedef struct {
-  EFI_BOOT_KEY_DATA         KeyData;
-  UINT32                    BootOptionCrc;
-  UINT16                    BootOption;
+typedef struct
+{
+    EFI_BOOT_KEY_DATA KeyData;
+    UINT32 BootOptionCrc;
+    UINT16 BootOption;
 } EFI_KEY_OPTION;
 
 /* EFI_BOOT_KEY_DATA */
-typedef union {
-  struct {
-    UINT32   Revision : 8;
-    UINT32   ShiftPressed : 1;
-    UINT32   ControlPressed : 1;
-    UINT32   AltPressed : 1;
-    UINT32   LogoPressed : 1;
-    UINT32   MenuPressed : 1;
-    UINT32   SysReqPressed : 1;
-    UINT32   Reserved : 16;
-    UINT32   InputKeyCount : 2;
+typedef union
+{
+    struct
+    {
+        UINT32 Revision : 8;
+        UINT32 ShiftPressed : 1;
+        UINT32 ControlPressed : 1;
+        UINT32 AltPressed : 1;
+        UINT32 LogoPressed : 1;
+        UINT32 MenuPressed : 1;
+        UINT32 SysReqPressed : 1;
+        UINT32 Reserved : 16;
+        UINT32 InputKeyCount : 2;
     } Options;
-  UINT32 PackedValue;
+    UINT32 PackedValue;
 } EFI_BOOT_KEY_DATA;
 
 /* EFI_MEMORY_TYPE */
-typedef enum {
+typedef enum
+{
     EfiReservedMemoryType,
     EfiLoaderCode,
     EfiLoaderData,
@@ -111,24 +120,26 @@ typedef enum {
     EfiMaxMemoryType
 } EFI_MEMORY_TYPE;
 
-
 /* EFI_GUID */
-typedef struct {
+typedef struct
+{
     UINT32 Data1;
     UINT16 Data2;
     UINT16 Data3;
     UINT8 Data4[8];
-} EFI_GUID; 
+} EFI_GUID;
 
 /* EFI_TIMER_DELAY */
-typedef enum {
+typedef enum
+{
     TimerCancel,
     TimerPeriodic,
     TimerRelactive
 } EFI_TIMER_DELAY;
 
 /* EFI_RESET_TYPE */
-typedef enum {
+typedef enum
+{
     EfiResetCold,
     EfiResetWarm,
     EfiResetShutdown,
@@ -136,14 +147,16 @@ typedef enum {
 } EFI_RESET_TYPE;
 
 /* EFI_DEVICE_PATH_PROTOCOL */
-typedef struct {
+typedef struct
+{
     UINT8 Type;
     UINT8 SubType;
     UINT8 Length[2];
 } EFI_DEVICE_PATH_PROTOCOL;
 
 /* EFI_MEMORY_DESCRIPTOR */
-typedef struct {
+typedef struct
+{
     UINT32 Type;
     EFI_STATUS PhysicalStart;
     EFI_STATUS VirtualStart;
@@ -151,7 +164,33 @@ typedef struct {
     EFI_STATUS Attribute;
 } EFI_MEMORY_DESCRIPTOR;
 
+/* EFI_TABLE_HEADER */
+typedef struct
+{
+    UINT64 Signature;
+    UINT32 Revision;
+    UINT32 HeaderSize;
+    UINT32 CRC32;
+    UINT32 Reserved;
+} EFI_TABLE_HEADER;
 
+/* EFI_SYMPLE_TABLE */
+typedef struct
+{
+    EFI_TABLE_HEADER Hdr;
+    CHAR16 *FirmwareVendor;
+    UINT32 FirmwareRevision;
+    EFI_HANDLE ConsoleInHandle;
+    EFI_SIMPLE_TEXT_INPUT_PROTOCOL *ConIn;
+    EFI_HANDLE ConsoleOutHandle;
+    EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *ConOut;
+    EFI_HANDLE StandardErrorHandle;
+    EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *StdErr;
+    EFI_RUNTIME_SERVICES *RuntimeServices;
+    EFI_BOOT_SERVICES *BootServices;
+    UINTN NumberOfTableEntries;
+    EFI_CONFIGURATION_TABLE *ConfigurationTable;
+} EFI_SYSTEM_TABLE;
 
 /* EFI_STATUS */
 typedef unsigned long long EFI_STATUS;
@@ -169,7 +208,8 @@ typedef UINT64 EFI_LBA;
 typedef UINTN EFI_TPL;
 
 /* EFI_TIME */
-typedef struct {
+typedef struct
+{
     UINT16 Year;
     UINT8 Month;
     UINT8 Day;
