@@ -2,6 +2,7 @@
 #define _UEFI_H
 
 #include "types.h"
+#include "protocol.h"
 
 
 #endif
