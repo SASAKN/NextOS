@@ -1,6 +1,11 @@
 #ifndef _TYPES_H
 #define _TYPES_H
 
+//True Or False
+
+#define TRUE 1
+#define FALSE 0
+
 //Char Types
 typedef unsigned char           uchar_t; 
 typedef signed char             char_t;

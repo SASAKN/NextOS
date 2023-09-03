@@ -5,10 +5,7 @@
 #include "../arch.h"
 
 /* Boolean */
-typedef enum {
-    True = 1,
-    Flase = 0
-} Boolean;
+typedef unsigned char Boolean;
 
 /* INTN */
 typedef signed long INTN;
@@ -72,6 +69,20 @@ typedef UINT64 EFI_LBA;
 /* EFI_TPL */
 typedef UINTN EFI_TPL;
 
+/* EFI_TIME */
+typedef struct {
+    UINT16 Year;
+    UINT8 Month;
+    UINT8 Day;
+    UINT8 Hour;
+    UINT8 Minute;
+    UINT8 Second;
+    UINT8 Pad1;
+    UINT32 Nanosecond;
+    INT16 TimeZone;
+    UINT8 Daylight;
+    UINT8 Pad2;
+} EFI_TIME;
 
 
 
