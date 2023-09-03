@@ -4,6 +4,20 @@
 #include <neox/types.h>
 #include "../arch.h"
 
+/* IN OUT */
+#ifndef IN
+
+#define IN
+#define OUT
+#define OPTIONAL
+
+#endif
+
+/* EFIAPI */
+#ifndef EFIAPI
+#define EFIAPI
+#endif
+
 /* Boolean */
 typedef unsigned char Boolean;
 
