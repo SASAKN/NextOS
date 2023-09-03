@@ -98,8 +98,4 @@ typedef struct {
     UINT8 Pad2;
 } EFI_TIME;
 
-
-
-
-
 #endif
