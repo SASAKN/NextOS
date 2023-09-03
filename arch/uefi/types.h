@@ -3,7 +3,6 @@
 
 #include <neox/types.h>
 #include "../arch.h"
-#include "guid.h"
 
 /* IN OUT */
 #ifndef IN
