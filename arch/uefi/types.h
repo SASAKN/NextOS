@@ -11,10 +11,10 @@ typedef enum {
 } Boolean;
 
 /* INTN */
-typedef int64_t INTN;
+typedef signed long INTN;
 
 /* UINTN */
-typedef uint64_t UINTN;
+typedef unsigned long UINTN;
 
 /* INT8 */
 typedef signed char INT8;
