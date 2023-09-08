@@ -16,8 +16,6 @@
 #define EFIAPI
 #endif
 
-/* GUID */
-
 /* Boolean */
 typedef unsigned char BOOLEAN;
 
