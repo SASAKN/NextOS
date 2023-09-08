@@ -1,1 +1,1 @@
-#include "../arch/uefi/uefi.h"
+#include <uefi/uefi.h>

@@ -1,5 +1,5 @@
-#ifndef __UEFI_GUID_H
-#define __UEFI_GUID_H
+#ifndef _UEFI_GUID_H
+#define _UEFI_GUID_H
 
 /* GUID */
 #define EFI_BOOT_MANAGER_POLICY_PROTOCOL_GUID              \
