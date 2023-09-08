@@ -12,16 +12,18 @@ typedef void NULL;
 typedef unsigned char bool;
 
 /* 符号付き整数 */
-typedef char i8_t 
-typedef short i16_t 
-typedef int i32_t 
-typedef long long i64_t 
+typedef char i8_t;
+typedef short i16_t; 
+typedef int i32_t;
+typedef long long i64_t; 
 
 /* 符号なし整数 */
-typedef unsigned char u8_t
-typedef unsigned short u16_t
-typedef unsigned u32_t
-typedef unsigned long long u64_t
+typedef unsigned char u8_t;
+typedef unsigned short u16_t;
+typedef unsigned u32_t;
+typedef unsigned long long u64_t;
+
+
 
 
 #endif
