@@ -6,6 +6,9 @@
 #define TRUE 1
 #define FALSE 0
 
+/* Bool Types */
+typedef unsigned char bool_t;
+
 /* Char Types */
 typedef unsigned char           uchar_t; 
 typedef signed char             char_t;
