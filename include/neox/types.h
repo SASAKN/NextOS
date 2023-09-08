@@ -7,11 +7,6 @@
 
 /* NULL */
 typedef void NULL;
-NULL( char a, ... ) {
-    int a;
-
-};
-
 
 /* Boolean */
 typedef unsigned char bool;
