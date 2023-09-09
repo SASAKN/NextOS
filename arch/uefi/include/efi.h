@@ -1,6 +1,8 @@
 #ifndef _EFI_H
 #define _EFI_H
 
+#include "types.h"
+
 /* GUID */
 #define EFI_BOOT_MANAGER_POLICY_PROTOCOL_GUID              \
     {                                                      \
