@@ -266,6 +266,12 @@ typedef struct {
   EFI_QUERY_VARIABLE_INFO          QueryVariableInfo;
 } EFI_RUNTIME_SERVICES;
 
+/* EFI_CONFIGURATION_TABLE */
+typedef struct{
+  EFI_GUID           VendorGuid;
+  VOID               *VendorTable;
+}   EFI_CONFIGURATION_TABLE;
+
 /* EFI_TIME */
 typedef struct
 {
