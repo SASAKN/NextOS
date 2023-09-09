@@ -1,8 +1,26 @@
 #ifndef _UEFI_UEFIDEF_H
 #define _UEFI_UEFIDEF_H
 
+/* デバイス関連 */
 
+/* EFI_DEVICE_PATH_PROTOCOL */
+typedef struct
+{
+    UINT8 Type;
+    UINT8 SubType;
+    UINT8 Length[2];
+} EFI_DEVICE_PATH_PROTOCOL;
 
+/* 電源処理系？ */
+
+/* EFI_RESET_TYPE */
+typedef enum
+{
+    EfiResetCold,
+    EfiResetWarm,
+    EfiResetShutdown,
+    EfiResetPlatformSpecific
+} EFI_RESET_TYPE;
 
 /* キーの入力 */
 

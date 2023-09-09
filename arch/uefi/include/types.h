@@ -58,24 +58,6 @@ typedef unsigned short CHAR16;
 /* VOID */
 typedef void VOID;
 
-
-/* EFI_RESET_TYPE */
-typedef enum
-{
-    EfiResetCold,
-    EfiResetWarm,
-    EfiResetShutdown,
-    EfiResetPlatformSpecific
-} EFI_RESET_TYPE;
-
-/* EFI_DEVICE_PATH_PROTOCOL */
-typedef struct
-{
-    UINT8 Type;
-    UINT8 SubType;
-    UINT8 Length[2];
-} EFI_DEVICE_PATH_PROTOCOL;
-
 /* EFI_STATUS */
 typedef unsigned long long EFI_STATUS;
 
