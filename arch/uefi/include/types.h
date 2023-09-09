@@ -91,35 +91,6 @@ typedef union
     UINT32 PackedValue;
 } EFI_BOOT_KEY_DATA;
 
-/* EFI_MEMORY_TYPE */
-typedef enum
-{
-    EfiReservedMemoryType,
-    EfiLoaderCode,
-    EfiLoaderData,
-    EfiBootServicesCode,
-    EfiBootServicesData,
-    EfiRuntimeServicesCode,
-    EfiRuntimeServicesData,
-    EfiConventionalMemory,
-    EfiUnusableMemory,
-    EfiACPIReclaimMemory,
-    EfiACPIMemoryNVS,
-    EfiMemoryMappedIO,
-    EfiMemoryMappedIOPortSpace,
-    EfiPalCode,
-    EfiMaxMemoryType
-} EFI_MEMORY_TYPE;
-
-/* EFI_GUID */
-typedef struct
-{
-    UINT32 Data1;
-    UINT16 Data2;
-    UINT16 Data3;
-    UINT8 Data4[8];
-} EFI_GUID;
-
 /* EFI_TIMER_DELAY */
 typedef enum
 {
@@ -144,16 +115,6 @@ typedef struct
     UINT8 SubType;
     UINT8 Length[2];
 } EFI_DEVICE_PATH_PROTOCOL;
-
-/* EFI_MEMORY_DESCRIPTOR */
-typedef struct
-{
-    UINT32 Type;
-    EFI_STATUS PhysicalStart;
-    EFI_STATUS VirtualStart;
-    EFI_STATUS NumberOfPages;
-    EFI_STATUS Attribute;
-} EFI_MEMORY_DESCRIPTOR;
 
 /* EFI_TABLE_HEADER */
 typedef struct
