@@ -76,16 +76,6 @@ typedef struct
     UINT8 Length[2];
 } EFI_DEVICE_PATH_PROTOCOL;
 
-/* EFI_TABLE_HEADER */
-typedef struct
-{
-    UINT64 Signature;
-    UINT32 Revision;
-    UINT32 HeaderSize;
-    UINT32 CRC32;
-    UINT32 Reserved;
-} EFI_TABLE_HEADER;
-
 /* EFI_STATUS */
 typedef unsigned long long EFI_STATUS;
 

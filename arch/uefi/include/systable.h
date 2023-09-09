@@ -1,6 +1,16 @@
 #ifndef _ARCH_UEFI_SYSTABLE_H
 #define _ARCH_UEFI_SYSTABLE_H
 
+/* EFI_TABLE_HEADER */
+typedef struct
+{
+    UINT64 Signature;
+    UINT32 Revision;
+    UINT32 HeaderSize;
+    UINT32 CRC32;
+    UINT32 Reserved;
+} EFI_TABLE_HEADER;
+
 /* EFI_SYSTEM_TABLE */
 #define EFI_SYSTEM_TABLE_SIGNATURE 0x5453595320494249
 #define EFI_2_100_SYSTEM_TABLE_REVISION ((2 << 16) | (100))
@@ -36,6 +46,8 @@ typedef struct
     UINTN NumberOfTableEntries;
     EFI_CONFIGURATION_TABLE *ConfigurationTable;
 } EFI_SYSTEM_TABLE;
+
+
 
 
 
