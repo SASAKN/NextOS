@@ -1,15 +1,6 @@
 #ifndef _ARCH_UEFI_GUID_H
 #define _ARCH_UEFI_GUID_H
 
-/* EFI_GUID */
-typedef struct
-{
-    UINT32 Data1;
-    UINT16 Data2;
-    UINT16 Data3;
-    UINT8 Data4[8];
-} EFI_GUID;
-
 /* GUID */
 #define EFI_BOOT_MANAGER_POLICY_PROTOCOL_GUID              \
     {                                                      \
