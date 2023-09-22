@@ -6,6 +6,9 @@
 #define OUT
 #define OPTIONAL
 
+/* EFIAPI */
+#define EFIAPI
+
 /* Data Types */
 typedef unsigned char BOOLEAN;
 typedef signed long long INTN;
