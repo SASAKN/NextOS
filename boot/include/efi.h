@@ -410,7 +410,7 @@ typedef struct EFI_FILE_PROTOCOL
     (EFI_FILE_PROTOCOL *This);
 };
 
-typedef struct EFI_FILE_SYSTEM_PROTOCOL
+typedef struct EFI_SIMPLE_FILE_SYSTEM_PROTOCOL
 {
     UINT64 Revision;
     UINT64 (*OpenVolume)
@@ -484,6 +484,13 @@ typedef struct EFI_DEVICE_PATH_TO_TEXT_PROTOCOL
         const unsigned short *TextDevicePath);
 };
 
+typedef struct EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL {
+    EFI_DEVICE_PATH_PROTOCOL *(*ConvertTextToDeviceNode) (
+        const UINT16 *TextDeviceNode);
+    EFI_DEVICE_PATH_PROTOCOL *(*ConvertTextToDevicePath) (
+        const UINT16 *TextDevicePath);
+}
+
 typedef struct EFI_DEVICE_PATH_UTILITIES_PROTOCOL
 {
     UINT64 _buf[3];
@@ -552,6 +559,15 @@ typedef struct EFI_MP_SERVICES_PROTOCOL
         EFI_MP_SERVICES_PROTOCOL *This,
         UINT64 *ProcessorNumber);
 };
+
+extern EFI_SYSTEM_TABLE *gST;
+extern EFI_GRAPHICS_OUTPUT_PROTOCOL *GOP;
+extern EFI_SIMPLE_POINTER_PROTOCOL *SPP;
+extern EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *SFSP;
+extern EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *STIEP;
+extern EFI_DEVICE_PATH_TO_TEXT_PROTOCOL *DPTTP;
+extern EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL *DPFTP;
+/* 今日は、ここで終わり */
 
 /* EFI PROTOTYPE */
 void efi_init(EFI_SYSTEM_TABLE *SystemTable);
