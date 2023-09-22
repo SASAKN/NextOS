@@ -235,6 +235,20 @@ typedef struct EFI_CONFIGURATION_TABLE {
     VOID *VendorTable;
 };
 
+/* EFI_SYSTEM_TABLE */
+typedef struct EFI_SYSTEM_TABLE {
+    CHAR8 _buf1[44];
+    EFI_SIMPLE_TEXT_INPUT_PROTOCOL *ConIn;
+    UINT64 _buf2;
+    EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *ConOut;
+    UINT64 _buf3[2];
+    EFI_RUNTIME_SERVICES *RuntimeServices;
+    EFI_BOOT_SERVICES *BootServices;
+    UINT64 NumberOfTableEntries;
+    EFI_CONFIGURATION_TABLE *ConfigurationTable;
+}
+
+
 
 
 
