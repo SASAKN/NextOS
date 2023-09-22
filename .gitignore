@@ -1,3 +1,4 @@
 *.code-workspace
 .vscode/
+.DS_Store
 my-operating-system.code-workspace
