@@ -1,1 +1,1 @@
-#include "../include/neox/machine.h"
+#include "../include/neos/machine.h"

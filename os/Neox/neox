@@ -1,5 +1,5 @@
 Neos Kernel Exec Commnad
 
-neox start
-neox initalize
-neox st
+neos start
+neos initalize
+neos st

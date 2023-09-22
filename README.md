@@ -38,7 +38,7 @@ ELFで出力されたファイルを開いて、OSを起動させています。
 
 ## Include
 
-"#include<neox/config.h>"のように、Includeで、カーネルなどから読み出されるファイルが置いてあります。
+"#include<neos/config.h>"のように、Includeで、カーネルなどから読み出されるファイルが置いてあります。
 
 ## 注意
 

@@ -30,11 +30,11 @@
 
 /* Errors */
 #ifndef _NEOS_MACHINE
-error "In <neox/machine.h> please define _NEOS_MACHINE"
+error "In <neos/machine.h> please define _NEOS_MACHINE"
 #endif
 
 #ifndef _NEOS_CHIP
-error "In <neox/machine.h> please define _NEOS_CHIP"
+error "In <neos/machine.h> please define _NEOS_CHIP"
 #endif
 
 #if (_NEOS_MACHINE == 0)
