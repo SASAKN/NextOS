@@ -246,6 +246,22 @@ typedef struct EFI_SYSTEM_TABLE {
     EFI_BOOT_SERVICES *BootServices;
     UINT64 NumberOfTableEntries;
     EFI_CONFIGURATION_TABLE *ConfigurationTable;
+};
+
+/* Graphics Output Protocol 用の定義 */
+
+/* 加法混色 */
+typedef struct EFI_GRAPHICS_OUTPUT_BLT_PIXEL{
+    UINT8 Blue;
+    UINT8 Green;
+    UINT8 Red;
+    UINT8 Reserved;
+};
+
+typedef 
+
+typedef struct EFI_GRAPHICS_OUTPUT_PROTOCOL {
+
 }
 
 
