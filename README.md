@@ -1,6 +1,6 @@
 # Neos
 
-Neos is a operating system like Unix.
+Neos is a operating system.
 
 ## Kernel
 
