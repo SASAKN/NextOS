@@ -392,11 +392,90 @@ typedef struct EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL {
         VOID *NotificationHandle);
 };
 
+typedef struct EFI_LOADED_IMAGE_PROTOCOL {
+    UINT32 Revision;
+    VOID *ParentHandle;
+    EFI_SYSTEM_TABLE *SystemTable;
+    VOID *DeviceHandle;
+    EFI_DEVICE_PATH_PROTOCOL *FilePath;
+    VOID *Reserved;
+    UINT32 LoadOptions Size;
+    VOID *LoadOptions;
+    VOID *ImageBase;
+    UINT64 ImageSize;
+    EFI_MEMORY_TYPE ImageCodeType;
+    EFI_MEMORY_TYPE ImageDataType;
+    UINT64 (*Unload)(VOID *ImageHandle);
+};
 
+typedef struct EFI_DEVICE_PATH_TO_TEXT_PROTOCOL {
+    EFI_DEVICE_PATH_PROTOCOL *(*ConvertTextToDeviceNode) (
+        const unsigned short *TextDeviceNode);
+    EFI_DEVICE_PATH_PROTOCOL *(*ConvertTextToDevicePath) (
+        const unsigned short *TextDevicePath); 
+};
 
+typedef struct EFI_DEVICE_PATH_UTILITIES_PROTOCOL {
+    UINT64 _buf[3];
+    EFI_DEVICE_PATH_PROTOCOL *(*AppendDeviceNode)(
+        const EFI_DEVICE_PATH_PROTOCOL *DevicePath,
+        const EFI_DEVICE_PATH_PROTOCOL *DeviceNode);
+};
 
+typedef struct EFI_CPU_PHYSICAL_LOCATION {
+    UINT32 Package;
+    UINT32 Core;
+    UINT32 Thread;
+};
 
+typedef struct EFI_PROCESSOR_INFOMATION {
+    UINT64 ProcessorId;
+    UINT32 StatusFlag;
+    EFI_CPU_PHYSICAL_LOCATION Location;
+};
 
+typedef struct EFI_MP_SERVICES_PROTOCOL {
+    UINT64 (*GetNumberOfProcessors)(
+        EFI_MP_SERVICES_PROTOCOL *This,
+        UINT64 *NumberOfProcessors,
+        UINT64 *NumberOfEnabledProcessors);
+    UINT64 (*GetProcessorInfo)(
+        EFI_MP_SERVICES_PROTOCOL *This,
+        UINT64 ProcessorNumber,
+        EFI_PROCESSOR_INFOMATION *ProcessorInfoBuffer);
+    UINT64 (*StartupAllAPs)(
+        EFI_MP_SERVICES_PROTOCOL *This,
+        VOID (*Procedure)(VOID *ProcedureArgument),
+        UINT8 SingleThread;
+        VOID *WaitEvent,
+        UINT64 TimeoutInMicroSeconds,
+        VOID *ProcudureArgument,
+        UINT64 **FailedCpuList);
+    UINT64 (*StartuphisAP)(
+        EFI_MP_SERVICES_PROTOCOL *This,
+        VOID (*Procudure)(VOID *ProcedureArgument),
+        UINT64 ProcessorNumber,
+        VOID *WaitEvent,
+        UINT64 TimeoutInMicroseconds,
+        VOID *ProcedureArgument,
+        UINT8 *Finished);
+    UINT64 (*SwitchBSP)(
+        EFI_MP_SERVICES_PROTOCOL *This,
+        UINT64 ProcessorNumber,
+        UINT8 EnableOldBSP);
+    UINT64 (*EnableDisableAP)(
+        EFI_MP_SERVICES_PROTOCOL *This,
+        UINT64 ProcessorNumber,
+        UINT8 EnableAP,
+        UINT32 *HealthFlag);
+    UINT64 (*WhoAmI)(
+        EFI_MP_SERVICES_PROTOCOL *This,
+        UINT64 *ProcessorNumber);
+};
 
+/* EFI PROTOTYPE */
+void efi_init(EFI_SYSTEM_TABLE *SystemTable);
+void dump_eficonftable(void);
+void *find_efi_acpi_table(void);
 
 #endif
