@@ -165,7 +165,7 @@ typedef struct EFI_BOOT_SERVICES {
     UINT64 _buf4_2[3];
     /* Protocol Handler Services */
     UINT64 _buf5[3];
-    UINT64 (*HandleProtocol)(VOID * Handle,
+    UINT64 (*HandleProtocol)(VOID *Handle,
             EFI_GUID *Protocol,
             VOID **Interface);
     UINT64 _buf5_2[5];
@@ -258,11 +258,139 @@ typedef struct EFI_GRAPHICS_OUTPUT_BLT_PIXEL{
     UINT8 Reserved;
 };
 
-typedef 
+typedef enum EFI_GRAPHICS_PIXEL_FORMAT {
+    PixelRedGreenBlueReserved8BitPerColor,
+    PixelBlueGreenRedReserved8BitPerColor,
+    PixelBitMask,
+    PixelBltOnly,
+    PixelFormatMax
+};
+
+typedef struct EFI_GRAPHICS_OUTPUT_MODE_INFOMATION {
+    UINT32 Version;
+    UINT32 HorizontalResolution;
+    UINT32 VerticalResolution;
+    EFI_GRAPHICS_PIXEL_FORMAT PixelFormat;
+}
+
+typedef struct EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE{
+    UINT32 MaxMode;
+    UINT32 Mode;
+    EFI_GRAPHICS_OUTPUT_MODE_INFOMATION *Info;
+    UINT64 SizeOfInfo;
+    UINT64 FrameBufferBase;
+    UINT64 FrameBufferSize;
+};
 
 typedef struct EFI_GRAPHICS_OUTPUT_PROTOCOL {
+    UINT64 _buf[3];
+    EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE *Mode;
+};
 
-}
+typedef struct EFI_SIMPLE_POINTER_STATE {
+    INT32 RelactiveMovementX;
+    INT32 RelactiveMovementY;
+    INT32 RelactiveMovementZ;
+    UINT8 LeftButton;
+    UINT8 RightButton;
+};
+
+typedef struct EFI_SIMPLE_POINTER_PROTOCOL {
+    UINT64 (*Reset)(
+        EFI_SIMPLE_POINTER_PROTOCOL *This,
+        UINT8 ExtendedVerification);
+    UINT64 (*GetState)(
+        EFI_SIMPLE_POINTER_PROTOCOL *This,
+        EFI_SIMPLE_POINTER_STATE *State);
+    VOID *WaitForInput;
+};
+
+typedef struct EFI_TIME {
+    UINT16 Year;
+    UINT8 Month;
+    UINT8 Day;
+    UINT8 Hour;
+    UINT8 Minute;
+    UINT8 Second;
+    UINT8 Pad1;
+    UINT32 Nanosecond;
+    UINT16 TimeZone;
+    UINT8 Daylight;
+    UINT8 Pad2;
+};
+
+typedef struct EFI_FILE_INFO {
+    UINT64 Size;
+    UINT64 FileSize;
+    UINT64 PhysicalSize;
+    EFI_TIME CreateTime;
+    EFI_TIME LastAccessTime;
+    EFI_TIME ModificationTime;
+    UINT64 Attribute;
+    UINT16 FileName[];
+};
+
+typedef struct EFI_FILE_PROTOCOL {
+    UINT64 _buf;
+    UINT64 (*Open)(EFI_FILE_PROTOCOL *This,
+            EFI_FILE_PROTOCOL **NewHandle,
+            UINT16 *FileName,
+            UINT64 OpenMode,
+            UINT64 Attributes);
+    UINT64 (*Close)(EFI_FILE_PROTOCOL *This);
+    UINT64 _buf2;
+    UINT64 (*Read)(EFI_FILE_PROTOCOL *This,
+            UINT64 *BufferSize,
+            VOID *Buffer);
+    UINT64 (*Write)(EFI_FILE_PROTOCOL *This,
+            UINT64 *BufferSize,
+            VOID *Buffer);
+    UINT64 _buf3[2];
+    UINT64 (*GetInfo)(EFI_FILE_PROTOCOL *This,
+            EFI_GUID *InfomationType,
+            UINT64 *BufferSize,
+            VOID *Buffer);
+    UINT64 _buf4;
+    UINT64 (*Flush)(EFI_FILE_PROTOCOL *This);
+};
+
+typedef struct EFI_FILE_SYSTEM_PROTOCOL {
+    UINT64 Revision;
+    UINT64 (*OpenVolume)(
+        EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *This,
+        EFI_FILE_PROTOCOL **Root);
+};
+
+typedef struct EFI_KEY_STATE {
+    UINT32 KeyShiftState;
+    UINT8 KeyToggleState;
+};
+
+typedef struct EFI_KEY_DATA {
+    EFI_INPUT_KEY Key;
+    EFI_KEY_STATE KeyState;
+};
+
+typedef struct EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL {
+    UINT64 (*Reset)(EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
+    UINT8 ExtendedVerifiation);
+    UINT64 (*ReadKeyStrokeEx)(
+        EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
+        EFI_KEY_DATA *KeyData);
+    VOID *WaitForKeyEx;
+    UINT64 (*SetState)(
+        EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
+        UINT8 *KeyToggleState);
+    UINT64 (*RegisterKeyNotify)(
+        EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
+        EFI_KEY_DATA *KeyData,
+        UINT64 (*KeyNotificationFunction)(
+            EFI_KEY_DAA *KeyData),
+        VOID *NottificationHandle);
+    UINT64 (*UnRegisterKeyNotify)(
+        EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
+        VOID *NotificationHandle);
+};
 
 
 
