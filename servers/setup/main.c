@@ -1,1 +1,1 @@
-/* It's a Neox reimplementation of something like Linux's Init.　*/
+/* It's a Neos reimplementation of something like Linux's Init.　*/

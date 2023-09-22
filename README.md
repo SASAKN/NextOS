@@ -1,6 +1,6 @@
-# Neox
+# Neos
 
-Neox is a operating system like Unix.
+Neos is a operating system like Unix.
 
 ## Kernel
 
@@ -33,7 +33,7 @@ OSの第二階層に当たるドライバーのためのソースがあるディ
 
 ## Boot
 
-EDK2で書かれているNeoxのブートローダーです。
+EDK2で書かれているNeosのブートローダーです。
 ELFで出力されたファイルを開いて、OSを起動させています。
 
 ## Include
@@ -62,7 +62,7 @@ Linuxなどと似ていますが、似ていない部分があります。
 
 ## 一部C++や、Go、Rustが使われています
 
-Neoxは、Go、Rust、C++をたまに使います。
+Neosは、Go、Rust、C++をたまに使います。
 
 ## 以上
 

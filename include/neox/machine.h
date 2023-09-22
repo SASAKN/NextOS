@@ -1,12 +1,12 @@
 /* Machine Definitions */
-#ifndef _NEOX_MACHINE_H
-#define _NEOX_MACHINE_H
+#ifndef _NEOS_MACHINE_H
+#define _NEOS_MACHINE_H
 
-/* Default NEOX CPU */
-#define _NEOX_MACHINE   _MACHINE_X64
+/* Default NEOS CPU */
+#define _NEOS_MACHINE   _MACHINE_X64
 
-/*Default NEOX Boot Systems*/
-#define _NEOX_BOOT_SYSTEM   _EFI_PC
+/*Default NEOS Boot Systems*/
+#define _NEOS_BOOT_SYSTEM   _EFI_PC
 
 /* Non-X64_PC definitions are not currently used */
 
@@ -24,24 +24,24 @@
 #define _CHIP_INTEL 1
 
 /* CPU Chip */
-#if (_NEOX_MACHINE == _MACHINE_X64)
-#define _NEOX_CHIP      _CHIP_INTEL
+#if (_NEOS_MACHINE == _MACHINE_X64)
+#define _NEOS_CHIP      _CHIP_INTEL
 #endif
 
 /* Errors */
-#ifndef _NEOX_MACHINE
-error "In <neox/machine.h> please define _NEOX_MACHINE"
+#ifndef _NEOS_MACHINE
+error "In <neox/machine.h> please define _NEOS_MACHINE"
 #endif
 
-#ifndef _NEOX_CHIP
-error "In <neox/machine.h> please define _NEOX_CHIP"
+#ifndef _NEOS_CHIP
+error "In <neox/machine.h> please define _NEOS_CHIP"
 #endif
 
-#if (_NEOX_MACHINE == 0)
-error "_NEOX_MACHINE has incorrect value (0)"
+#if (_NEOS_MACHINE == 0)
+error "_NEOS_MACHINE has incorrect value (0)"
 #endif
 
-#define MACHINE     _NEOX_MACHINE
+#define MACHINE     _NEOS_MACHINE
 
 
 /* CPU Architectures */
@@ -58,4 +58,4 @@ error "_NEOX_MACHINE has incorrect value (0)"
 #define EFI_PC      _EFI_PC     /* Supported UEFI Computer */
 #define BIOS_PC     _BIOS_PC    /* Supported BIOS Computer */
 
-#endif /* _NEOX_MACHINE_H */
+#endif /* _NEOS_MACHINE_H */
