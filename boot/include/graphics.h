@@ -1,5 +1,5 @@
-#ifndef _FB_H
-#define _FB_H
+#ifndef _BOOT_GRAPHICS_H
+#define _BOOT_GRAPHICS_H
 
 #include "types.h" /* Must be First. */
 
