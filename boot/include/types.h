@@ -30,5 +30,25 @@ typedef VOID *EFI_EVENT;
 typedef UINT64 EFI_LBA;
 typedef UINTN EFI_TPL;
 
+/* 違う定義 */
+typedef unsigned int uintptr_t;
+typedef UINT64 uint64_t;
+typedef UINT16 uint16_t;
+typedef UINT32 uint32_t;
+typedef INT32 int32_t;
+typedef INT64 int64_t;
+
+/* ELF Types */
+typedef uintptr_t Elf64_Addr;
+typedef uint64_t Elf64_Off;
+typedef uint16_t Elf64_Half;
+typedef uint32_t Elf64_Word;
+typedef int32_t Elf64_Sword;
+typedef uint64_t Elf64_Xword;
+typedef int64_t Elf64_Sxword;
+
+/* ELF Macro */
+#define ELF_NIDENT 16
+
 
 #endif
