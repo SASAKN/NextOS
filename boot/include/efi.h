@@ -8,7 +8,7 @@ typedef struct EFI_INPUT_KEY
 {
     CHAR16 ScanCode;
     CHAR16 UnicodeChar;
-};
+} EFI_INPUT_KEY;
 
 typedef struct EFI_GUID
 {
@@ -16,7 +16,7 @@ typedef struct EFI_GUID
     CHAR16 Data2;
     CHAR16 Data3;
     BOOLEAN Data4[8];
-};
+} EFI_GUID;
 
 typedef enum EFI_GRAPHICS_PIXEL_FORMAT
 {
@@ -25,14 +25,14 @@ typedef enum EFI_GRAPHICS_PIXEL_FORMAT
     PixelBitMask,
     PixelBltOnly,
     PixelFormatMax
-};
+} EFI_GRAPHICS_PIXEL_FORMAT;
 
 typedef enum EFI_LOCATE_SEARCH_TYPE
 {
     AllHandles,
     ByRegisterNotify,
     ByProtocol
-};
+} EFI_LOCATE_SEARCH_TYPE;
 
 typedef enum EFI_MEMORY_TYPE
 {
@@ -51,14 +51,14 @@ typedef enum EFI_MEMORY_TYPE
     EfiMemoryMappedIOPortSpace,
     EfiPalCode,
     EfiMaxMemoryType
-};
+} EFI_MEMORY_TYPE;
 
 typedef enum EFI_TIMER_DELAY
 {
     TimerCancel,
     TimerPeriodic,
     TimerRelactive
-};
+} EFI_TIMER_DELAY;
 
 typedef enum EFI_RESET_TYPE
 {
@@ -66,14 +66,14 @@ typedef enum EFI_RESET_TYPE
     EfiResetWarm,
     EfiResetShutdown,
     EfiResetPlatformSpecific
-};
+} EFI_RESET_TYPE;
 
 typedef struct EFI_DEVICE_PATH_PROTOCOL
 {
     BOOLEAN Type;
     BOOLEAN SubType;
     BOOLEAN Length[2];
-};
+} EFI_DEVICE_PATH_PROTOCOL;
 
 typedef struct EFI_MEMORY_DESCRIPTOR
 {
@@ -82,7 +82,7 @@ typedef struct EFI_MEMORY_DESCRIPTOR
     UINT32 VirtualStart;
     UINT32 NumberOfPages;
     UINT32 Attribute;
-};
+} EFI_MEMORY_DESCRIPTOR;
 
 /* Protocols */
 
@@ -94,7 +94,7 @@ typedef struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL
         EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This,
         EFI_INPUT_KEY *Key);
     void *WaitForKey;
-};
+} EFI_SIMPLE_TEXT_INPUT_PROTOCOL;
 
 /* EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL用の構造体 */
 typedef struct SIMPLE_TEXT_OUTPUT_MODE
@@ -105,7 +105,7 @@ typedef struct SIMPLE_TEXT_OUTPUT_MODE
     INT32 CursorColumn;
     INT32 CursorRow;
     UINT8 CursorVisible;
-}
+} SIMPLE_TEXT_OUTPUT_MODE;
 
 typedef struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
 {
@@ -137,7 +137,7 @@ typedef struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
         EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This);
     UINT64 _buf4[2];
     SIMPLE_TEXT_OUTPUT_MODE *Mode;
-};
+} EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL;
 
 /* EFI_RUNTIME */
 typedef struct EFI_RUNTIME_SERVICES
@@ -155,7 +155,7 @@ typedef struct EFI_RUNTIME_SERVICES
                         UINT64 ResetStatus,
                         UINT64 DataSize,
                         VOID *ResetData);
-};
+} EFI_RUNTIME_SERVICES;
 
 /* EFI_BOOT_SERVICES */
 typedef struct EFI_BOOT_SERVICES
@@ -273,13 +273,13 @@ typedef struct EFI_BOOT_SERVICES
         UINT64 Size,
         UINT8 Value);
     UINT64 _buf12;
-};
+} EFI_BOOT_SERVICES;
 
 typedef struct EFI_CONFIGURATION_TABLE
 {
     EFI_GUID VendorGuid;
     VOID *VendorTable;
-};
+} EFI_CONFIGURATION_TABLE;
 
 /* EFI_SYSTEM_TABLE */
 typedef struct EFI_SYSTEM_TABLE
@@ -293,7 +293,7 @@ typedef struct EFI_SYSTEM_TABLE
     EFI_BOOT_SERVICES *BootServices;
     UINT64 NumberOfTableEntries;
     EFI_CONFIGURATION_TABLE *ConfigurationTable;
-};
+} EFI_SYSTEM_TABLE;
 
 /* Graphics Output Protocol 用の定義 */
 
@@ -304,7 +304,7 @@ typedef struct EFI_GRAPHICS_OUTPUT_BLT_PIXEL
     UINT8 Green;
     UINT8 Red;
     UINT8 Reserved;
-};
+} EFI_GRAPHICS_OUTPUT_BLT_PIXEL;
 
 typedef struct EFI_GRAPHICS_OUTPUT_MODE_INFOMATION
 {
@@ -312,7 +312,7 @@ typedef struct EFI_GRAPHICS_OUTPUT_MODE_INFOMATION
     UINT32 HorizontalResolution;
     UINT32 VerticalResolution;
     EFI_GRAPHICS_PIXEL_FORMAT PixelFormat;
-}
+} EFI_GRAPHICS_OUTPUT_MODE_INFOMATION;
 
 typedef struct EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE
 {
@@ -322,13 +322,13 @@ typedef struct EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE
     UINT64 SizeOfInfo;
     UINT64 FrameBufferBase;
     UINT64 FrameBufferSize;
-};
+} EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE;
 
 typedef struct EFI_GRAPHICS_OUTPUT_PROTOCOL
 {
     UINT64 _buf[3];
     EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE *Mode;
-};
+} EFI_GRAPHICS_OUTPUT_PROTOCOL;
 
 typedef struct EFI_SIMPLE_POINTER_STATE
 {
@@ -337,7 +337,7 @@ typedef struct EFI_SIMPLE_POINTER_STATE
     INT32 RelactiveMovementZ;
     UINT8 LeftButton;
     UINT8 RightButton;
-};
+} EFI_SIMPLE_POINTER_STATE;
 
 typedef struct EFI_SIMPLE_POINTER_PROTOCOL
 {
@@ -350,7 +350,7 @@ typedef struct EFI_SIMPLE_POINTER_PROTOCOL
         EFI_SIMPLE_POINTER_PROTOCOL *This,
         EFI_SIMPLE_POINTER_STATE *State);
     VOID *WaitForInput;
-};
+} EFI_SIMPLE_POINTER_PROTOCOL;
 
 typedef struct EFI_TIME
 {
@@ -365,7 +365,7 @@ typedef struct EFI_TIME
     UINT16 TimeZone;
     UINT8 Daylight;
     UINT8 Pad2;
-};
+} EFI_TIME;
 
 typedef struct EFI_FILE_INFO
 {
@@ -377,7 +377,7 @@ typedef struct EFI_FILE_INFO
     EFI_TIME ModificationTime;
     UINT64 Attribute;
     UINT16 FileName[];
-};
+} EFI_FILE_INFO;
 
 typedef struct EFI_FILE_PROTOCOL
 {
@@ -408,7 +408,7 @@ typedef struct EFI_FILE_PROTOCOL
     UINT64 _buf4;
     UINT64(*Flush)
     (EFI_FILE_PROTOCOL *This);
-};
+} EFI_FILE_PROTOCOL;
 
 typedef struct EFI_SIMPLE_FILE_SYSTEM_PROTOCOL
 {
@@ -417,19 +417,19 @@ typedef struct EFI_SIMPLE_FILE_SYSTEM_PROTOCOL
     (
         EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *This,
         EFI_FILE_PROTOCOL **Root);
-};
+} EFI_SIMPLE_FILE_SYSTEM_PROTOCOL;
 
 typedef struct EFI_KEY_STATE
 {
     UINT32 KeyShiftState;
     UINT8 KeyToggleState;
-};
+} EFI_KEY_STATE;
 
 typedef struct EFI_KEY_DATA
 {
     EFI_INPUT_KEY Key;
     EFI_KEY_STATE KeyState;
-};
+} EFI_KEY_DATA;
 
 typedef struct EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL
 {
@@ -456,7 +456,7 @@ typedef struct EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL
     (
         EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
         VOID *NotificationHandle);
-};
+} EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL;
 
 typedef struct EFI_LOADED_IMAGE_PROTOCOL
 {
@@ -474,7 +474,7 @@ typedef struct EFI_LOADED_IMAGE_PROTOCOL
     EFI_MEMORY_TYPE ImageDataType;
     UINT64(*Unload)
     (VOID *ImageHandle);
-};
+} EFI_LOADED_IMAGE_PROTOCOL;
 
 typedef struct EFI_DEVICE_PATH_TO_TEXT_PROTOCOL
 {
@@ -482,7 +482,7 @@ typedef struct EFI_DEVICE_PATH_TO_TEXT_PROTOCOL
         const unsigned short *TextDeviceNode);
     EFI_DEVICE_PATH_PROTOCOL *(*ConvertTextToDevicePath)(
         const unsigned short *TextDevicePath);
-};
+} EFI_DEVICE_PATH_TO_TEXT_PROTOCOL;
 
 typedef struct EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL
 {
@@ -490,7 +490,7 @@ typedef struct EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL
         const UINT16 *TextDeviceNode);
     EFI_DEVICE_PATH_PROTOCOL *(*ConvertTextToDevicePath)(
         const UINT16 *TextDevicePath);
-}
+} EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL;
 
 typedef struct EFI_DEVICE_PATH_UTILITIES_PROTOCOL
 {
@@ -498,21 +498,21 @@ typedef struct EFI_DEVICE_PATH_UTILITIES_PROTOCOL
     EFI_DEVICE_PATH_PROTOCOL *(*AppendDeviceNode)(
         const EFI_DEVICE_PATH_PROTOCOL *DevicePath,
         const EFI_DEVICE_PATH_PROTOCOL *DeviceNode);
-};
+} EFI_DEVICE_PATH_UTILITIES_PROTOCOL;
 
 typedef struct EFI_CPU_PHYSICAL_LOCATION
 {
     UINT32 Package;
     UINT32 Core;
     UINT32 Thread;
-};
+} EFI_CPU_PHYSICAL_LOCATION;
 
 typedef struct EFI_PROCESSOR_INFOMATION
 {
     UINT64 ProcessorId;
     UINT32 StatusFlag;
     EFI_CPU_PHYSICAL_LOCATION Location;
-};
+} EFI_PROCESSOR_INFOMATION;
 
 typedef struct EFI_MP_SERVICES_PROTOCOL
 {
@@ -559,7 +559,7 @@ typedef struct EFI_MP_SERVICES_PROTOCOL
     (
         EFI_MP_SERVICES_PROTOCOL *This,
         UINT64 *ProcessorNumber);
-};
+} EFI_MP_SERVICES_PROTOCOL;
 
 extern EFI_SYSTEM_TABLE *ST;
 extern EFI_GRAPHICS_OUTPUT_PROTOCOL *GOP;
