@@ -3,7 +3,31 @@
 
 #include "types.h" /* Must be First. */
 
-/* ELFの定義を書くファイル */
+/* Macros */
+#define EI_NIDENT 16
+#define ET_NONE 0
+#define ET_REL 1
+#define ET_EXEC 2
+#define ET_DYN 3
+#define ET_CORE 4
+#define PT_NULL 0
+#define PT_LOAD 1
+#define PT_DYNAMIC 2
+#define PT_INTERP 3
+#define PT_NOTE 4
+#define PT_SHLIB 5
+#define PT_PHDR 6
+#define PT_TLS 7
+#define DT_NULL 0
+#define DT_RELA 7
+#define DT_RELASZ 8
+#define DT_RELAENT 9
+#define ELF64_R_SYM(i) ((i)>>32)
+#define ELF64_R_TYPE(i) ((i)&0xffffffffL)
+#define ELF64_R_INFO(s,t) (((s)<<32)+((t)&0xffffffffL))
+#define R_INTEL64_RELATIVE 8
+#define R_X86_64_RELATIVE R_INTEL64_RELATIVE
+
 
 /* Dynamic Header */
 typedef struct {
