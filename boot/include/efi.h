@@ -112,11 +112,11 @@ typedef struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
     UINT64 _buf;
     UINT64(*OutputString)
     (
-        struct struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
+        struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
         UINT16 *String);
     UINT64(*TextString)
     (
-        struct struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
+        struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
         UINT16 *String);
     UINT64(*QueryMode)
     (
@@ -343,12 +343,12 @@ typedef struct EFI_SIMPLE_POINTER_PROTOCOL
 {
     UINT64(*Reset)
     (
-        EFI_SIMPLE_POINTER_PROTOCOL *This,
+        struct EFI_SIMPLE_POINTER_PROTOCOL *This,
         UINT8 ExtendedVerification);
     UINT64(*GetState)
     (
-        EFI_SIMPLE_POINTER_PROTOCOL *This,
-        EFI_SIMPLE_POINTER_STATE *State);
+        struct EFI_SIMPLE_POINTER_PROTOCOL *This,
+        struct EFI_SIMPLE_POINTER_STATE *State);
     VOID *WaitForInput;
 } EFI_SIMPLE_POINTER_PROTOCOL;
 
@@ -383,31 +383,31 @@ typedef struct EFI_FILE_PROTOCOL
 {
     UINT64 _buf;
     UINT64(*Open)
-    (EFI_FILE_PROTOCOL *This,
-     EFI_FILE_PROTOCOL **NewHandle,
+    (struct EFI_FILE_PROTOCOL *This,
+     struct EFI_FILE_PROTOCOL **NewHandle,
      UINT16 *FileName,
      UINT64 OpenMode,
      UINT64 Attributes);
     UINT64(*Close)
-    (EFI_FILE_PROTOCOL *This);
+    (struct EFI_FILE_PROTOCOL *This);
     UINT64 _buf2;
     UINT64(*Read)
-    (EFI_FILE_PROTOCOL *This,
+    (struct EFI_FILE_PROTOCOL *This,
      UINT64 *BufferSize,
      VOID *Buffer);
     UINT64(*Write)
-    (EFI_FILE_PROTOCOL *This,
+    (struct EFI_FILE_PROTOCOL *This,
      UINT64 *BufferSize,
      VOID *Buffer);
     UINT64 _buf3[2];
     UINT64(*GetInfo)
-    (EFI_FILE_PROTOCOL *This,
+    (struct EFI_FILE_PROTOCOL *This,
      EFI_GUID *InfomationType,
      UINT64 *BufferSize,
      VOID *Buffer);
     UINT64 _buf4;
     UINT64(*Flush)
-    (EFI_FILE_PROTOCOL *This);
+    (struct EFI_FILE_PROTOCOL *This);
 } EFI_FILE_PROTOCOL;
 
 typedef struct EFI_SIMPLE_FILE_SYSTEM_PROTOCOL
@@ -415,8 +415,8 @@ typedef struct EFI_SIMPLE_FILE_SYSTEM_PROTOCOL
     UINT64 Revision;
     UINT64(*OpenVolume)
     (
-        EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *This,
-        EFI_FILE_PROTOCOL **Root);
+        struct EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *This,
+        struct EFI_FILE_PROTOCOL **Root);
 } EFI_SIMPLE_FILE_SYSTEM_PROTOCOL;
 
 typedef struct EFI_KEY_STATE
@@ -438,23 +438,23 @@ typedef struct EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL
      UINT8 ExtendedVerifiation);
     UINT64(*ReadKeyStrokeEx)
     (
-        EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
+        struct EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
         EFI_KEY_DATA *KeyData);
     VOID *WaitForKeyEx;
     UINT64(*SetState)
     (
-        EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
+        struct EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
         UINT8 *KeyToggleState);
     UINT64(*RegisterKeyNotify)
     (
-        EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
+        struct EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
         EFI_KEY_DATA *KeyData,
         UINT64 (*KeyNotificationFunction)(
-            EFI_KEY_DAA *KeyData),
+            EFI_KEY_DATA *KeyData),
         VOID *NottificationHandle);
     UINT64(*UnRegisterKeyNotify)
     (
-        EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
+        struct EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
         VOID *NotificationHandle);
 } EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL;
 
@@ -466,7 +466,7 @@ typedef struct EFI_LOADED_IMAGE_PROTOCOL
     VOID *DeviceHandle;
     EFI_DEVICE_PATH_PROTOCOL *FilePath;
     VOID *Reserved;
-    UINT32 LoadOptions Size;
+    UINT32 LoadOptionsSize;
     VOID *LoadOptions;
     VOID *ImageBase;
     UINT64 ImageSize;
@@ -518,17 +518,17 @@ typedef struct EFI_MP_SERVICES_PROTOCOL
 {
     UINT64(*GetNumberOfProcessors)
     (
-        EFI_MP_SERVICES_PROTOCOL *This,
+        struct EFI_MP_SERVICES_PROTOCOL *This,
         UINT64 *NumberOfProcessors,
         UINT64 *NumberOfEnabledProcessors);
     UINT64(*GetProcessorInfo)
     (
-        EFI_MP_SERVICES_PROTOCOL *This,
+        struct EFI_MP_SERVICES_PROTOCOL *This,
         UINT64 ProcessorNumber,
         EFI_PROCESSOR_INFOMATION *ProcessorInfoBuffer);
     UINT64(*StartupAllAPs)
     (
-        EFI_MP_SERVICES_PROTOCOL *This,
+        struct EFI_MP_SERVICES_PROTOCOL *This,
         VOID (*Procedure)(VOID *ProcedureArgument),
         UINT8 SingleThread;
         VOID * WaitEvent,
@@ -537,7 +537,7 @@ typedef struct EFI_MP_SERVICES_PROTOCOL
         UINT64 **FailedCpuList);
     UINT64(*StartuphisAP)
     (
-        EFI_MP_SERVICES_PROTOCOL *This,
+        struct EFI_MP_SERVICES_PROTOCOL *This,
         VOID (*Procudure)(VOID *ProcedureArgument),
         UINT64 ProcessorNumber,
         VOID *WaitEvent,
@@ -546,18 +546,18 @@ typedef struct EFI_MP_SERVICES_PROTOCOL
         UINT8 *Finished);
     UINT64(*SwitchBSP)
     (
-        EFI_MP_SERVICES_PROTOCOL *This,
+        struct EFI_MP_SERVICES_PROTOCOL *This,
         UINT64 ProcessorNumber,
         UINT8 EnableOldBSP);
     UINT64(*EnableDisableAP)
     (
-        EFI_MP_SERVICES_PROTOCOL *This,
+        struct EFI_MP_SERVICES_PROTOCOL *This,
         UINT64 ProcessorNumber,
         UINT8 EnableAP,
         UINT32 *HealthFlag);
     UINT64(*WhoAmI)
     (
-        EFI_MP_SERVICES_PROTOCOL *This,
+        struct EFI_MP_SERVICES_PROTOCOL *This,
         UINT64 *ProcessorNumber);
 } EFI_MP_SERVICES_PROTOCOL;
 
