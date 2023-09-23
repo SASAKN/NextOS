@@ -5,6 +5,7 @@
 
 /* ELFの定義を書くファイル */
 
+/* ELF Header */
 typedef struct {
     uint8_t e_ident[16];
     Elf64_Half e_type;
@@ -19,12 +20,32 @@ typedef struct {
     Elf64_Half e_shentsize;
     Elf64_Half e_shnum;
     Elf64_Half e_shstrndx;
-} Elf64_Header;
+} elfhdr;
 
+/* ELF Section Header */
 typedef struct {
-    
-}
+    Elf64_Word sh_name;
+    Elf64_Word sh_type;
+    Elf64_Word sh_flags;
+    Elf64_Addr sh_addr;
+    Elf64_Off sh_offset;
+    Elf64_Word sh_size;
+    Elf64_Word sh_link;
+    Elf64_Word sh_info;
+    Elf64_Word sh_addralign;
+    Elf64_Word sh_entsize; 
+} elfshdr;
 
-typedef 
+/* ELF Program Header */
+typedef struct {
+    Elf64_Word p_type;
+    Elf64_Word p_flags;
+    Elf64_Off  p_offset;
+    Elf64_Addr p_vaddr;
+    Elf64_Addr p_paddr;
+    Elf64_Xword p_filesz;
+    Elf64_Xword p_memsz;
+    Elf64_Xword p_align;
+} elf_phdr;
 
 #endif
