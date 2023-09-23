@@ -42,10 +42,5 @@ typedef uint64_t u64;
 
 /* Process */
 
-/* Process Identification */
-typedef 
-
-
-
 
 #endif
