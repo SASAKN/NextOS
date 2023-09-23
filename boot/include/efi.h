@@ -2,7 +2,7 @@
 #ifndef _EFI_H
 #define _EFI_H
 
-#include "types.h"
+#include "types.h" /* Must be First. */
 
 typedef struct EFI_INPUT_KEY
 {
