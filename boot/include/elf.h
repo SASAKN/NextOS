@@ -5,7 +5,7 @@
 
 /* ELFの定義を書くファイル */
 
-/* Dynamic */
+/* Dynamic Header */
 typedef struct {
     Elf64_Sxword d_tag;
     union {
@@ -56,5 +56,17 @@ typedef struct {
     Elf64_Xword p_memsz;
     Elf64_Xword p_align;
 } elf_phdr;
+
+/* ELF Relocation Entries */
+typedef struct {
+    Elf64_Addr r_offset;
+    Elf64_Word r_info;
+} elf_rel;
+
+typedef struct {
+    Elf64_Addr r_offset;
+    Elf64_Word r_info;
+    Elf64_Sxword r_append;
+} elf_rela;
 
 #endif
