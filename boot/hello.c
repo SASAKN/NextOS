@@ -8,7 +8,7 @@ EFI_STATUS EFIAPI EfiMain(
     IN EFI_HANDLE ImageHandle,
     IN EFI_SYSTEM_TABLE *SystemTable)
 {
-    SystemTable->ConOut->OutputString(ST->ConOut, L"Hello Neos!\n");
+    SystemTable->ConOut->OutputString(SystemTable->ConOut, L"Hello Neos!\n");
     while (1);
     return EFI_SUCCESS;
 };

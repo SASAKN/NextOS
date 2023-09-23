@@ -1,4 +1,6 @@
 *.code-workspace
 .vscode/
 .DS_Store
+*.o
+*.efi
 my-operating-system.code-workspace
