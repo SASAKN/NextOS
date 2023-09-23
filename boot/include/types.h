@@ -1,5 +1,5 @@
-#ifndef _TYPES_H
-#define _TYPES_H
+#ifndef _BOOT_TYPES_H
+#define _BOOT_TYPES_H
 
 /* IN OUT  何も意味は、ない*/
 #define IN
