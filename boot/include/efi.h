@@ -82,8 +82,8 @@ typedef struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL
     UINT64 _buf;
     UINT64 (*ReadKeyStroke)
     (
-        struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This,
-        struct EFI_INPUT_KEY *Key);
+       EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This,
+       EFI_INPUT_KEY *Key);
     void *WaitForKey;
 };
 
@@ -103,29 +103,29 @@ typedef struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
     UINT64 _buf;
     UINT64 (*OutputString)
     (
-        struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
+        EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
         UINT16 *String);
     UINT64 (*TextString)
     (
-        struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
+        EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
         UINT16 *String);
     UINT64 (*QueryMode)
     (
-        struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
+        EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
         UINT64 ModeNumber,
         UINT64 *Columns,
         UINT64 *Rows);
     UINT64 (*SetMode)
     (
-        struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
+        EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
         UINT64 ModeNumber);
     UINT64 (*SetAttribute)
     (
-        struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
+        EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
         UINT64 Attribute);
     UINT64 (*ClearScreen)
     (
-        struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This);
+        EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This);
     UINT64 _buf4[2];
     SIMPLE_TEXT_OUTPUT_MODE *Mode;
 };
