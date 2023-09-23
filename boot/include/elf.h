@@ -5,6 +5,15 @@
 
 /* ELFの定義を書くファイル */
 
+/* Dynamic */
+typedef struct {
+    Elf64_Sxword d_tag;
+    union {
+        Elf64_Xword d_val;
+        Elf64_Addr d_ptr;
+    } d_un;
+} elf_dynamic;
+
 /* ELF Header */
 typedef struct {
     uint8_t e_ident[16];
@@ -20,7 +29,7 @@ typedef struct {
     Elf64_Half e_shentsize;
     Elf64_Half e_shnum;
     Elf64_Half e_shstrndx;
-} elfhdr;
+} elf_hdr;
 
 /* ELF Section Header */
 typedef struct {
@@ -34,7 +43,7 @@ typedef struct {
     Elf64_Word sh_info;
     Elf64_Word sh_addralign;
     Elf64_Word sh_entsize; 
-} elfshdr;
+} elf_shdr;
 
 /* ELF Program Header */
 typedef struct {
