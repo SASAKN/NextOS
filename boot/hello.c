@@ -3,6 +3,8 @@
 #include "include/config.h"
 #include "include/graphics.h"
 
+struct EFI_SYSTEM_TABLE *ST;
+
 /* Print Hello! */
 EFI_STATUS EFIAPI EfiMain(
     IN EFI_HANDLE ImageHandle,
