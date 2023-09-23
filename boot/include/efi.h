@@ -434,7 +434,7 @@ typedef struct EFI_KEY_DATA
 typedef struct EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL
 {
     UINT64(*Reset)
-    (EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
+    (struct EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
      UINT8 ExtendedVerifiation);
     UINT64(*ReadKeyStrokeEx)
     (
@@ -530,8 +530,8 @@ typedef struct EFI_MP_SERVICES_PROTOCOL
     (
         struct EFI_MP_SERVICES_PROTOCOL *This,
         VOID (*Procedure)(VOID *ProcedureArgument),
-        UINT8 SingleThread;
-        VOID * WaitEvent,
+        UINT8 SingleThread,
+        VOID *WaitEvent,
         UINT64 TimeoutInMicroSeconds,
         VOID *ProcudureArgument,
         UINT64 **FailedCpuList);
