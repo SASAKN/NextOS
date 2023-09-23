@@ -35,6 +35,7 @@ typedef unsigned int uintptr_t;
 typedef UINT64 uint64_t;
 typedef UINT16 uint16_t;
 typedef UINT32 uint32_t;
+typedef UINT8 uint8_t;
 typedef INT32 int32_t;
 typedef INT64 int64_t;
 
@@ -46,9 +47,6 @@ typedef uint32_t Elf64_Word;
 typedef uint16_t Elf64_Half;
 typedef int64_t Elf64_Sxword;
 typedef int32_t Elf64_Sword;
-
-/* ELF Macro */
-#define ELF_NIDENT 16
 
 
 #endif
