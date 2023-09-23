@@ -14,6 +14,7 @@
 #define OS_APPS     L"apps/"
 #define OS_SERVER   L"servers/"
 #define OS_DRIVER   L"drivers/"
+#define OS_FUNCTION L"functions/"
 
 /* Boot Setting */
 #define BOOT_DEVELOPER_MODE 1 /* Debug Mode */
