@@ -4,12 +4,12 @@
 #include "include/graphics.h"
 
 /* Print Hello! */
-EFI_STATUS EFIAPI EfiMain (
+EFI_STATUS EFIAPI EfiMain(
     IN EFI_HANDLE ImageHandle,
-    IN EFI_SYSTEM_TABLE *SystemTable
-)
+    IN EFI_SYSTEM_TABLE *SystemTable)
 {
     ST->ConOut->OutputString(ST->ConOut, L"Hello Neos!\n");
-    while(1);
+    while (1)
+        ;
     return EFI_SUCCESS;
-}
+};
