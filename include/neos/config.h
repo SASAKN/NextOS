@@ -12,6 +12,6 @@
 #define OS_PLATFORM "ALL" /*OS PLATFORMS (UEFI_X64, ALL) */
 
 /* Machine Definitions */
-#include <neos/machine.h>
+#include <include/neos/machine.h>
 
 #endif /* _CONFIG_H */
