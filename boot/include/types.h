@@ -5,7 +5,6 @@
 #define IN
 #define OUT
 #define OPTIONAL
-#define EFI_SUCCESS	0
 
 /* EFIAPI */
 #define EFIAPI
