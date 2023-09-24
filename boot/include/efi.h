@@ -579,9 +579,5 @@ extern EFI_GUID fi_guid;
 extern EFI_GUID sfsp_guid;
 
 /* EFI PROTOTYPE */
-void efi_init(EFI_SYSTEM_TABLE *SystemTable);
-void dump_eficonftable(void);
-void *find_efi_acpi_table(void);
-void puts(unsigned short *s);
 
 #endif
