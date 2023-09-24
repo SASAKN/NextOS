@@ -24,7 +24,7 @@ typedef unsigned long long UINT64;
 typedef char CHAR8;
 typedef unsigned short CHAR16;
 typedef void VOID;
-typedef VOID NULL;
+#define NULL ((void *)0)
 typedef unsigned long long EFI_STATUS;
 typedef VOID *EFI_HANDLE;
 typedef VOID *EFI_EVENT;
