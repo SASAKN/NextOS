@@ -582,4 +582,9 @@ void efi_init(EFI_SYSTEM_TABLE *SystemTable);
 void dump_eficonftable(void);
 void *find_efi_acpi_table(void);
 
+/* Print Function */
+VOID Print(IN EFI_SYSTEM_TABLE *SystemTable, CHAR16 *Text) {
+    SystemTable->ConOut->OutputString(SystemTable->ConOut, Text);
+}
+
 #endif

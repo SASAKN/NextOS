@@ -12,8 +12,3 @@ EFI_STATUS EFIAPI EfiMain(
     while (1);
     return EFI_SUCCESS;
 };
-
-UINTN Print (
-    IN CONST CHAR16 *fmt,
-    ...
-);
