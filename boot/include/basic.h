@@ -8,6 +8,6 @@ size_t strlen(const char *str) {
         s++;
     }
     return s - str;
-}
+};
 
 #endif
