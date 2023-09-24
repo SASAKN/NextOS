@@ -578,6 +578,5 @@ extern EFI_GUID dpp_guid;
 extern EFI_GUID fi_guid;
 extern EFI_GUID sfsp_guid;
 
-/* EFI PROTOTYPE */
 
 #endif
