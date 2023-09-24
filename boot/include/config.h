@@ -20,4 +20,14 @@
 #define BOOT_DEVELOPER_MODE 1 /* Debug Mode */
 #define SPLASH              1 /* Boot Splash */  
 
+/* Boot Config */
+struct boot_config {
+    UINT64 kernel;
+    UINT64 servers;
+    UINT64 functions;
+    UINT64 drivers;
+    UINT64 apps; 
+};
+/* メモリの割り当て設定を行うことができる構造体です。 */
+
 #endif
