@@ -7,7 +7,6 @@
 #include "mem.h"
 #include "elf.h"
 
-void efi_clear_screen(EFI_SYSTEM_TABLE *SystemTable);
 void efi_init(EFI_SYSTEM_TABLE *SystemTable);
 void dump_eficonftable(void);
 void *find_efi_acpi_table(void);
