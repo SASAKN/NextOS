@@ -3,6 +3,7 @@
 #define _EFI_H
 
 #include "types.h" /* Must be First. */
+#include "status.h"
 
 typedef struct EFI_INPUT_KEY
 {
@@ -562,6 +563,7 @@ typedef struct EFI_MP_SERVICES_PROTOCOL
 } EFI_MP_SERVICES_PROTOCOL;
 
 extern EFI_SYSTEM_TABLE *ST;
+extern EFI_BOOT_SERVICES *BS;
 extern EFI_GRAPHICS_OUTPUT_PROTOCOL *GOP;
 extern EFI_SIMPLE_POINTER_PROTOCOL *SPP;
 extern EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *SFSP;
