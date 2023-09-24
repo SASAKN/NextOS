@@ -50,7 +50,7 @@ typedef int64_t Elf64_Sxword;
 typedef int32_t Elf64_Sword;
 
 /* Basic Types */
-typedef unsigned long size_t;
+typedef unsigned long long size_t;
 
 
 #endif
