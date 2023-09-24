@@ -584,8 +584,8 @@ void dump_eficonftable(void);
 void *find_efi_acpi_table(void);
 
 /* Print Function */
-VOID Print(CHAR16 *Text, ...) {
-    ST->ConOut->OutputString(ST->ConOut, Text ...);
-};
+void puts(unsigned short *s){
+	ST->ConOut->OutputString(ST->ConOut, s);
+}
 
 #endif
