@@ -1,7 +1,6 @@
 /* Mikanos Boot Loader */
 /* 実験用 */
 
-#include "include/types.h"
 #include "include/efi.h"
 #include "include/mem.h"
 
