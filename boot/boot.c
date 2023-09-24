@@ -3,10 +3,6 @@
 
 #include "include/efi.h"
 #include "include/mem.h"
-
-// #@@range_end(struct_memory_map)
-
-// #@@range_begin(get_memory_map)
 EFI_STATUS GetMemoryMap(struct MemoryMap* map) {
   if (map->buffer == NULL) {
     return EFI_BUFFER_TOO_SMALL;
