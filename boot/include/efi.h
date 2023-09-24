@@ -86,7 +86,8 @@ typedef struct EFI_MEMORY_DESCRIPTOR
 
 /* Protocols */
 
-typedef struct {
+typedef struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL
+{
     UINT64 _buf;
     UINT64(*ReadKeyStroke)
     (
