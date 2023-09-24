@@ -1,8 +1,9 @@
-/* Neos Boot Loader v.0.1 */
-/* このブートローダーは、まだ非常に、簡易的なものであり、ELFの読み込みしかできません。 */
+/* Mikanos Boot Loader */
+/* 実験用 */
 
-#include "efi.h"
-#include "mem.h"
+#include "include/types.h"
+#include "include/efi.h"
+#include "include/mem.h"
 
 // #@@range_end(struct_memory_map)
 
@@ -82,7 +83,7 @@ EFI_STATUS OpenRootDir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root) {
   EFI_LOADED_IMAGE_PROTOCOL* loaded_image;
   EFI_SIMPLE_FILE_SYSTEM_PROTOCOL* fs;
 
-  gBS->OpenProtocol(
+  BS->OpenProtocol(
       image_handle,
       &gEfiLoadedImageProtocolGuid,
       (VOID**)&loaded_image,
@@ -90,7 +91,7 @@ EFI_STATUS OpenRootDir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root) {
       NULL,
       EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
 
-  gBS->OpenProtocol(
+  BS->OpenProtocol(
       loaded_image->DeviceHandle,
       &gEfiSimpleFileSystemProtocolGuid,
       (VOID**)&fs,
