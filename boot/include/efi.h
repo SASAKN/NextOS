@@ -582,7 +582,6 @@ extern EFI_GUID sfsp_guid;
 void efi_init(EFI_SYSTEM_TABLE *SystemTable);
 void dump_eficonftable(void);
 void *find_efi_acpi_table(void);
-
-/* Print Function */
+void puts(unsigned short *s);
 
 #endif
