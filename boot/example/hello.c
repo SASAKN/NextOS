@@ -1,7 +1,7 @@
-#include "include/efi.h"
-#include "include/elf.h"
-#include "include/config.h"
-#include "include/graphics.h"
+#include "../include/efi.h"
+#include "../include/elf.h"
+#include "../include/config.h"
+#include "../include/graphics.h"
 
 /* Print Hello! */
 EFI_STATUS EFIAPI EfiMain(
