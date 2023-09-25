@@ -9,7 +9,7 @@ EFI_STATUS EFIAPI EfiMain(
     IN EFI_HANDLE ImageHandle,
     IN EFI_SYSTEM_TABLE *SystemTable)
 {
-    puts(L"Hello !");
+    puts(L"Hello from UEFI!");
     while (1);
     return EFI_SUCCESS;
 };
