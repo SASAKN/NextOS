@@ -3,7 +3,7 @@
 
 #include "efi.h"
 #include "types.h"
-#include "staus.h"
+#include "status.h"
 #include "proto.h"
 #include "elf.h"
 
