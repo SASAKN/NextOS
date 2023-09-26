@@ -1,5 +1,5 @@
-#include "../include/efi.h"
-#include "../include/proto.h"
+#include "include/efi.h"
+#include "include/proto.h"
 
 /* ブートの範囲内で共通の関数 */
 void putc(UINT16 c) {
