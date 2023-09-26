@@ -32,7 +32,7 @@ typedef VOID *EFI_EVENT;
 typedef UINT64 EFI_LBA;
 typedef UINTN EFI_TPL;
 
-/* 違う定義 */
+/* Stdint.hで定義されているもの */
 typedef unsigned int uintptr_t;
 typedef UINT64 uint64_t;
 typedef UINT16 uint16_t;
