@@ -1,12 +1,14 @@
 #ifndef _BOOT_TYPES_H
 #define _BOOT_TYPES_H
 
-/* IN OUT  何も意味は、ない*/
+/* Macros */
+#define NULL ((void *)0)
+#define TRUE 1
+#define FALSE 0
+
+/* UEFIデータ修飾子 */
 #define IN
 #define OUT
-#define OPTIONAL
-
-/* EFIAPI */
 #define EFIAPI
 
 /* Data Types */
@@ -24,7 +26,6 @@ typedef unsigned long long UINT64;
 typedef char CHAR8;
 typedef unsigned short CHAR16;
 typedef void VOID;
-#define NULL ((void *)0)
 typedef unsigned long long EFI_STATUS;
 typedef VOID *EFI_HANDLE;
 typedef VOID *EFI_EVENT;
