@@ -7,6 +7,7 @@
 #include "mem.h"
 #include "elf.h"
 
+/* Common.c EFI.h EFI.c etc... */
 void efi_init(EFI_SYSTEM_TABLE *SystemTable);
 void graphics_init(struct frame_buffer);
 void dump_eficonftable(void);
@@ -16,5 +17,8 @@ void puts(UINT16 *s);
 void Print(UINT16 *s); /* EDK2などに合わせるためにある関数 */
 UINT16 getc(void);
 UINT32 gets(UINT16 *buf, UINT32 buf_size);
+/* Boot.c */
+EFI_STATUS GetMemoryMap(struct MemoryMap *map);
+
 
 #endif
