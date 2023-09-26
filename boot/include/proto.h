@@ -14,6 +14,6 @@ void *find_efi_acpi_table(void);
 void putc (UINT16 c);
 void puts(UINT16 *s);
 UINT16 getc(void);
-UINT16 gets(UINT16 *buf, UINT16 buf_size);
+UINT32 gets(UINT16 *buf, UINT32 buf_size);
 
 #endif
