@@ -24,7 +24,13 @@ EFI_STATUS PrintMemoryMap(struct MemoryMap* mem_map) {
     EFI_STATUS status;
     CHAR8 buf[256];
     UINTN len;
-    puts()
+    if(EFI_ERROR(status)) {
+        return status;
+    };
+
+    puts(L"mem_map->buffer = %08lx, mem_map->map_size = %08lx\n");
+    puts(mem_map->buffer);
+    puts(mem_map->map_size);
 
 }
 
