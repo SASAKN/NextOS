@@ -5,6 +5,7 @@
 #define EFI_SUCCESS	0
 
 /* Error ! */
+#define EFI_ERROR	0x8000000000000000
 #define EFI_LOAD_EROOR 1
 #define EFI_INVALID_PARAMETER 2
 #define EFI_UNSUPPORTED 3

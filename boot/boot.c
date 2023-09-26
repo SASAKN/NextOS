@@ -8,17 +8,25 @@
 #include "include/mem.h"
 
 /* メモリーマップをUEFIファームフェアからブートローダーへ受け渡す */
-EFI_STATUS GetMemoryMap(struct MemoryMap *map)
+EFI_STATUS GetMemoryMap(struct MemoryMap* mem_map)
 {
-    if (map->buffer == NULL)
+    if (mem_map->buffer == NULL)
     {
         return EFI_BUFFER_TOO_SMALL; /* エラーを返す。 */
     };
 
-    map->map_size = map->buffer_size;
-    return BS->GetMemoryMap(&map->map_size, (EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key, &map->descriptor_size, &map->descriptor_version);
+    mem_map->map_size = mem_map->buffer_size;
+    return BS->GetMemoryMap(&mem_map->map_size, (EFI_MEMORY_DESCRIPTOR *)mem_map->buffer, &mem_map->map_key, &mem_map->descriptor_size, &mem_map->descriptor_version);
 };
 
+/* メモリーの詳細を画面に表示 */
+EFI_STATUS PrintMemoryMap(struct MemoryMap* mem_map) {
+    EFI_STATUS status;
+    CHAR8 buf[256];
+    UINTN len;
+    puts()
+
+}
 
 
 /* Entry Point ! */
