@@ -12,6 +12,11 @@ void puts(UINT16 *s) {
     ST->ConOut->OutputString(ST->ConOut, s);
 };
 
+/* EDK2などに合わせるためにあるだけ */
+void Print(UINT16 *s) {
+    ST->ConOut->OutputString(ST->ConOut, s);
+};
+
 UINT16 getc(void) {
     EFI_INPUT_KEY key;
     UINT64 waitidx;

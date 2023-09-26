@@ -13,6 +13,7 @@ void dump_eficonftable(void);
 void *find_efi_acpi_table(void);
 void putc (UINT16 c);
 void puts(UINT16 *s);
+void Print(UINT16 *s); /* EDK2などに合わせるためにある関数 */
 UINT16 getc(void);
 UINT32 gets(UINT16 *buf, UINT32 buf_size);
 
