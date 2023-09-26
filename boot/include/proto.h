@@ -8,10 +8,9 @@
 #include "elf.h"
 
 void efi_init(EFI_SYSTEM_TABLE *SystemTable);
+void graphics_init(struct frame_buffer);
 void dump_eficonftable(void);
 void *find_efi_acpi_table(void);
-void puts(unsigned short *s);
-void graphics_init(struct frame_buffer);
 void putc (UINT16 c);
 void puts(UINT16 *s);
 UINT16 getc(void);
