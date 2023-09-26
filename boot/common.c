@@ -39,14 +39,3 @@ UINT32 gets(UINT16 *buf, UINT32 buf_size) {
 
     return i;
 };
-
-
-
-UINT64 strlen (UINT16 *str) {
-    UINT64 length = 0;
-    /* ヌル文字になるまで、Lengthを増やしていく */
-    while (*str++ != L'\0')
-        length++;
-    return length;
-};
-

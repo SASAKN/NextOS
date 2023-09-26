@@ -14,6 +14,5 @@ void puts(unsigned short *s);
 void graphics_init(struct frame_buffer);
 void putc (UINT16 c);
 void puts(UINT16 *s);
-UINT64 strlen(UINT16 *str);
 
 #endif
