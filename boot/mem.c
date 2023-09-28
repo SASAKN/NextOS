@@ -18,4 +18,7 @@ EFI_STATUS GetMemoryMap(struct MemoryMap *mem_map) {
     init_memorymap();
 };
 
-void init_memorymap(void)
+void init_memorymap(void) {
+
+
+};
