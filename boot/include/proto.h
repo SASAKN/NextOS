@@ -18,11 +18,11 @@ void Print(UINT16 *s); /* EDK2などに合わせるためにある関数 */
 UINT16 getc(void);
 UINT32 gets(UINT16 *buf, UINT32 buf_size);
 void PrintHex(UINT64 val, UINT8 num_degits); /* 16進数の出力 */
-UINT8 check_warn_error (UINT64 status, UINT16 *mess)
+UINT8 check_warn_error (UINT64 status, UINT16 *mess);
 void assert (UINT64 status, UINT16 *mess);
 EFI_STATUS GetMemoryMap(struct MemoryMap *map);
 EFI_STATUS PrintMemoryMap(struct MemoryMap *map);
-init_memorymap(void);
+void init_memorymap(void);
 
 
 #endif

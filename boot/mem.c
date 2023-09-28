@@ -15,5 +15,7 @@ EFI_STATUS GetMemoryMap(struct MemoryMap *mem_map) {
         return EFI_BUFFER_TOO_SMALL;
     };
     /* もしエラーを返さないなら */
-    init_memorymap(void)
+    init_memorymap();
 };
+
+void init_memorymap(void)
