@@ -22,6 +22,7 @@ UINT8 check_warn_error (UINT64 status, UINT16 *mess)
 void assert (UINT64 status, UINT16 *mess);
 EFI_STATUS GetMemoryMap(struct MemoryMap *map);
 EFI_STATUS PrintMemoryMap(struct MemoryMap *map);
+init_memorymap(void);
 
 
 #endif
