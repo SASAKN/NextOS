@@ -21,6 +21,7 @@ UINT32 gets(UINT16 *buf, UINT32 buf_size);
 
 /* Boot.c */
 EFI_STATUS GetMemoryMap(struct MemoryMap *map);
+EFI_STATUS PrintMemoryMap(struct MemoryMap *map);
 
 
 #endif
