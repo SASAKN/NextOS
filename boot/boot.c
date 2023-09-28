@@ -7,7 +7,7 @@
 #include "include/graphics.h"
 #include "include/mem.h"
 
-
+/* メモリー用の関数 */
 
 
 /* Entry Point ! */
