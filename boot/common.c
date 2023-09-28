@@ -44,16 +44,3 @@ UINT32 gets(UINT16 *buf, UINT32 buf_size) {
 
     return i;
 };
-
-EFI_STATUS EFIAPI AsciiStrLen (IN CONST CHAR8 *String)
-{
-  UINTN  Length;
-  ASSERT (String != NULL);
-  for (Length = 0; *String != '\0'; String++, Length++) {
-    if (PcdGet32 (PcdMaximumAsciiStringLength) != 0) {
-      ASSERT (Length < PcdGet32 (PcdMaximumAsciiStringLength));
-    }
-  }
-
-  return Length;
-}
