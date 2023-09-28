@@ -3,6 +3,8 @@
 
 #include "types.h" /* Must be First. */
 
+#define MEM_MAP_SIZE 4800
+
 /* A memory map for booting */
 struct MemoryMap {
     uint64_t buffer_size;
