@@ -65,3 +65,19 @@ void PrintHex(UINT64 val, UINT8 num_degits) {
 
     puts(str);
 };
+
+UINT8 check_warn_error (UINT64 status, UINT16 *mess) {
+    if(status) {
+        puts(mess);
+        puts(L":");
+        PrintHex(status, 16);
+        puts(L"\r\n");
+    };
+
+    return !status;
+}
+
+void assert (UINT64 status, UINT16 *mess) {
+    if (!check_warn_error(status, mess))
+        while(1);
+};
