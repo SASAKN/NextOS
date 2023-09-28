@@ -26,7 +26,7 @@ void efi_init(EFI_SYSTEM_TABLE *SystemTable)
 	EFI_GUID dpup_guid = {0x379be4e, 0xd706, 0x437d, {0xb0, 0x37, 0xed, 0xb8, 0x2f, 0xb7, 0x72, 0xa4}};
 	EFI_GUID msp_guid = {0x3fdda605, 0xa76e, 0x4f46, {0xad, 0x29, 0x12, 0xf4, 0x53, 0x1b, 0x3d, 0x08}};
 
-	SystemTable->ConOut->ClearScreen(SystemTable->ConOut); /* 何かが、画面に表示されてしまわないようにクリア。 */
+	SystemTable->ConOut->ClearScreen(SystemTable->ConOut); /* 画面クリア */
 	ST = SystemTable;
 	ST->BootServices->SetWatchdogTimer(0, 0, 0, NULL); /* 5分何もしないでいると、再起動してしまうバグを修正 */
 	ST->BootServices->LocateProtocol(&gop_guid, NULL, (void **)&GOP);
