@@ -8,7 +8,14 @@
 #include "include/mem.h"
 
 /* メモリー用の関数 */
-
+/* NEOSのブート中のメモリー管理 */
+EFI_STATUS GetMemoryMap(struct MemoryMap *mem_map) {
+    if (mem_map->buffer == NULL) {
+        return EFI_BUFFER_TOO_SMALL;
+    };
+    /* もしエラーを返さないなら */
+    init_memorymap();
+};
 
 /* Entry Point ! */
 /* 起動時の最初に実行されます。 */

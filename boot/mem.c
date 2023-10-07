@@ -9,17 +9,6 @@
 #include "include/graphics.h"
 #include "include/mem.h"
 
-
-
-/* NEOSのブート中のメモリー管理 */
-EFI_STATUS GetMemoryMap(struct MemoryMap *mem_map) {
-    if (mem_map->buffer == NULL) {
-        return EFI_BUFFER_TOO_SMALL;
-    };
-    /* もしエラーを返さないなら */
-    init_memorymap();
-};
-
 void init_memmap(struct MemoryMap *mem_map)
 {
 	unsigned long long status;
@@ -29,4 +18,12 @@ void init_memmap(struct MemoryMap *mem_map)
 		&mem_map->descriptor_size, &mem_map->descriptor_version);
 	assert(status, L"GetMemoryMap");
 	mem_desc_num = mem_map->map_size / mem_map->descriptor_size;
+}
+
+/* メモリーマップを表示 */
+void print_memmap(struct MemoryMap *mem_map) {
+    EFI_MEMORY_DESCRIPTOR *p = (EFI_MEMORY_DESCRIPTOR *)mem_desc;
+    UINT32 i;
+
+    for (i = 0; i < mem_map->)
 }
