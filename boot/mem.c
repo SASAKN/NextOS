@@ -42,5 +42,5 @@ void init_memmap(struct MemoryMap *mem_map)
 		&mem_map->map_size, (struct EFI_MEMORY_DESCRIPTOR*)mem_map->buffer, &mem_map->map_key,
 		&mem_map->descriptor_size, &mem_map->descriptor_version);
 	assert(status, L"GetMemoryMap");
-	mem_desc_num = mem_map->map_size / mem_map->descriptor_size;
+	mem_map->map_size = mem_map->map_size / mem_map->descriptor_size;
 }
