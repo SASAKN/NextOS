@@ -42,6 +42,10 @@ typedef UINT8 uint8_t;
 typedef INT32 int32_t;
 typedef INT64 int64_t;
 
+/* EFIようのメモリー管理 */
+typedef UINT64 EFI_PHYSICAL_ADDRESS;
+typedef UINT64 EFI_VIRTUAL_ADDRESS;
+
 /* ELF Types */
 typedef uintptr_t Elf64_Addr;
 typedef uint64_t Elf64_Xword;
