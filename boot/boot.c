@@ -9,13 +9,16 @@
 
 /* メモリー用の関数 */
 /* NEOSのブート中のメモリー管理 */
+
+struct MemoryMap *mem_map;
+
 EFI_STATUS GetMemoryMap(struct MemoryMap *mem_map) {
     if (mem_map->buffer == NULL) {
         return EFI_BUFFER_TOO_SMALL;
     };
     /* もしエラーを返さないなら */
-    init_memmap(struct MemoryMap *mem_map);
-};
+    init_memmap(mem_map);
+}
 
 /* Entry Point ! */
 /* 起動時の最初に実行されます。 */
@@ -24,8 +27,8 @@ EFI_STATUS EfiMain(
     IN EFI_SYSTEM_TABLE *SystemTable)
 {
     efi_init(SystemTable); /* UEFIの全てを初期化する関数 */
-    GetMemoryMap(struct MemoryMap *mem_map);
-    print_memmap(struct MemoryMap *mem_map);
+    GetMemoryMap(mem_map);
+    print_memmap(mem_map);
     while (1);
     return EFI_SUCCESS;
 };
