@@ -16,6 +16,9 @@
 #define OS_DRIVER   L"drivers/"
 #define OS_FUNCTION L"functions/"
 
+/* Minixエミュレーション */
+#define _MINIX_ROOT L"minix/"
+
 /* Boot Setting */
 #define BOOT_DEVELOPER_MODE 1 /* Debug Mode */
 #define SPLASH              1 /* Boot Splash */  
