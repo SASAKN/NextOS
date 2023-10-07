@@ -17,7 +17,6 @@ EFI_STATUS GetMemoryMap(struct MemoryMap *mem_map) {
         return EFI_BUFFER_TOO_SMALL;
     };
     /* もしエラーを返さないなら */
-    init_memmap(mem_map);
 }
 
 /* Entry Point ! */
@@ -27,7 +26,7 @@ EFI_STATUS EfiMain(
     IN EFI_SYSTEM_TABLE *SystemTable)
 {
     efi_init(SystemTable); /* UEFIの全てを初期化する関数 */
-    GetMemoryMap(mem_map);
+    init_memmap(mem_map);
     print_memmap(mem_map);
     while (1);
     return EFI_SUCCESS;
