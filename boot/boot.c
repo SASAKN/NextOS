@@ -1,4 +1,4 @@
-/* Neos Boot Loader v0.1 */
+/* Neos Boot Loader v0.01 */
 
 #include "include/efi.h"
 #include "include/proto.h"
