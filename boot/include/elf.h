@@ -36,7 +36,7 @@ typedef struct {
         Elf64_Xword d_val;
         Elf64_Addr d_ptr;
     } d_un;
-} elf_dynamic;
+} elf64_dynamic;
 
 /* ELF Header */
 typedef struct {
@@ -53,7 +53,7 @@ typedef struct {
     Elf64_Half e_shentsize;
     Elf64_Half e_shnum;
     Elf64_Half e_shstrndx;
-} elf_hdr;
+} elf64_hdr;
 
 /* ELF Section Header */
 typedef struct {
@@ -67,7 +67,7 @@ typedef struct {
     Elf64_Word sh_info;
     Elf64_Word sh_addralign;
     Elf64_Word sh_entsize; 
-} elf_shdr;
+} elf64_shdr;
 
 /* ELF Program Header */
 typedef struct {
@@ -79,18 +79,18 @@ typedef struct {
     Elf64_Xword p_filesz;
     Elf64_Xword p_memsz;
     Elf64_Xword p_align;
-} elf_phdr;
+} elf64_phdr;
 
 /* ELF Relocation Entries */
 typedef struct {
     Elf64_Addr r_offset;
     Elf64_Word r_info;
-} elf_rel;
+} elf64_rel;
 
 typedef struct {
     Elf64_Addr r_offset;
     Elf64_Word r_info;
     Elf64_Sxword r_append;
-} elf_rela;
+} elf64_rela;
 
 #endif
