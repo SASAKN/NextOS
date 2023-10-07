@@ -11,7 +11,7 @@
 
 /* メモリーマップを表示 */
 void print_memmap(struct MemoryMap *mem_map) {
-    EFI_MEMORY_DESCRIPTOR *p = (EFI_MEMORY_DESCRIPTOR *)mem_desc;
+    EFI_MEMORY_DESCRIPTOR *p = (EFI_MEMORY_DESCRIPTOR *)mem_map->buffer;
     UINT32 i;
 
     for (i = 0; i < mem_map->map_size; i++) {
