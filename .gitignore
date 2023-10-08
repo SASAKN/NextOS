@@ -4,4 +4,7 @@
 *.o
 *.efi
 *.fd
+*.dmg
+*.img
+*.cdr
 my-operating-system.code-workspace

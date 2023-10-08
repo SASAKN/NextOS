@@ -5,12 +5,12 @@
 script_dir="$(dirname "$(readlink -f "$0")")"
 
 #DMGファイルの作成
-hdiutil create -size 1g -fs MS-DOS -volname NEOS -format UDRW neos.img
+hdiutil create -size 1g -fs MS-DOS -volname NEOS neos.img
 
 #DMGファイルの名前 neos.img.dmg
 
 #DMGファイルをCDRファイルに変換
-hdiutil convert neos.img.dmg -format UDRW -o neos.img
+hdiutil convert neos.img.dmg -format UDTO -o neos.img
 
 #CDRファイルの名前 neos.img.cdr
 
