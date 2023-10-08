@@ -75,6 +75,15 @@ UINT8 check_warn_error (UINT64 status, UINT16 *mess) {
     };
 
     return !status;
+};
+
+/* StrLen 文字数を数える */
+UINTN EFIAPI strlen(const CHAR16 *str) {
+    UINTN len;
+    for (len = 0; *str != L'\0'; str++) {
+        len++;
+    }
+    return len;
 }
 
 void assert (UINT64 status, UINT16 *mess) {

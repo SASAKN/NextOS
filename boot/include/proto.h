@@ -20,6 +20,7 @@ void graphics_init(struct frame_buffer);
 void putc (UINT16 c);
 void puts(UINT16 *s);
 void Print(UINT16 *s); /* EDK2などに合わせるためにある関数 */
+UINTN EFIAPI strlen(const CHAR8 *String); /* 文字数を数える */
 UINT16 getc(void);
 UINT32 gets(UINT16 *buf, UINT32 buf_size);
 void PrintHex(UINT64 val, UINT8 num_degits); /* 16進数の出力 */
@@ -30,6 +31,5 @@ void assert (UINT64 status, UINT16 *mess);
 void print_memmap(void);
 void init_memmap(void);
 UINT16 *get_memtype_name(EFI_MEMORY_TYPE type);
-UINT64 EFIAPI strlen(const CHAR8 *String); /* 文字数を数える */
 
 #endif
