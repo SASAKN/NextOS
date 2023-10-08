@@ -9,38 +9,46 @@
 #include "include/graphics.h"
 #include "include/mem.h"
 
-/* メモリーマップを表示 */
-void print_memmap(struct MemoryMap *mem_map) {
-    EFI_MEMORY_DESCRIPTOR *p = (EFI_MEMORY_DESCRIPTOR *)mem_map->buffer;
-    UINT32 i;
 
-    for (i = 0; i < mem_map->map_size; i++) {
-		PrintHex((UINT64)p, 16);
+unsigned char mem_desc[MEM_MAP_SIZE];
+unsigned long long mem_desc_num;
+unsigned long long mem_desc_unit_size;
+unsigned long long map_key;
+
+void dump_memmap(void)
+{
+	struct EFI_MEMORY_DESCRIPTOR *p =
+		(struct EFI_MEMORY_DESCRIPTOR *)mem_desc;
+	unsigned int i;
+
+	for (i = 0; i < mem_desc_num; i++) {
+		puth((unsigned long long)p, 16);
 		putc(L' ');
-		PrintHex(p->Type, 2);
+		puth(p->Type, 2);
 		putc(L' ');
-		PrintHex(p->PhysicalStart, 16);
+		puth(p->PhysicalStart, 16);
 		putc(L' ');
-		PrintHex(p->VirtualStart, 16);
+		puth(p->VirtualStart, 16);
 		putc(L' ');
-		PrintHex(p->NumberOfPages, 16);
+		puth(p->NumberOfPages, 16);
 		putc(L' ');
-		PrintHex(p->Attribute, 16);
+		puth(p->Attribute, 16);
 		puts(L"\r\n");
 
-		p = (EFI_MEMORY_DESCRIPTOR *)(
-			(UINT8 *)p + mem_map->descriptor_size);
+		p = (struct EFI_MEMORY_DESCRIPTOR *)(
+			(unsigned char *)p + mem_desc_unit_size);
 	}
 }
 
-/* メモリーマップの初期化 */
-void init_memmap(struct MemoryMap *mem_map)
+void init_memmap(void)
 {
 	unsigned long long status;
-    mem_map->map_size = MEM_MAP_SIZE;
+	unsigned long long mmap_size = MEM_DESC_SIZE;
+	unsigned int desc_ver;
+
 	status = ST->BootServices->GetMemoryMap(
-		&mem_map->map_size, (struct EFI_MEMORY_DESCRIPTOR*)mem_map->buffer, &mem_map->map_key,
-		&mem_map->descriptor_size, &mem_map->descriptor_version);
+		&mmap_size, (struct EFI_MEMORY_DESCRIPTOR *)mem_desc, &map_key,
+		&mem_desc_unit_size, &desc_ver);
 	assert(status, L"GetMemoryMap");
-	mem_map->map_size = mem_map->map_size / mem_map->descriptor_size;
+	mem_desc_num = mmap_size / mem_desc_unit_size;
 }
