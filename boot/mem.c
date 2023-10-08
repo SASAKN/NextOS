@@ -15,7 +15,7 @@ unsigned long long mem_desc_unit_size;
 unsigned long long map_key;
 
 /* メモリマップの種類 */
-const CHAR16 *get_memtype_name(EFI_MEMORY_TYPE type)
+UINT16 *get_memtype_name(EFI_MEMORY_TYPE type)
 {
 	switch (type)
 	{
@@ -61,15 +61,17 @@ void print_memmap(void)
 	struct EFI_MEMORY_DESCRIPTOR *p =
 		(struct EFI_MEMORY_DESCRIPTOR *)mem_desc;
 	unsigned int i;
-	CHAR8 *header = "Index, Type, Type(name), PhysicalStart, NumberOfPages, Attribute\n"
+	UINT16 *header = L"Index, Type, Type(name), PhysicalStart, NumberOfPages, Attribute\n";
 
 		for (i = 0; i < mem_desc_num; i++)
 	{
 		PrintHex((unsigned long long)p, 16);
 		putc(L' ');
+		puts(header);
+		putc(L' ');
 		PrintHex(p->Type, 2);
 		putc(L' ');
-		PrintHex(get_memtype_name(p->Type));
+		puts(get_memtype_name(p->Type));
 		putc(L' ');
 		PrintHex(p->PhysicalStart, 16);
 		putc(L' ');

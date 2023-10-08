@@ -29,6 +29,7 @@ void assert (UINT64 status, UINT16 *mess);
 /* Memory */
 void print_memmap(void);
 void init_memmap(void);
+UINT16 *get_memtype_name(EFI_MEMORY_TYPE type);
 
 
 #endif
