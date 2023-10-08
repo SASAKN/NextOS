@@ -69,6 +69,8 @@ void print_memmap(void)
 		putc(L' ');
 		PrintHex(p->Type, 2);
 		putc(L' ');
+		PrintHex(get_memtype_name(p->Type));
+		putc(L' ');
 		PrintHex(p->PhysicalStart, 16);
 		putc(L' ');
 		PrintHex(p->VirtualStart, 16);
