@@ -64,7 +64,7 @@ void print_memmap(void)
 	UINT16 *header = L"Index, Type, Type(name), PhysicalStart, NumberOfPages, Attribute\n";
 	puts(header);
 	puts(L"\r\n");
-		for (i = 0; i < mem_desc_num; i++)
+	for (i = 0; i < mem_desc_num; i++)
 	{
 		PrintHex((unsigned long long)p, 16);
 		putc(L' ');
@@ -85,15 +85,27 @@ void print_memmap(void)
 	}
 }
 
-void init_memmap(void)
+EFI_STATUS init_memmap(struct MemoryMap* map)
 {
-	unsigned long long status;
-	unsigned long long mmap_size = MEM_MAP_SIZE;
-	unsigned int desc_ver;
+	if (map->buffer == NULL) {
+		return EFI_BUFFER_TOO_SMALL;
+	}
 
-	status = ST->BootServices->GetMemoryMap(
-		&mmap_size, (struct EFI_MEMORY_DESCRIPTOR *)mem_desc, &map_key,
-		&mem_desc_unit_size, &desc_ver);
-	assert(status, L"GetMemoryMap");
-	mem_desc_num = mmap_size / mem_desc_unit_size;
+  map->map_size = map->buffer_size;
+  return gBS->GetMemoryMap(
+      &map->map_size,
+      (EFI_MEMORY_DESCRIPTOR*)map->buffer,
+      &map->map_key,
+      &map->descriptor_size,
+      &map->descriptor_version);
+};
+
+EFI_STATUS save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *file) {
+	CHAR8 buf[256];
+	UINTN length;
+
+	CHAR8* header = "Index, Type, Type(name), PhysicalStart, NumberOfPages, Attribute\n";
+	length = strlen(header);
+	file->Write(file, &length, header);
+
 }
