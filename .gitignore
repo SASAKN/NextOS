@@ -3,4 +3,5 @@
 .DS_Store
 *.o
 *.efi
+*.fd
 my-operating-system.code-workspace
