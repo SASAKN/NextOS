@@ -20,6 +20,7 @@ void print_memmap(void)
 	struct EFI_MEMORY_DESCRIPTOR *p =
 		(struct EFI_MEMORY_DESCRIPTOR *)mem_desc;
 	unsigned int i;
+	CHAR8* header = "Index, Type, Type(name), PhysicalStart, NumberOfPages, Attribute\n"
 
 	for (i = 0; i < mem_desc_num; i++) {
 		PrintHex((unsigned long long)p, 16);
