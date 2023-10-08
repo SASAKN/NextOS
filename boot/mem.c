@@ -107,5 +107,16 @@ EFI_STATUS save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *file) {
 	CHAR8* header = "Index, Type, Type(name), PhysicalStart, NumberOfPages, Attribute\n";
 	length = strlen(header);
 	file->Write(file, &length, header);
-
+	putc(L' ');
+	PrintHex(map->buffer, 16);
+	putc(L' ');
+	PrintHex(map->map_size, 16);
+	putc(L' ');
+	EFI_PHYSICAL_ADDRESS iter;
+	int i;
+	for (iter = (EFI_PHYSICAL_ADDRESS)map->buffer, i = 0;
+	iter < (EFI_PHYSICAL_ADDRESS)map->buffer + map->map_size;
+	iter += map->descriptor_size, i++) {
+		EFI_MEMORY_DESCRIPTOR* desc = (EFI_MEMORY_DESCRIPTOR*)iter;
+	}
 }
