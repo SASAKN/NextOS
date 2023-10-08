@@ -4,6 +4,12 @@
 
 script_dir="$(dirname "$(readlink -f "$0")")"
 
+#ビルドフォルダーのクリア
+rm -r build/
+
+#ビルドフォルダーの作成
+mkdir build/
+
 #DMGファイルの作成
 hdiutil create -size 1g -fs MS-DOS -volname NEOS neos.img
 
