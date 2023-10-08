@@ -68,8 +68,6 @@ void print_memmap(void)
 	{
 		PrintHex((unsigned long long)p, 16);
 		putc(L' ');
-		puts(header);
-		putc(L' ');
 		PrintHex(p->Type, 2);
 		putc(L' ');
 		puts(get_memtype_name(p->Type));
