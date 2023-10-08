@@ -30,6 +30,6 @@ void assert (UINT64 status, UINT16 *mess);
 void print_memmap(void);
 void init_memmap(void);
 UINT16 *get_memtype_name(EFI_MEMORY_TYPE type);
-
+UINT64 EFIAPI strlen(const CHAR8 *String); /* 文字数を数える */
 
 #endif
