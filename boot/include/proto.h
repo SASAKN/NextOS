@@ -27,8 +27,8 @@ UINT8 check_warn_error (UINT64 status, UINT16 *mess);
 void assert (UINT64 status, UINT16 *mess);
 
 /* Memory */
-void print_memmap(struct MemoryMap *mem_map);
-void init_memmap(struct MemoryMap *mem_map);
+void print_memmap(void);
+void init_memmap(void);
 
 
 #endif
