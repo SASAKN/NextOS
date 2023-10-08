@@ -12,6 +12,13 @@
 
 struct MemoryMap *mem_map;
 
+EFI_STATUS GetMemoryMap(struct MemoryMap *mem_map) {
+    if (mem_map->buffer == NULL) {
+        return EFI_BUFFER_TOO_SMALL;
+    };
+    /* もしエラーを返さないなら */
+}
+
 /* Entry Point ! */
 /* 起動時の最初に実行されます。 */
 EFI_STATUS EfiMain(
