@@ -63,7 +63,7 @@ void print_memmap(void)
 	unsigned int i;
 	UINT16 *header = L"Index, Type, Type(name), PhysicalStart, NumberOfPages, Attribute\n";
 	puts(header);
-	putc(L"\r\n");
+	puts(L"\r\n");
 		for (i = 0; i < mem_desc_num; i++)
 	{
 		PrintHex((unsigned long long)p, 16);
