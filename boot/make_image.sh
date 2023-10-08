@@ -37,3 +37,6 @@ cd ${script_dir}
 
 #アンマウント
 hdiutil unmount /Volumes/NEOS
+
+#QEMUの実行に移る
+source run_image.sh
