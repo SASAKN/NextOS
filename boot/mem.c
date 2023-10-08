@@ -9,11 +9,6 @@
 #include "include/graphics.h"
 #include "include/mem.h"
 
-unsigned char mem_desc[MEM_MAP_SIZE];
-unsigned long long mem_desc_num;
-unsigned long long mem_desc_unit_size;
-unsigned long long map_key;
-
 /* メモリマップの種類 */
 UINT16 *get_memtype_name(EFI_MEMORY_TYPE type)
 {
