@@ -26,6 +26,7 @@ UINT32 gets(UINT16 *buf, UINT32 buf_size);
 void PrintHex(UINT64 val, UINT8 num_degits); /* 16進数の出力 */
 UINT8 check_warn_error (UINT64 status, UINT16 *mess);
 void assert (UINT64 status, UINT16 *mess);
+/* 基本的なテキストの表示 */
 void text_gen(char *str, size_t max_size, const char *format, ...);
 size_t itoa(char *str, size_t max_size, unsigned int value, int base);
 void printf(const char *format, ...);

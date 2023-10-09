@@ -101,7 +101,7 @@ void printf(const char *format, ...) {
 
     while (*format) {
         if (*format != '%') {
-            putchar(*format);
+            putc(*format);
         } else {
             format++;
             if (*format == '\0') {
@@ -111,13 +111,13 @@ void printf(const char *format, ...) {
             switch (*format) {
                 case 'c': {
                     int c = va_arg(args, int);
-                    putchar(c);
+                    putc(c);
                     break;
                 }
                 case 's': {
                     const char *str = va_arg(args, const char *);
                     while (*str) {
-                        putchar(*str);
+                        putc(*str);
                         str++;
                     }
                     break;
@@ -131,8 +131,8 @@ void printf(const char *format, ...) {
                     break;
                 }
                 default: {
-                    putchar('%');
-                    putchar(*format);
+                    putc('%');
+                    putc(*format);
                 }
             }
         }
