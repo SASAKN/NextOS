@@ -3,7 +3,7 @@
 
 #include "types.h" /* Must be First. */
 
-#define MEM_BUFFER_SIZE 2048
+#define MEM_BUFFER_SIZE (1024 * 3)
 
 /* A memory map for booting */
 struct MemoryMap {
