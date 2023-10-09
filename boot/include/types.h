@@ -47,6 +47,7 @@ typedef UINT32 uint32_t;
 typedef UINT8 uint8_t;
 typedef INT32 int32_t;
 typedef INT64 int64_t;
+typedef unsigned long size_t;
 
 /* EFIようのメモリー管理 */
 typedef UINT64 EFI_PHYSICAL_ADDRESS;
