@@ -19,8 +19,8 @@ EFI_STATUS EfiMain(
     IN EFI_SYSTEM_TABLE *SystemTable)
 {
     efi_init(SystemTable); /* UEFIの全てを初期化する関数 */
-    init_memmap();
-    print_memmap();
+    init_memmap(mem_map);
+    print_memmap(mem_map);
     while (1);
     return EFI_SUCCESS;
 };
