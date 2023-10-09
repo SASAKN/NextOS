@@ -57,8 +57,13 @@ void print_memmap(struct MemoryMap* map)
 {
 	EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR*)map->buffer;
 	UINT32 i;
-
+	UINT16 header = L"Index, Type, Type(name), PhysicalStart, VirtualStart, NumberOfPages, Attribute\n";
+	putc(L' ');
+	puts(header);
+	puts(L"\r\n");
 	for (i = 0; i < memmap_desc_entry; i++) {
+		puts((UINT16)i);
+		putc(L' ');
 		PrintHex((unsigned long long)desc, 16);
 		putc(L' ');
 		PrintHex(desc->Type, 2);
