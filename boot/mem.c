@@ -56,14 +56,12 @@ UINT16 *get_memtype_name(EFI_MEMORY_TYPE type)
 void print_memmap(struct MemoryMap *map)
 {
 	EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer;
-	UINT16 i;
+	UINT32 i;
 	UINT16 *header = L"Index, Buffer, Type, Type(name),PhysicalStart, VirtualStart, NumberOfPages, Attribute\n";
 	puts(header);
 	putc(L' ');
 	for (i = 0; i < memmap_desc_entry; i++)
 	{
-		puts(&i);
-		putc(L' ');
 		PrintHex((unsigned long long)desc, 16);
 		putc(L' ');
 		PrintHex(desc->Type, 2);
