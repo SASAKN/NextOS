@@ -82,7 +82,6 @@ void print_memmap(struct MemoryMap *map)
 EFI_STATUS init_memmap(struct MemoryMap *map)
 {
 	EFI_STATUS status;
-	map->map_size = MEM_MAP_SIZE;
 	status = ST->BootServices->GetMemoryMap(&map->map_size, (EFI_MEMORY_DESCRIPTOR*)map->buffer, &map->map_key, &map->descriptor_size, &map->descriptor_version);
 	assert(status, L"GetMemoryMap");
 
