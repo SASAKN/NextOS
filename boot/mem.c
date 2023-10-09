@@ -51,18 +51,21 @@ UINT16 *get_memtype_name(EFI_MEMORY_TYPE type)
 	}
 }
 
-void print_memmap(struct MemoryMap* map)
+void print_memmap(struct MemoryMap *map)
 {
 	EFI_PHYSICAL_ADDRESS iter;
-	iter = (EFI_PHYSICAL_ADDRESS)map->buffer;
 	UINT32 i;
 	UINT16 *header = L"Index, Type, Type(name), PhysicalStart, NumberOfPages, Attribute\n";
 	puts(header);
 	puts(L"\r\n");
-	for (i = 0; i < map->descriptor_size; i++)
+	iter = (EFI_PHYSICAL_ADDRESS)map->buffer;
+	i = 0;
+	for (
+		iter < (EFI_PHYSICAL_ADDRESS)map->buffer + map->map_size;
+		iter += map->descriptor_size, i++)
 	{
-		EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR*)iter;
-		PrintHex((unsigned long long)desc, 16);
+		EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)iter;
+		PrintHex((UINT64)desc, 16);
 		putc(L' ');
 		PrintHex(desc->Type, 2);
 		putc(L' ');
@@ -76,17 +79,18 @@ void print_memmap(struct MemoryMap* map)
 		putc(L' ');
 		PrintHex(desc->Attribute, 16);
 		puts(L"\r\n");
-	}
+	};
 }
 
-EFI_STATUS init_memmap(struct MemoryMap* map)
+EFI_STATUS init_memmap(struct MemoryMap *map)
 {
 	EFI_STATUS status;
-	if (map->buffer == NULL) {
+	if (map->buffer == NULL)
+	{
 		return EFI_BUFFER_TOO_SMALL;
 	};
-  map->map_size = map->buffer_size;
-  status = ST->BootServices->GetMemoryMap(map->map_size, (EFI_MEMORY_DESCRIPTOR*)map->buffer, &map->map_key, &map->descriptor_size, &map->descriptor_version);
-  assert(status, L"GetMemoryMap");
-  return status;
+	map->map_size = map->buffer_size;
+	status = ST->BootServices->GetMemoryMap(map->map_size, (EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key, &map->descriptor_size, &map->descriptor_version);
+	assert(status, L"GetMemoryMap");
+	return status;
 };
