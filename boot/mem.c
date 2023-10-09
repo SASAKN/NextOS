@@ -55,27 +55,27 @@ UINT16 *get_memtype_name(EFI_MEMORY_TYPE type)
 
 void print_memmap(struct MemoryMap* map)
 {
-	EFI_MEMORY_DESCRIPTOR *p = (EFI_MEMORY_DESCRIPTOR*)map->buffer;
+	EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR*)map->buffer;
 	UINT32 i;
 
 	for (i = 0; i < memmap_desc_entry; i++) {
 		PrintHex((unsigned long long)p, 16);
 		putc(L' ');
-		PrintHex(p->Type, 2);
+		PrintHex(desc->Type, 2);
 		putc(L' ');
-		puts(get_memtype_name(p->Type));
+		puts(get_memtype_name(desc->Type));
 		putc(L' ');
-		PrintHex(p->PhysicalStart, 16);
+		PrintHex(desc->PhysicalStart, 16);
 		putc(L' ');
-		PrintHex(p->VirtualStart, 16);
+		PrintHex(desc->VirtualStart, 16);
 		putc(L' ');
-		PrintHex(p->NumberOfPages, 16);
+		PrintHex(desc->NumberOfPages, 16);
 		putc(L' ');
-		PrintHex(p->Attribute, 16);
+		PrintHex(desc->Attribute, 16);
 		puts(L"\r\n");
 
 		p = (EFI_MEMORY_DESCRIPTOR *)(
-			(UINT8 *)p + map->descriptor_size);
+			(UINT8 *)desc + map->descriptor_size);
 	}
 }
 
