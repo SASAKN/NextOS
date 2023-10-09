@@ -95,6 +95,7 @@ void assert (UINT64 status, UINT16 *mess) {
         while(1);
 };
 
+/* Printf 標準ライブラリなどにあるやつ */
 void printf(const char *format, ...) {
     va_list args;
     va_start(args, format);
@@ -142,6 +143,7 @@ void printf(const char *format, ...) {
     va_end(args);
 };
 
+/* 標準ライブラリで実装されているitoa */
 size_t itoa(char *str, size_t max_size, unsigned int value, int base) {
     if (base < 2 || base > 36 || max_size < 2) {
         return 0; // エラー: サポートされていない基数や不十分なバッファサイズ
@@ -170,6 +172,7 @@ size_t itoa(char *str, size_t max_size, unsigned int value, int base) {
     return i - 1; // null 終端文字を除いた文字列の長さ
 };
 
+/* sprintf的なやつ */
 void text_gen(char *str, size_t max_size, const char *format, ...) {
     va_list args;
     va_start(args, format);
