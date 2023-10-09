@@ -59,7 +59,7 @@ void print_memmap(struct MemoryMap* map)
 	UINT32 i;
 
 	for (i = 0; i < memmap_desc_entry; i++) {
-		PrintHex((unsigned long long)p, 16);
+		PrintHex((unsigned long long)desc, 16);
 		putc(L' ');
 		PrintHex(desc->Type, 2);
 		putc(L' ');
@@ -74,7 +74,7 @@ void print_memmap(struct MemoryMap* map)
 		PrintHex(desc->Attribute, 16);
 		puts(L"\r\n");
 
-		p = (EFI_MEMORY_DESCRIPTOR *)(
+		desc = (EFI_MEMORY_DESCRIPTOR *)(
 			(UINT8 *)desc + map->descriptor_size);
 	};
 };

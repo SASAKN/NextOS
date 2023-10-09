@@ -124,11 +124,12 @@ void printf(const char *format, ...) {
                     break;
                 }
                 case 'd': {
-                    int num = va_arg(args, int);
-                    // カスタム整数から文字列への変換ロジックを呼び出す
-                    // この例では未実装
-                    // custom_itoa_base(buffer, sizeof(buffer), num, 10);
-                    // custom_puts(buffer);
+                    /* ここには、何も実装がありません */
+                    // int num = va_arg(args, int);
+                    // // カスタム整数から文字列への変換ロジックを呼び出す
+                    // // この例では未実装
+                    // // custom_itoa_base(buffer, sizeof(buffer), num, 10);
+                    // // custom_puts(buffer);
                     break;
                 }
                 default: {
@@ -193,12 +194,12 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
             switch (*format) {
                 case 'u': {
                     unsigned int val = va_arg(args, unsigned int);
-                    dest += custom_itoa(dest, end - dest, val, 10);
+                    dest += itoa(dest, end - dest, val, 10);
                     break;
                 }
                 case 'x': {
                     unsigned int val = va_arg(args, unsigned int);
-                    dest += custom_itoa(dest, end - dest, val, 16);
+                    dest += itoa(dest, end - dest, val, 16);
                     break;
                 }
                 case 's': {
