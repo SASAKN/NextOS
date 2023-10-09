@@ -51,13 +51,12 @@ UINT16 *get_memtype_name(EFI_MEMORY_TYPE type)
 	}
 };
 
-void print_memmap(void)
+void print_memmap(struct MemoryMap* map)
 {
-	struct EFI_MEMORY_DESCRIPTOR *p =
-		(struct EFI_MEMORY_DESCRIPTOR *)mem_desc;
-	unsigned int i;
+	EFI_MEMORY_DESCRIPTOR *p = (EFI_MEMORY_DESCRIPTOR*)map->buffer;
+	UINT32 i;
 
-	for (i = 0; i < mem_desc_num; i++) {
+	for (i = 0; i < mem_desc_entry; i++) {
 		PrintHex((unsigned long long)p, 16);
 		putc(L' ');
 		PrintHex(p->Type, 2);
@@ -73,8 +72,8 @@ void print_memmap(void)
 		PrintHex(p->Attribute, 16);
 		puts(L"\r\n");
 
-		p = (struct EFI_MEMORY_DESCRIPTOR *)(
-			(unsigned char *)p + mem_desc_unit_size);
+		p = (EFI_MEMORY_DESCRIPTOR *)(
+			(UINT8 *)p + map->descriptor_size);
 	}
 }
 
