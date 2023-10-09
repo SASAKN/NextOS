@@ -88,7 +88,7 @@ UINTN EFIAPI strlen(const CHAR8 *str) {
 
 void assert (UINT64 status, UINT16 *mess) {
     if (status == 0x8000000000000005) {
-        puts(L"EFI_BUFFER_TOO_SMALL");
+        puts(L"Error: EFI_BUFFER_TOO_SMALL");
         puts(L"\r\n");
     }
     if (!check_warn_error(status, mess))
