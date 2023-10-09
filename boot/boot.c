@@ -17,14 +17,13 @@ EFI_STATUS EfiMain(
     IN EFI_SYSTEM_TABLE *SystemTable)
 {
     efi_init(SystemTable); /* UEFIの全てを初期化する関数 */
-    CHAR8 memmap_buf[MEM_BUFFER_SIZE];
-    UINT64 memmap_size = MEM_BUFFER_SIZE;
-    struct MemoryMap map;
-    map.buffer_size = memmap_size;
-    map.buffer = memmap_buf;
-    map.descriptor_size
-    init_memmap(&map);
-    print_memmap(&map);
+    // CHAR8 memmap_buf[MEM_BUFFER_SIZE];
+    // UINT64 memmap_size = MEM_BUFFER_SIZE;
+    // struct MemoryMap map;
+    // map.buffer_size = memmap_size;
+    // map.buffer = memmap_buf;
+    init_memmap();
+    print_memmap();
     while (1);
     return EFI_SUCCESS;
 };
