@@ -51,16 +51,6 @@ UINT16 *get_memtype_name(EFI_MEMORY_TYPE type)
 	}
 };
 
-/* A memory map for booting */
-struct MemoryMap {
-    uint64_t buffer_size;
-    void* buffer; //Descriptor
-    uint64_t map_size;
-    uint64_t map_key;
-    uint64_t descriptor_size;
-    uint32_t descriptor_version;
-};
-
 void print_memmap(void)
 {
 	struct EFI_MEMORY_DESCRIPTOR *p =
@@ -95,8 +85,8 @@ EFI_STATUS init_memmap(struct MemoryMap *map)
 		&map->map_size, (struct EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key,
 		&map->descriptor_size, &map->descriptor_version);
 	assert(status, L"GetMemoryMap");
+	mem_desc_entry = map->map_size / map->descriptor_size;
 	return status;
-	mem_desc_entry = mmap_size / mem_desc_unit_size;
 }
 
 // void print_memmap(struct MemoryMap *map)
