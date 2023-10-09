@@ -8,4 +8,5 @@
 test.c
 *.img
 *.cdr
+*.out
 my-operating-system.code-workspace
