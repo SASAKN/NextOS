@@ -58,6 +58,16 @@ unsigned long long mem_desc_num;
 unsigned long long mem_desc_unit_size;
 unsigned long long map_key;
 
+/* A memory map for booting */
+struct MemoryMap {
+    uint64_t buffer_size;
+    void* buffer;
+    uint64_t map_size;
+    uint64_t map_key;
+    uint64_t descriptor_size;
+    uint32_t descriptor_version;
+};
+
 void print_memmap(void)
 {
 	struct EFI_MEMORY_DESCRIPTOR *p =
@@ -68,6 +78,8 @@ void print_memmap(void)
 		PrintHex((unsigned long long)p, 16);
 		putc(L' ');
 		PrintHex(p->Type, 2);
+		putc(L' ');
+		puts(get_memtype_name(p->Type));
 		putc(L' ');
 		PrintHex(p->PhysicalStart, 16);
 		putc(L' ');
