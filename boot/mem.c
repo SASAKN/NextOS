@@ -91,27 +91,3 @@ EFI_STATUS init_memmap(struct MemoryMap *map)
 	assert(status, L"GetMemoryMap");
 	return status;
 };
-
-void print_memmap_old(struct MemoryMap *map)
-{
-	EFI_PHYSICAL_ADDRESS iter;
-	UINT32 i;
-	UINT16 *header = L"Index, Type, Type(name), PhysicalStart, NumberOfPages, Attribute\n";
-	puts(header);
-	puts(L"\r\n");
-	EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)iter;
-	PrintHex((UINT64)desc, 16);
-	putc(L' ');
-	PrintHex(desc->Type, 2);
-	putc(L' ');
-	puts(get_memtype_name(desc->Type));
-	putc(L' ');
-	PrintHex(desc->PhysicalStart, 16);
-	putc(L' ');
-	PrintHex(desc->VirtualStart, 16);
-	putc(L' ');
-	PrintHex(desc->NumberOfPages, 16);
-	putc(L' ');
-	PrintHex(desc->Attribute, 16);
-	puts(L"\r\n");
-}
