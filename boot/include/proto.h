@@ -29,8 +29,8 @@ void assert (UINT64 status, UINT16 *mess);
 
 /* Memory */
 // void print_memmap(struct MemoryMap* map);
-void print_memmap(void);
-void init_memmap(void);
+void print_memmap(struct MemoryMap* map);
+EFI_STATUS init_memmap(struct MemoryMap *map);
 UINT16 *get_memtype_name(EFI_MEMORY_TYPE type);
 
 #endif
