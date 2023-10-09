@@ -7,6 +7,12 @@
 #define FALSE 0
 #define CONST const
 
+/* 可変長引数 */
+typedef __builtin_va_list va_list;
+#define va_start(ap, param) __builtin_va_start(ap, param)
+#define va_end(ap)          __builtin_va_end(ap)
+#define va_arg(ap, type)    __builtin_va_arg(ap, type)
+
 /* UEFIデータ修飾子 */
 #define IN
 #define OUT
