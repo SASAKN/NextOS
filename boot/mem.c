@@ -51,17 +51,10 @@ UINT16 *get_memtype_name(EFI_MEMORY_TYPE type)
 	}
 };
 
-#define MEM_DESC_SIZE	3700
-
-unsigned char mem_desc[MEM_DESC_SIZE];
-unsigned long long mem_desc_num;
-unsigned long long mem_desc_unit_size;
-unsigned long long map_key;
-
 /* A memory map for booting */
 struct MemoryMap {
     uint64_t buffer_size;
-    void* buffer;
+    void* buffer; //Descriptor
     uint64_t map_size;
     uint64_t map_key;
     uint64_t descriptor_size;
@@ -95,17 +88,15 @@ void print_memmap(void)
 	}
 }
 
-void init_memmap(void)
+EFI_STATUS init_memmap(struct MemoryMap *map)
 {
 	unsigned long long status;
-	unsigned long long mmap_size = MEM_DESC_SIZE;
-	unsigned int desc_ver;
-
 	status = ST->BootServices->GetMemoryMap(
-		&mmap_size, (struct EFI_MEMORY_DESCRIPTOR *)mem_desc, &map_key,
-		&mem_desc_unit_size, &desc_ver);
+		&map->map_size, (struct EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key,
+		&map->descriptor_size, &map->descriptor_version);
 	assert(status, L"GetMemoryMap");
-	mem_desc_num = mmap_size / mem_desc_unit_size;
+	return status;
+	mem_desc_entry = mmap_size / mem_desc_unit_size;
 }
 
 // void print_memmap(struct MemoryMap *map)

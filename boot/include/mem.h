@@ -3,6 +3,9 @@
 
 #include "types.h" /* Must be First. */
 
+#define MEM_DESC_SIZE	3700
+UINT64 mem_desc_entry; /* ループの時に必要 */
+
 /* A memory map for booting */
 struct MemoryMap {
     uint64_t buffer_size;
