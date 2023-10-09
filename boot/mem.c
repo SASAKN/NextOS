@@ -54,11 +54,12 @@ UINT16 *get_memtype_name(EFI_MEMORY_TYPE type)
 void print_memmap(struct MemoryMap* map)
 {
 	EFI_PHYSICAL_ADDRESS iter;
+	iter = (EFI_PHYSICAL_ADDRESS)map->buffer;
 	UINT32 i;
 	UINT16 *header = L"Index, Type, Type(name), PhysicalStart, NumberOfPages, Attribute\n";
 	puts(header);
 	puts(L"\r\n");
-	for (i = 0; i < mem_desc_num; i++)
+	for (i = 0; i < map->descriptor_size; i++)
 	{
 		EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR*)iter;
 		PrintHex((unsigned long long)desc, 16);
@@ -85,32 +86,10 @@ EFI_STATUS init_memmap(struct MemoryMap* map)
 	}
 
   map->map_size = map->buffer_size;
-  return gBS->GetMemoryMap(
+  return BS->GetMemoryMap(
       &map->map_size,
       (EFI_MEMORY_DESCRIPTOR*)map->buffer,
       &map->map_key,
       &map->descriptor_size,
       &map->descriptor_version);
 };
-
-EFI_STATUS save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *file) {
-	CHAR8 buf[256];
-	UINTN length;
-
-	CHAR8* header = "Index, Type, Type(name), PhysicalStart, NumberOfPages, Attribute\n";
-	length = strlen(header);
-	file->Write(file, &length, header);
-	putc(L' ');
-	PrintHex(map->buffer, 16);
-	putc(L' ');
-	PrintHex(map->map_size, 16);
-	putc(L' ');
-	EFI_PHYSICAL_ADDRESS iter;
-	int i;
-	for (iter = (EFI_PHYSICAL_ADDRESS)map->buffer, i = 0;
-	iter < (EFI_PHYSICAL_ADDRESS)map->buffer + map->map_size;
-	iter += map->descriptor_size, i++) {
-		EFI_MEMORY_DESCRIPTOR* desc = (EFI_MEMORY_DESCRIPTOR*)iter;
-		//この後、テキスト生成プログラムを書く	
-	}
-}
