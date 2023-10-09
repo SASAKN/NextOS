@@ -5,6 +5,7 @@
 *.efi
 *.fd
 *.dmg
+test.c
 *.img
 *.cdr
 my-operating-system.code-workspace
