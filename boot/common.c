@@ -94,3 +94,130 @@ void assert (UINT64 status, UINT16 *mess) {
     if (!check_warn_error(status, mess))
         while(1);
 };
+
+void printf(const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+
+    while (*format) {
+        if (*format != '%') {
+            putchar(*format);
+        } else {
+            format++;
+            if (*format == '\0') {
+                break; // 不完全なフォーマット文字列を処理
+            }
+
+            switch (*format) {
+                case 'c': {
+                    int c = va_arg(args, int);
+                    putchar(c);
+                    break;
+                }
+                case 's': {
+                    const char *str = va_arg(args, const char *);
+                    while (*str) {
+                        putchar(*str);
+                        str++;
+                    }
+                    break;
+                }
+                case 'd': {
+                    int num = va_arg(args, int);
+                    // カスタム整数から文字列への変換ロジックを呼び出す
+                    // この例では未実装
+                    // custom_itoa_base(buffer, sizeof(buffer), num, 10);
+                    // custom_puts(buffer);
+                    break;
+                }
+                default: {
+                    putchar('%');
+                    putchar(*format);
+                }
+            }
+        }
+        format++;
+    }
+
+    va_end(args);
+};
+
+size_t itoa(char *str, size_t max_size, unsigned int value, int base) {
+    if (base < 2 || base > 36 || max_size < 2) {
+        return 0; // エラー: サポートされていない基数や不十分なバッファサイズ
+    }
+
+    size_t i = 0;
+    str[i++] = '\0';
+
+    while (value > 0 && i < max_size) {
+        int digit = value % base;
+        str[i++] = (digit < 10) ? (char)('0' + digit) : (char)('a' + digit - 10);
+        value /= base;
+    }
+
+    if (i < max_size) {
+        str[i] = '\0'; // 文字列を逆順にして null 終端
+        for (size_t j = 0; j < i / 2; j++) {
+            char temp = str[j];
+            str[j] = str[i - j - 1];
+            str[i - j - 1] = temp;
+        }
+    } else {
+        return 0; // エラー: バッファオーバーフロー
+    }
+
+    return i - 1; // null 終端文字を除いた文字列の長さ
+};
+
+void text_gen(char *str, size_t max_size, const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+
+    char *dest = str;
+    char *end = str + max_size - 1; // Leave space for null-terminator
+
+    while (*format && dest < end) {
+        if (*format != '%') {
+            *dest = *format;
+            dest++;
+        } else {
+            format++;
+            if (*format == '\0') {
+                break; // Handle incomplete format string
+            }
+
+            switch (*format) {
+                case 'u': {
+                    unsigned int val = va_arg(args, unsigned int);
+                    dest += custom_itoa(dest, end - dest, val, 10);
+                    break;
+                }
+                case 'x': {
+                    unsigned int val = va_arg(args, unsigned int);
+                    dest += custom_itoa(dest, end - dest, val, 16);
+                    break;
+                }
+                case 's': {
+                    const char *arg_str = va_arg(args, const char *);
+                    while (*arg_str && dest < end) {
+                        *dest = *arg_str;
+                        dest++;
+                        arg_str++;
+                    }
+                    break;
+                }
+                default: {
+                    // Handle unknown format specifier
+                    *dest = *format;
+                    dest++;
+                }
+            }
+        }
+        format++;
+    }
+
+    *dest = '\0'; // Null-terminate the string
+    va_end(args);
+};
+
