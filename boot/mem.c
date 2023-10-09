@@ -53,11 +53,15 @@ UINT16 *get_memtype_name(EFI_MEMORY_TYPE type)
 	}
 };
 
-void print_memmap(struct MemoryMap* map)
+void print_memmap(struct MemoryMap *map)
 {
-	EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR*)map->buffer;
+	EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer;
 	UINT32 i;
-	for (i = 0; i < memmap_desc_entry; i++) {
+	UINT16 *header = L"Index, Buffer, Type, Type(name),PhysicalStart, VirtualStart, NumberOfPages, Attribute\n";
+	puts(header);
+	putc(L' ');
+	for (i = 0; i < memmap_desc_entry; i++)
+	{
 		PrintHex((unsigned long long)desc, 16);
 		putc(L' ');
 		PrintHex(desc->Type, 2);
@@ -73,17 +77,12 @@ void print_memmap(struct MemoryMap* map)
 		PrintHex(desc->Attribute, 16);
 		puts(L"\r\n");
 
-		desc = (EFI_MEMORY_DESCRIPTOR *)(
-			(UINT8 *)desc + map->descriptor_size);
+		desc = (EFI_MEMORY_DESCRIPTOR *)((UINT8 *)desc + map->descriptor_size);
 	};
 };
 
 EFI_STATUS init_memmap(struct MemoryMap *map)
 {
-	/* もし足りなかったら */
-	if (map->buffer == NULL) {
-		return EFI_BUFFER_TOO_SMALL;
-	};
 	unsigned long long status;
 	status = ST->BootServices->GetMemoryMap(
 		&map->map_size, (struct EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key,
