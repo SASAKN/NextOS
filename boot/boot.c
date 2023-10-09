@@ -22,6 +22,7 @@ EFI_STATUS EfiMain(
     struct MemoryMap map;
     map.buffer_size = memmap_size;
     map.buffer = memmap_buf;
+    map.descriptor_size
     init_memmap(&map);
     print_memmap(&map);
     while (1);
