@@ -20,13 +20,6 @@ EFI_STATUS EfiMain(
     CHAR8 memmap_buf[MEM_BUFFER_SIZE];
     UINT64 memmap_size;
     memmap_size = MEM_BUFFER_SIZE;
-    struct MemoryMap map = {
-        .buffer_size = memmap_size,
-        .buffer = memmap_buf,
-        .map_size = 0,
-        .map_key = 0,
-        .descriptor_size = 0,
-        .descriptor_version = 0};
     init_memmap(&map);
     print_memmap(&map);
     while (1);
