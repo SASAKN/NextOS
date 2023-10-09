@@ -53,18 +53,15 @@ UINT16 *get_memtype_name(EFI_MEMORY_TYPE type)
 
 void print_memmap(struct MemoryMap *map)
 {
-	EFI_PHYSICAL_ADDRESS iter;
+	EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer;
 	UINT32 i;
+	UINT64 iter;
+	iter = map->map_size / map->descriptor_size;
 	UINT16 *header = L"Index, Type, Type(name), PhysicalStart, NumberOfPages, Attribute\n";
+	putc(L' ');
 	puts(header);
 	puts(L"\r\n");
-	iter = (EFI_PHYSICAL_ADDRESS)map->buffer;
-	i = 0;
-	for (
-		iter < (EFI_PHYSICAL_ADDRESS)map->buffer + map->map_size;
-		iter += map->descriptor_size, i++)
-	{
-		EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)iter;
+	for (i = 0; i < iter; i++) {
 		PrintHex((UINT64)desc, 16);
 		putc(L' ');
 		PrintHex(desc->Type, 2);
@@ -80,7 +77,7 @@ void print_memmap(struct MemoryMap *map)
 		PrintHex(desc->Attribute, 16);
 		puts(L"\r\n");
 	};
-}
+};
 
 EFI_STATUS init_memmap(struct MemoryMap *map)
 {
@@ -94,3 +91,27 @@ EFI_STATUS init_memmap(struct MemoryMap *map)
 	assert(status, L"GetMemoryMap");
 	return status;
 };
+
+void print_memmap_old(struct MemoryMap *map)
+{
+	EFI_PHYSICAL_ADDRESS iter;
+	UINT32 i;
+	UINT16 *header = L"Index, Type, Type(name), PhysicalStart, NumberOfPages, Attribute\n";
+	puts(header);
+	puts(L"\r\n");
+	EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)iter;
+	PrintHex((UINT64)desc, 16);
+	putc(L' ');
+	PrintHex(desc->Type, 2);
+	putc(L' ');
+	puts(get_memtype_name(desc->Type));
+	putc(L' ');
+	PrintHex(desc->PhysicalStart, 16);
+	putc(L' ');
+	PrintHex(desc->VirtualStart, 16);
+	putc(L' ');
+	PrintHex(desc->NumberOfPages, 16);
+	putc(L' ');
+	PrintHex(desc->Attribute, 16);
+	puts(L"\r\n");
+}
