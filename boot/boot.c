@@ -17,9 +17,11 @@ EFI_STATUS EfiMain(
     IN EFI_SYSTEM_TABLE *SystemTable)
 {
     efi_init(SystemTable); /* UEFIの全てを初期化する関数 */
-    CHAR8 memmap_buf[1024];
+    CHAR8 memmap_buf[MEM_BUFFER_SIZE];
+    UINT64 memmap_size;
+    memmap_size = MEM_BUFFER_SIZE;
     struct MemoryMap mem_map = {
-        .buffer_size = sizeof(memmap_buf),
+        .buffer_size = memmap_size,
         .buffer = memmap_buf,
         .map_size = 0,
         .map_key = 0,
