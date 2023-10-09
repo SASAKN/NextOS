@@ -96,7 +96,7 @@ void assert (UINT64 status, UINT16 *mess) {
 };
 
 /* Printf 標準ライブラリなどにあるやつ */
-void printf(const char *format, ...) {
+void custom_printf(const char *format, ...) {
     va_list args;
     va_start(args, format);
 

@@ -29,7 +29,7 @@ void assert (UINT64 status, UINT16 *mess);
 /* 基本的なテキストの表示 */
 void text_gen(char *str, size_t max_size, const char *format, ...);
 size_t itoa(char *str, size_t max_size, unsigned int value, int base);
-void printf(const char *format, ...);
+void custom_printf(const char *format, ...);
 
 /* Memory */
 void print_memmap(struct MemoryMap* map);
