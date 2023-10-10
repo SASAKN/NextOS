@@ -94,6 +94,5 @@ EFI_STATUS init_memmap(struct MemoryMap *map)
 void save_memmap(struct MemoryMap *map) {
 	CHAR8 buffer[256];
 	UINTN len;
-
-	CHAR8* header = "Index, "
+	text_gen(buffer, sizeof(buffer), "")
 }
