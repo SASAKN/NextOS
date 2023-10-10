@@ -18,6 +18,7 @@ EFI_STATUS EfiMain(
     UINT64 memmap_size = MEM_DESC_SIZE;
     struct MemoryMap map;
     map.buffer = memmap_buf;
+    map.buffer_size = memmap_size;
     init_memmap(&map);
     print_memmap(&map);
     while (1);
