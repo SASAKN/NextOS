@@ -19,6 +19,7 @@ void graphics_init(struct frame_buffer);
 /* Common */
 void putc (UINT16 c);
 void puts(UINT16 *s);
+void puts_uint32(UINT32 *s);
 void Print(UINT16 *s); /* EDK2などに合わせるためにある関数 */
 UINTN EFIAPI strlen(const CHAR8 *String); /* 文字数を数える */
 UINT16 getc(void);
