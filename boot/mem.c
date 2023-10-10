@@ -60,6 +60,7 @@ void print_memmap(struct MemoryMap *map)
 	putc(L' ');
 	for (i = 0; i < map->memmap_desc_entry; i++)
 	{
+		custom_printf("")
 		PrintHex((unsigned long long)desc, 16);
 		putc(L' ');
 		PrintHex(desc->Type, 2);
@@ -89,3 +90,10 @@ EFI_STATUS init_memmap(struct MemoryMap *map)
 	map->memmap_desc_entry = map->map_size / map->descriptor_size;
 	return status;
 };
+
+void save_memmap(struct MemoryMap *map) {
+	CHAR8 buffer[256];
+	UINTN len;
+
+	CHAR8* header = "Index, "
+}

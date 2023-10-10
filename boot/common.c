@@ -111,11 +111,13 @@ void custom_printf(const char *format, ...) {
 
             switch (*format) {
                 case 'c': {
+                    /* 1文字出力 */
                     int c = va_arg(args, int);
                     putc(c);
                     break;
                 }
                 case 's': {
+                    /* 文字列の出力 */
                     const char *str = va_arg(args, const char *);
                     while (*str) {
                         putc(*str);
@@ -124,12 +126,7 @@ void custom_printf(const char *format, ...) {
                     break;
                 }
                 case 'd': {
-                    /* ここには、何も実装がありません */
-                    // int num = va_arg(args, int);
-                    // // カスタム整数から文字列への変換ロジックを呼び出す
-                    // // この例では未実装
-                    // // custom_itoa_base(buffer, sizeof(buffer), num, 10);
-                    // // custom_puts(buffer);
+                    /* 整数を10進数で表示 */
                     break;
                 }
                 default: {
