@@ -13,13 +13,6 @@ void puts(UINT16 *s) {
     ST->ConOut->OutputString(ST->ConOut, s);
 };
 
-void puts_uint32(UINT32 s) {
-    UINT16 lower16bits = (UINT16*)(s & 0xFFFF);
-    UINT16 upper16bits = (UINT16*)((s >> 16) & 0xFFFF);
-    puts(&upper16bits);
-    puts(&lower16bits);
-}
-
 /* EDK2などに合わせるためにあるだけ */
 void Print(UINT16 *s) {
     ST->ConOut->OutputString(ST->ConOut, s);
