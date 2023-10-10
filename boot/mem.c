@@ -9,8 +9,6 @@
 #include "include/graphics.h"
 #include "include/mem.h"
 
-UINT64 memmap_desc_entry; /* ループの時に必要 */
-
 /* メモリマップの種類 */
 UINT16 *get_memtype_name(EFI_MEMORY_TYPE type)
 {
@@ -60,10 +58,8 @@ void print_memmap(struct MemoryMap *map)
 	UINT16 *header = L"Index, Buffer, Type, Type(name),PhysicalStart, VirtualStart, NumberOfPages, Attribute\n";
 	puts(header);
 	putc(L' ');
-	for (i = 0; i < memmap_desc_entry; i++)
+	for (i = 0; i < map->memmap_desc_entry; i++)
 	{
-		puts_uint32(i);
-		putc(L' ');
 		PrintHex((unsigned long long)desc, 16);
 		putc(L' ');
 		PrintHex(desc->Type, 2);
@@ -90,6 +86,6 @@ EFI_STATUS init_memmap(struct MemoryMap *map)
 		&map->map_size, (struct EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key,
 		&map->descriptor_size, &map->descriptor_version);
 	assert(status, L"GetMemoryMap");
-	memmap_desc_entry = map->map_size / map->descriptor_size;
+	map->memmap_desc_entry = map->map_size / map->descriptor_size;
 	return status;
 };

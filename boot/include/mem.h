@@ -13,6 +13,7 @@ struct MemoryMap {
     uint64_t map_key;
     uint64_t descriptor_size;
     uint32_t descriptor_version;
+    uint64_t memmap_desc_entry;
 };
 
 /* EFI_MEMORY_DESCRIPTOR */
