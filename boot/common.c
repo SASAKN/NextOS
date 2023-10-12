@@ -211,6 +211,22 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                     }
                     break;
                 }
+                case 'l': {
+                    if (format[1] == 's') {
+                        /* ワイド文字を生成 */
+                        format++;
+                        const wchar_t *arg_wstr = va_arg(args, const wchar_t *);
+                        while (*arg_wstr && dest < end) {
+                            *dest = (char)*arg_wstr;
+                            dest++;
+                            arg_wstr++;
+                        };
+                    } else {
+                        dest = *format;
+                        dest++;
+                    };
+                    break;
+                }
                 default: {
                     // Handle unknown format specifier
                     *dest = *format;

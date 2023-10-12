@@ -104,6 +104,6 @@ void save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *file) {
 	iter += map->descriptor_size, i++) {
 		EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR*)iter;
 		text_gen(buf, sizeof(buf), "%u, %x\n", i, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->Attribute & 0xffffflu);
-		file->Write(file, strlen(&buf), buf);
+		file->Write(file, strlen(buf), buf);
 	};
 };
