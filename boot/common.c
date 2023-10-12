@@ -222,7 +222,7 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                             arg_wstr++;
                         };
                     } else {
-                        dest = *format;
+                        *dest = *format;
                         dest++;
                     };
                     break;
