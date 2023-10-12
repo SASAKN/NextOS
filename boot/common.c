@@ -190,22 +190,41 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
 
             switch (*format) {
                 case 'u': {
+                    /* 10進数のテキスト生成 */
                     unsigned int val = va_arg(args, unsigned int);
                     dest += itoa(dest, end - dest, val, 10);
                     break;
                 }
                 case 'x': {
+                    /* 16進数のテキスト生成 */
                     unsigned int val = va_arg(args, unsigned int);
                     dest += itoa(dest, end - dest, val, 16);
                     break;
                 }
                 case 's': {
+                    /* Charデータ型のテキスト生成 */
                     const char *arg_str = va_arg(args, const char *);
                     while (*arg_str && dest < end) {
                         *dest = *arg_str;
                         dest++;
                         arg_str++;
                     }
+                    break;
+                }
+                case 'l': {
+                    if (format[1] == 's') {
+                        /* ワイド文字を生成 */
+                        format++;
+                        const wchar_t *arg_wstr = va_arg(args, const wchar_t *);
+                        while (*arg_wstr && dest < end) {
+                            *dest = (char)*arg_wstr;
+                            dest++;
+                            arg_wstr++;
+                        };
+                    } else {
+                        *dest = *format;
+                        dest++;
+                    };
                     break;
                 }
                 default: {
@@ -221,4 +240,3 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
     *dest = '\0'; // Null-terminate the string
     va_end(args);
 };
-
