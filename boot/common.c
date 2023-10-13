@@ -224,3 +224,32 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
     *dest = '\0'; // Null-terminate the string
     va_end(args);
 };
+
+
+
+/* ワイド文字のテキスト生成など */
+
+void customWcharToChar(wchar_t wc, char* dest, size_t destSize) {
+    if (destSize < 2) {
+        return; // バッファが小さすぎる場合、何もしない
+    }
+    dest[0] = (char)wc;
+    dest[1] = '\0'; // NULL終端文字を追加
+};
+
+void printWideString(const wchar_t* wsz) {
+    char str[2]; // 1文字 + NULL終端文字
+    char fullStr[100]; // テキストを格納するバッファ
+
+    int fullStrIndex = 0;
+
+    for (int i = 0; wsz[i] != L'\0'; i++) {
+        customWcharToChar(wsz[i], str, sizeof(str));
+        fullStr[fullStrIndex] = str[0];
+        fullStrIndex++;
+    }
+
+    fullStr[fullStrIndex] = '\0';
+
+    custom_printf("テキスト: %s\n", fullStr);
+};

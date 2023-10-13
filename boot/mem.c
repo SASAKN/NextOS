@@ -90,6 +90,8 @@ EFI_STATUS init_memmap(struct MemoryMap *map)
 	return status;
 };
 
+
+
 // void save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *file) {
 // 	CHAR8 buf[256]; /* バッファー */
 // 	UINTN size; /* サイズの格納変数 */
