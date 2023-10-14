@@ -280,7 +280,6 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                         format++;
                         if (*format == 's') {
                             /* これなら成功次のステップへ */
-                            /* ワイド文字の生成 */
                             wchar_t *wsz = va_arg(args, wchar_t *);
                             char str[2]; // 1文字 + NULL終端文字
                             char fullStr[200];
@@ -297,6 +296,7 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                                 dest++;
                                 buffer++;
                             };
+                            format++;
                         } else {
                             puts(L"[ Text_gen ]: Format error!");
                         }

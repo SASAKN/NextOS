@@ -15,8 +15,9 @@ EFI_STATUS EfiMain(
 {
     efi_init(SystemTable); /* UEFIの全てを初期化する関数 */
     char buffer[100];
-    text_gen(buffer, sizeof(buffer), "%-ls", L"I'm sleepy.");
-    custom_
+    text_gen(buffer, sizeof(buffer), "%-ls", L"nemui");
+    custom_wprintf(L"%s\n", L"nemui");
+    custom_printf("[ INFO ]: %s\n", buffer);
     /* メモリーのバッファーなどを設定 */
     CHAR8 memmap_buf[MEM_DESC_SIZE];
     UINT64 memmap_size = MEM_DESC_SIZE;
