@@ -97,6 +97,30 @@ void assert (UINT64 status, UINT16 *mess) {
         while(1);
 };
 
+/* ゼロ埋め関数 */
+void zero_pad(char *str, int width) {
+    int str_length = strlen(str);
+
+    if (str_length < width) {
+        int pad_count = width - str_length;
+
+        // 移動元と移動先の位置を計算
+        char *src = str;
+        char *dest = str + pad_count;
+
+        // 文字列を右にずらす
+        while (*src != '\0') {
+            *(dest++) = *(src++);
+        }
+
+        // 残りの部分を '0' で埋める
+        while (pad_count > 0) {
+            *(str++) = '0';
+            pad_count--;
+        }
+    }
+}
+
 /* 標準ライブラリで実装されているitoa */
 size_t itoa(char *str, size_t max_size, unsigned int value, int base) {
     if (base < 2 || base > 36 || max_size < 2) {
