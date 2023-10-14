@@ -276,9 +276,9 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                 }
                 case '-': {
                     format++;
-                    if (format == 'l') {
+                    if (*format == 'l') {
                         format++;
-                        if (format == 's') {
+                        if (*format == 's') {
                             /* これなら成功次のステップへ */
                             /* ワイド文字の生成 */
                             wchar_t *wsz = va_arg(args, wchar_t *);
