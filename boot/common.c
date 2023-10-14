@@ -274,6 +274,36 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                     }
                     break;
                 }
+                case '-': {
+                    format++;
+                    if (format == 'l') {
+                        format++;
+                        if (format == 's') {
+                            /* これなら成功次のステップへ */
+                            /* ワイド文字の生成 */
+                            wchar_t *wsz = va_arg(args, wchar_t *);
+                            char str[2]; // 1文字 + NULL終端文字
+                            char fullStr[200];
+                            int fullStrIndex = 0;
+                            for (int i = 0; wsz[i] != L'\0'; i++) {
+                                custom_wctomb(wsz[i], str, sizeof(str));
+                                fullStr[fullStrIndex] = str[0];
+                                fullStrIndex++;
+                            };
+                            fullStr[fullStrIndex] = '\0';
+                            char *buffer = fullStr;
+                            while (*buffer && dest < end) {
+                                *dest = *buffer;
+                                dest++;
+                                buffer++;
+                            };
+                        } else {
+                            puts(L"[ Printf ]: Format error!");
+                        }
+                    } else {
+                        puts(L"[ Printf ]: Format error!");
+                    }
+                }
                 default: {
                     // Handle unknown format specifier
                     *dest = *format;
