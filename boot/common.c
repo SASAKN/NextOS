@@ -135,23 +135,6 @@ void custom_wctomb(wchar_t wc, char* dest, size_t destSize) {
     dest[1] = '\0'; // NULL終端文字を追加
 };
 
-/* ワイド文字列をCHAR型文字列に変換 */
-char wstombs(const wchar_t* wsz) {
-    char str[2]; // 1文字 + NULL終端文字
-    char fullStr[100]; // テキストを格納するバッファ
-
-    int fullStrIndex = 0;
-
-    for (int i = 0; wsz[i] != L'\0'; i++) {
-        custom_wctomb(wsz[i], str, sizeof(str));
-        fullStr[fullStrIndex] = str[0];
-        fullStrIndex++;
-    }
-
-    fullStr[fullStrIndex] = '\0';
-    return fullStr;
-};
-
 /* Printf 標準ライブラリなどにあるやつ */
 void custom_printf(const char *format, ...) {
     va_list args;
@@ -186,17 +169,6 @@ void custom_printf(const char *format, ...) {
                     /* 整数を10進数で表示 */
                     break;
                 }
-                case 'w' {
-                    /* ワイド文字の表示 */
-                    const wchar_t *ws = va_arg(args, const wchar_t *);
-                    char buf[];
-                    buf = wstombs(ws);
-                    while (buf) {
-                        putc(buf);
-                        buf++;
-                    };
-                }
-
                 default: {
                     putc('%');
                     putc(*format);
@@ -209,7 +181,23 @@ void custom_printf(const char *format, ...) {
     va_end(args);
 };
 
+/* ワイド文字配列のPrintf関数 */
+void custom_wprintf(const wchar_t* wsz) {
+    char str[2]; // 1文字 + NULL終端文字
+    char fullStr[100]; // テキストを格納するバッファ
 
+    int fullStrIndex = 0;
+
+    for (int i = 0; wsz[i] != L'\0'; i++) {
+        custom_wctomb(wsz[i], str, sizeof(str));
+        fullStr[fullStrIndex] = str[0];
+        fullStrIndex++;
+    }
+
+    fullStr[fullStrIndex] = '\0';
+
+    custom_printf("テキスト: %s\n", fullStr);
+};
 
 /* sprintf的なやつ */
 void text_gen(char *str, size_t max_size, const char *format, ...) {
