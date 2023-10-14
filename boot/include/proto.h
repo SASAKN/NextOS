@@ -33,6 +33,8 @@ void text_gen(char *str, size_t max_size, const char *format, ...);
 size_t itoa(char *str, size_t max_size, unsigned int value, int base);
 void custom_printf(const char *format, ...);
 void custom_wprintf(const wchar_t *format, ...);
+int custom_atoi(const char *str);
+void zero_pad(char *str, int width);
 
 /* Memory */
 void print_memmap(struct MemoryMap* map);
