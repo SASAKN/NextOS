@@ -298,10 +298,10 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                                 buffer++;
                             };
                         } else {
-                            puts(L"[ Printf ]: Format error!");
+                            puts(L"[ Text_gen ]: Format error!");
                         }
                     } else {
-                        puts(L"[ Printf ]: Format error!");
+                        puts(L"[ Text_gen ]: Format error!");
                     }
                 }
                 default: {
