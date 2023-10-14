@@ -124,7 +124,7 @@ int custom_atoi(const char *str) {
 
 /* 文字列をシフトして違うものに変える関数 */
 void prependCharacter(char* str, char* character, int count) {
-    int length = custom_strlen(str);
+    int length = strlen(str);
     
     // 文字列を右にシフト
     for (int i = length; i >= 0; i--) {
@@ -137,7 +137,7 @@ void prependCharacter(char* str, char* character, int count) {
 }
 
 void zero_pad(char *str, int width) {
-    int str_length = custom_strlen(str);
+    int str_length = strlen(str);
 
     if (str_length < width) {
         int pad_count = width - str_length;
