@@ -122,20 +122,19 @@ int custom_atoi(const char *str) {
     return result * sign;
 }
 
-/* ゼロ埋め関数 */
 void zero_pad(char *str, int width) {
-    int str_length = strlen(str);
+    int str_length = custom_strlen(str);
 
     if (str_length < width) {
         int pad_count = width - str_length;
 
         // 移動元と移動先の位置を計算
-        char *src = str;
-        char *dest = str + pad_count;
+        char *src = str + str_length;  // 末尾から進む
+        char *dest = str + width;      // 末尾から進む
 
         // 文字列を右にずらす
-        while (*src != '\0') {
-            *(dest++) = *(src++);
+        while (src >= str) {
+            *(--dest) = *(--src);
         }
 
         // 残りの部分を '0' で埋める
@@ -143,6 +142,9 @@ void zero_pad(char *str, int width) {
             *(str++) = '0';
             pad_count--;
         }
+
+        // 文字列の終了を示すヌル文字を追加
+        *str = '\0';
     }
 }
 
@@ -365,7 +367,7 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                             unsigned int val = va_arg(args, unsigned int);
                             int tmp = custom_atoi(format);
                             dest += itoa(dest, end - dest, val, 16);
-                            zero_pad(dest, 8);
+                            zero_pad(dest, tmp);
                         }
                     } else {
                         puts(L"[ Text_gen ]: Format error!");
