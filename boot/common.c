@@ -189,7 +189,7 @@ void custom_wprintf(const wchar_t* wsz) {
     int fullStrIndex = 0;
 
     for (int i = 0; wsz[i] != L'\0'; i++) {
-        customWcharToChar(wsz[i], str, sizeof(str));
+        custom_wctomb(wsz[i], str, sizeof(str));
         fullStr[fullStrIndex] = str[0];
         fullStrIndex++;
     }
