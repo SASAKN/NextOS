@@ -181,6 +181,57 @@ void custom_printf(const char *format, ...) {
     va_end(args);
 };
 
+/* Printf 標準ライブラリなどにあるやつ */
+void custom_wprintf2(const wchar_t *format, ...) {
+    va_list args;
+    va_start(args, format);
+
+    while (*format) {
+        if (*format != L'%') {
+            putc(*format);
+        } else {
+            format++;
+            if (*format == L'\0') {
+                break; // 不完全なフォーマット文字列を処理
+            }
+
+            switch (*format) {
+                case L'c': {
+                    /* 1文字出力 */
+                    int c = va_arg(args, int);
+                    putc(c);
+                    break;
+                }
+                case L's': {
+                    /* 文字列の出力 */
+                    wchar_t *str2 = va_arg(args, wchar_t *);
+                    char str[2]; // 1文字 + NULL終端文字
+                    char fullStr[100]; // テキストを格納するバッファ
+                    int fullStrIndex = 0;
+                    for (int i = 0; str2[i] != L'\0'; i++) {
+                        custom_wctomb(str2[i], str, sizeof(str));
+                        fullStr[fullStrIndex] = str[0];
+                        fullStrIndex++;
+                    }
+                    fullStr[fullStrIndex] = '\0';
+                    while (fullStr) {
+                        putc(fullStr);
+                        fullStr++;
+                    }
+                    break;
+                }
+                default: {
+                    putc('%');
+                    putc(*format);
+                }
+            }
+        }
+        format++;
+    }
+
+    va_end(args);
+};
+
 /* ワイド文字配列のPrintf関数 */
 void custom_wprintf(const wchar_t* wsz) {
     char str[2]; // 1文字 + NULL終端文字
