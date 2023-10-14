@@ -369,27 +369,6 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                         puts(L"[ Text_gen ]: Format error!");
                     }
                 }
-                case '0': {
-                    format++;
-                    format++; /* xが予想される場所まで移動 */
-                    if (*format == 'l') {
-                        format++;
-                        if (*format == 'x') {
-                            /* 16進数のテキスト生成 */
-                            format--;
-                            format--;
-                            unsigned int val = va_arg(args, unsigned int);
-                            int tmp = custom_atoi(format);
-                            dest += itoa(dest, end - dest, val, 16);
-                            zero_pad(dest, tmp);
-                        }
-                    } else {
-                        puts(L"[ Text_gen ]: Format error!");
-                    }
-                    format++;
-                    format++;
-                    break;
-                } 
                 default: {
                     // Handle unknown format specifier
                     *dest = *format;
