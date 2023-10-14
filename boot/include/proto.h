@@ -31,6 +31,7 @@ void assert (UINT64 status, UINT16 *mess);
 void custom_wctomb(wchar_t wc, char* dest, size_t destSize);
 void text_gen(char *str, size_t max_size, const char *format, ...);
 size_t itoa(char *str, size_t max_size, unsigned int value, int base);
+void custom_printf(const char *format, ...);
 void custom_wprintf(const wchar_t *format, ...);
 
 /* Memory */
