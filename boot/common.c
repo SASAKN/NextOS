@@ -364,12 +364,14 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                             format--;
                             unsigned int val = va_arg(args, unsigned int);
                             int tmp = custom_atoi(format);
-                            zero_pad(dest, tmp);
                             dest += itoa(dest, end - dest, val, 16);
+                            zero_pad(dest, 8);
                         }
                     } else {
                         puts(L"[ Text_gen ]: Format error!");
                     }
+                    format++;
+                    format++;
                     break;
                 } 
                 default: {
