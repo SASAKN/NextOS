@@ -66,6 +66,7 @@ void PrintHex(UINT64 val, UINT8 num_degits) {
     puts(str);
 };
 
+/* エラーチェック */
 UINT8 check_warn_error (UINT64 status, UINT16 *mess) {
     if(status) {
         puts(mess);
@@ -86,6 +87,7 @@ UINTN EFIAPI strlen(const CHAR8 *str) {
     return len;
 };
 
+/* assert関数は、エラーを表示する */
 void assert (UINT64 status, UINT16 *mess) {
     if (status == 0x8000000000000005) {
         puts(L"Error: EFI_BUFFER_TOO_SMALL");
@@ -93,6 +95,44 @@ void assert (UINT64 status, UINT16 *mess) {
     }
     if (!check_warn_error(status, mess))
         while(1);
+};
+
+/* 標準ライブラリで実装されているitoa */
+size_t itoa(char *str, size_t max_size, unsigned int value, int base) {
+    if (base < 2 || base > 36 || max_size < 2) {
+        return 0; // エラー: サポートされていない基数や不十分なバッファサイズ
+    }
+
+    size_t i = 0;
+    str[i++] = '\0';
+
+    while (value > 0 && i < max_size) {
+        int digit = value % base;
+        str[i++] = (digit < 10) ? (char)('0' + digit) : (char)('a' + digit - 10);
+        value /= base;
+    }
+
+    if (i < max_size) {
+        str[i] = '\0'; // 文字列を逆順にして null 終端
+        for (size_t j = 0; j < i / 2; j++) {
+            char temp = str[j];
+            str[j] = str[i - j - 1];
+            str[i - j - 1] = temp;
+        }
+    } else {
+        return 0; // エラー: バッファオーバーフロー
+    }
+
+    return i - 1; // null 終端文字を除いた文字列の長さ
+};
+
+/* 1文字のワイド文字を、マルチバイト文字に変換 */
+void custom_wctomb(wchar_t wc, char* dest, size_t destSize) {
+    if (destSize < 2) {
+        return; // バッファが小さすぎる場合、何もしない
+    }
+    dest[0] = (char)wc;
+    dest[1] = '\0'; // NULL終端文字を追加
 };
 
 /* Printf 標準ライブラリなどにあるやつ */
@@ -141,33 +181,22 @@ void custom_printf(const char *format, ...) {
     va_end(args);
 };
 
-/* 標準ライブラリで実装されているitoa */
-size_t itoa(char *str, size_t max_size, unsigned int value, int base) {
-    if (base < 2 || base > 36 || max_size < 2) {
-        return 0; // エラー: サポートされていない基数や不十分なバッファサイズ
+/* ワイド文字配列のPrintf関数 */
+void custom_wprintf(const wchar_t* wsz) {
+    char str[2]; // 1文字 + NULL終端文字
+    char fullStr[100]; // テキストを格納するバッファ
+
+    int fullStrIndex = 0;
+
+    for (int i = 0; wsz[i] != L'\0'; i++) {
+        customWcharToChar(wsz[i], str, sizeof(str));
+        fullStr[fullStrIndex] = str[0];
+        fullStrIndex++;
     }
 
-    size_t i = 0;
-    str[i++] = '\0';
+    fullStr[fullStrIndex] = '\0';
 
-    while (value > 0 && i < max_size) {
-        int digit = value % base;
-        str[i++] = (digit < 10) ? (char)('0' + digit) : (char)('a' + digit - 10);
-        value /= base;
-    }
-
-    if (i < max_size) {
-        str[i] = '\0'; // 文字列を逆順にして null 終端
-        for (size_t j = 0; j < i / 2; j++) {
-            char temp = str[j];
-            str[j] = str[i - j - 1];
-            str[i - j - 1] = temp;
-        }
-    } else {
-        return 0; // エラー: バッファオーバーフロー
-    }
-
-    return i - 1; // null 終端文字を除いた文字列の長さ
+    custom_printf("テキスト: %s\n", fullStr);
 };
 
 /* sprintf的なやつ */
@@ -223,33 +252,4 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
 
     *dest = '\0'; // Null-terminate the string
     va_end(args);
-};
-
-
-
-/* ワイド文字のテキスト生成など */
-
-void customWcharToChar(wchar_t wc, char* dest, size_t destSize) {
-    if (destSize < 2) {
-        return; // バッファが小さすぎる場合、何もしない
-    }
-    dest[0] = (char)wc;
-    dest[1] = '\0'; // NULL終端文字を追加
-};
-
-void printWideString(const wchar_t* wsz) {
-    char str[2]; // 1文字 + NULL終端文字
-    char fullStr[100]; // テキストを格納するバッファ
-
-    int fullStrIndex = 0;
-
-    for (int i = 0; wsz[i] != L'\0'; i++) {
-        customWcharToChar(wsz[i], str, sizeof(str));
-        fullStr[fullStrIndex] = str[0];
-        fullStrIndex++;
-    }
-
-    fullStr[fullStrIndex] = '\0';
-
-    custom_printf("テキスト: %s\n", fullStr);
 };
