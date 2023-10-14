@@ -169,24 +169,6 @@ void custom_printf(const char *format, ...) {
                     /* 整数を10進数で表示 */
                     break;
                 }
-                case 'w': {
-                    /* ワイド文字の表示 */
-                    const wchar_t* wsz = va_arg(args, const wchar_t *);
-                    char str[2]; // 1文字 + NULL終端文字
-                    char fullStr[100]; // テキストを格納するバッファ
-                    int fullStrIndex = 0;
-                    for (int i = 0; wsz[i] != L'\0'; i++) {
-                        custom_wctomb(wsz[i], str, sizeof(str));
-                        fullStr[fullStrIndex] = str[0];
-                        fullStrIndex++;
-                    };
-                    fullStr[fullStrIndex] = '\0';
-                    const char *str2 = fullStr;
-                    while (*str2) {
-                        putc(*str2);
-                        str2++;
-                    }
-                }
                 default: {
                     putc('%');
                     putc(*format);
@@ -200,21 +182,18 @@ void custom_printf(const char *format, ...) {
 };
 
 /* ワイド文字配列のPrintf関数 */
-void custom_wprintf(const wchar_t* wsz) {
+void custom_wprintf(const wchar_t* wsz, char format) {
     char str[2]; // 1文字 + NULL終端文字
     char fullStr[100]; // テキストを格納するバッファ
-
     int fullStrIndex = 0;
-
     for (int i = 0; wsz[i] != L'\0'; i++) {
         custom_wctomb(wsz[i], str, sizeof(str));
         fullStr[fullStrIndex] = str[0];
         fullStrIndex++;
     }
-
     fullStr[fullStrIndex] = '\0';
-
-    custom_printf("テキスト: %s\n", fullStr);
+    format += "%s\n";
+    custom_printf(format, fullStr);
 };
 
 /* sprintf的なやつ */
