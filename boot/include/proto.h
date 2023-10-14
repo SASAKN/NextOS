@@ -33,12 +33,11 @@ void custom_wprintf(const wchar_t* wsz);
 void text_gen(char *str, size_t max_size, const char *format, ...);
 size_t itoa(char *str, size_t max_size, unsigned int value, int base);
 void custom_printf(const char *format, ...);
+void custom_wprintf(const wchar_t *format, ...);
 
 /* Memory */
 void print_memmap(struct MemoryMap* map);
 EFI_STATUS init_memmap(struct MemoryMap *map);
 UINT16 *get_memtype_name(EFI_MEMORY_TYPE type);
-
-void custom_wprintf2(const wchar_t *format, ...);
 
 #endif

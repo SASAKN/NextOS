@@ -182,7 +182,7 @@ void custom_printf(const char *format, ...) {
 };
 
 /* Wprintf 標準ライブラリなどにあるやつ */
-void custom_wprintf2(const wchar_t *format, ...) {
+void custom_wprintf(const wchar_t *format, ...) {
     va_list args;
     va_start(args, format);
 
@@ -231,20 +231,6 @@ void custom_wprintf2(const wchar_t *format, ...) {
     }
 
     va_end(args);
-};
-
-/* ワイド文字配列のPrintf関数 */
-void custom_wprintf(const wchar_t* wsz) {
-    char str[2]; // 1文字 + NULL終端文字
-    char fullStr[100]; // テキストを格納するバッファ
-    int fullStrIndex = 0;
-    for (int i = 0; wsz[i] != L'\0'; i++) {
-        custom_wctomb(wsz[i], str, sizeof(str));
-        fullStr[fullStrIndex] = str[0];
-        fullStrIndex++;
-    }
-    fullStr[fullStrIndex] = '\0';
-    custom_printf("WideString: %s\n", fullStr);
 };
 
 /* sprintf的なやつ */
