@@ -181,7 +181,7 @@ void custom_printf(const char *format, ...) {
     va_end(args);
 };
 
-/* Printf 標準ライブラリなどにあるやつ */
+/* Wprintf 標準ライブラリなどにあるやつ */
 void custom_wprintf2(const wchar_t *format, ...) {
     va_list args;
     va_start(args, format);

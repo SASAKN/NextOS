@@ -15,7 +15,7 @@ EFI_STATUS EfiMain(
 {
     efi_init(SystemTable); /* UEFIの全てを初期化する関数 */
     const wchar_t a[] = L"abcdefg";
-    custom_wprintf(a);
+    custom_wprintf2("", a);
     CHAR8 memmap_buf[MEM_DESC_SIZE];
     UINT64 memmap_size = MEM_DESC_SIZE;
     struct MemoryMap map;
