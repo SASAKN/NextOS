@@ -188,8 +188,13 @@ void custom_printf(const char *format, ...) {
                 }
                 case 'w' {
                     /* ワイド文字の表示 */
-                    
-                    wstombs()
+                    const wchar_t *ws = va_arg(args, const wchar_t *);
+                    char buf[];
+                    buf = wstombs(ws);
+                    while (buf) {
+                        putc(buf);
+                        buf++;
+                    };
                 }
 
                 default: {
