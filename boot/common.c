@@ -355,11 +355,21 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                 }
                 case '0': {
                     format++;
-                    /* 16進数のテキスト生成 */
-                    unsigned int val = va_arg(args, unsigned int);
-                    dest += itoa(dest, end - dest, val, 16);
-                    int *tmp = custom_atoi(*format);
-                    zero_pad(dest, *tmp);
+                    format++; /* xが予想される場所まで移動 */
+                    if (*format == 'l') {
+                        format++;
+                        if (*format == 'x') {
+                            /* 16進数のテキスト生成 */
+                            format--;
+                            format--;
+                            unsigned int val = va_arg(args, unsigned int);
+                            int tmp = custom_atoi(format);
+                            zero_pad(dest, tmp);
+                            dest += itoa(dest, end - dest, val, 16);
+                        }
+                    } else {
+                        puts(L"[ Text_gen ]: Format error!");
+                    }
                     break;
                 } 
                 default: {
