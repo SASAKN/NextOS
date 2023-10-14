@@ -358,7 +358,8 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                     /* 16進数のテキスト生成 */
                     unsigned int val = va_arg(args, unsigned int);
                     dest += itoa(dest, end - dest, val, 16);
-                    zero_pad(dest, *format);
+                    int *tmp = custom_atoi(*format);
+                    zero_pad(dest, *tmp);
                     break;
                 } 
                 default: {
