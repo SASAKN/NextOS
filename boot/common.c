@@ -96,6 +96,31 @@ void assert (UINT64 status, UINT16 *mess) {
     if (!check_warn_error(status, mess))
         while(1);
 };
+/* CHARデータ型のものをintに変換する関数  */
+int custom_atoi(const char *str) {
+    int result = 0;
+    int sign = 1;
+    int i = 0;
+
+    // ホワイトスペースをスキップ
+    while (str[i] == ' ' || str[i] == '\t') {
+        i++;
+    }
+
+    // 符号を処理
+    if (str[i] == '-' || str[i] == '+') {
+        sign = (str[i] == '-') ? -1 : 1;
+        i++;
+    }
+
+    // 数値を解析して整数に変換
+    while (str[i] >= '0' && str[i] <= '9') {
+        result = result * 10 + (str[i] - '0');
+        i++;
+    }
+
+    return result * sign;
+}
 
 /* ゼロ埋め関数 */
 void zero_pad(char *str, int width) {
@@ -328,6 +353,14 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                         puts(L"[ Text_gen ]: Format error!");
                     }
                 }
+                case '0': {
+                    format++;
+                    /* 16進数のテキスト生成 */
+                    unsigned int val = va_arg(args, unsigned int);
+                    dest += itoa(dest, end - dest, val, 16);
+                    zero_pad(dest, *format);
+                    break;
+                } 
                 default: {
                     // Handle unknown format specifier
                     *dest = *format;
