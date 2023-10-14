@@ -29,7 +29,7 @@ UINT8 check_warn_error (UINT64 status, UINT16 *mess);
 void assert (UINT64 status, UINT16 *mess);
 /* 基本的なテキストの表示 */
 void custom_wctomb(wchar_t wc, char* dest, size_t destSize);
-void custom_wprintf(const wchar_t* wsz);
+char wstombs(const wchar_t* wsz);
 void text_gen(char *str, size_t max_size, const char *format, ...);
 size_t itoa(char *str, size_t max_size, unsigned int value, int base);
 void custom_printf(const char *format, ...);
