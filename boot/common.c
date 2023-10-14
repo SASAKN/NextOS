@@ -204,19 +204,20 @@ void custom_wprintf2(const wchar_t *format, ...) {
                 }
                 case L's': {
                     /* 文字列の出力 */
-                    wchar_t *str2 = va_arg(args, wchar_t *);
+                    wchar_t *wsz = va_arg(args, wchar_t *);
                     char str[2]; // 1文字 + NULL終端文字
-                    char fullStr[100]; // テキストを格納するバッファ
+                    char fullStr[200];
                     int fullStrIndex = 0;
-                    for (int i = 0; str2[i] != L'\0'; i++) {
-                        custom_wctomb(str2[i], str, sizeof(str));
+                    for (int i = 0; wsz[i] != L'\0'; i++) {
+                        custom_wctomb(wsz[i], str, sizeof(str));
                         fullStr[fullStrIndex] = str[0];
                         fullStrIndex++;
-                    }
+                    };
                     fullStr[fullStrIndex] = '\0';
-                    while (fullStr) {
-                        putc(fullStr);
-                        fullStr++;
+                    char *buffer = fullStr;
+                    while(*buffer) {
+                        putc(*buffer);
+                        buffer++;
                     }
                     break;
                 }
