@@ -421,7 +421,7 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                             unsigned int num = va_arg(args, unsigned int);
                             dest += itoa(dest, end - dest, num, 16);
                             /* ゼロ埋めを行う */
-                            dest += zeroPad(dest, length);
+                            // dest += zeroPad(dest, length);
                             format++;
                         } else {
                             puts(L"[ Text_gen ]: Format error!");
