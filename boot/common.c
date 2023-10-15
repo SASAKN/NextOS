@@ -155,8 +155,24 @@ void* custom_memset(void *dst, int c, size_t n) {
     return (dst);
 }
 
-size_t zeroPad(char *input, int width) {
+void custom_memmove(void *dest, const void *src, size_t n) {
+    unsigned char *d = dest;
+    const unsigned char *s = src;
 
+    if (d < s) {
+        // ソースと宛先のメモリブロックが重なっていない場合、前から後ろにコピー
+        for (size_t i = 0; i < n; i++) {
+            d[i] = s[i];
+        }
+    } else if (d > s) {
+        // ソースと宛先のメモリブロックが重なっている場合、後ろから前にコピー
+        for (size_t i = n; i > 0; i--) {
+            d[i - 1] = s[i - 1];
+        }
+    }
+}
+
+size_t zeroPad(char *input, int width) {
 }
 
 

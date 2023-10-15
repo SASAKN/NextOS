@@ -35,6 +35,7 @@ void custom_printf(const char *format, ...);
 void text_gen(char *str, size_t max_size, const char *format, ...);
 void custom_strcpy(char *dest, const char *src);
 void custom_strcat(char *dest, const char *src);
+void custom_memmove(void *dest, const void *src, size_t n);
 void* custom_memset(void *dst, int c, size_t n); /* メモリーにバイトのセット */
 
 /* Memory */
