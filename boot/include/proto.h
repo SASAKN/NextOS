@@ -35,7 +35,6 @@ void custom_printf(const char *format, ...);
 void text_gen(char *str, size_t max_size, const char *format, ...);
 void custom_strcpy(char *dest, const char *src);
 void custom_strcat(char *dest, const char *src);
-rightShiftString(char *str, int shiftCount);
 void* custom_memset(void *dst, int c, size_t n); /* メモリーにバイトのセット */
 
 /* Memory */
