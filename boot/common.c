@@ -144,7 +144,7 @@ void custom_strcpy(char *dest, const char *src) {
 }
 
 size_t zeroPad(char *input, int width) {
-    int length = strlen(input);
+    size_t length = strlen(input);
 
     if (length >= width) {
         // 入力文字列が指定の幅以上の場合は何もしない
@@ -152,26 +152,27 @@ size_t zeroPad(char *input, int width) {
     }
 
     int padding = width - length;
-    if (padding > 0) {
-        if (length + padding + 1 > width) {
-            // バッファオーバーフローを避ける
-            return 0;
-        }
 
-        // パディングのために一時的なバッファを使用
-        char temp[256]; // サイズは適切に調整する必要があります
-        for (int i = 0; i < padding; i++) {
-            temp[i] = '0';
-        }
-        temp[padding] = '\0'; // null 終端
-        custom_strcat(temp, input); // パディングを含む新しい文字列を作成
-        custom_strcpy(input, temp); // 元の文字列にコピー
-        length += padding; // 長さを更新
+    if (length + padding + 1 > width) {
+        // バッファオーバーフローを避ける
+        return 0;
     }
+
+    // 右にずらす
+    for (int i = length; i >= 0; i--) {
+        input[i + padding] = input[i];
+    }
+
+    // パディングを '0' で埋める
+    for (int i = 0; i < padding; i++) {
+        input[i] = '0';
+    }
+
+    // 長さを更新
+    length += padding;
 
     return length;
 }
-
 
 
 
