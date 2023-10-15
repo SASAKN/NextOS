@@ -376,7 +376,14 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                         length = 9;
                     } else {
                         puts(L"[ Text_gen ]: Format error!");
-                    }
+                    };
+                    /* 10進数を16進数の文字列にする */
+                    char tmp[500];
+                    unsigned int num = va_arg(args, unsigned int);
+                    dest += itoa(dest, end - dest, num, 16);
+                    tmp = itoa(dest, end - dest, num, 16);
+                    /* ゼロ埋めを行う */
+                    zeroPad(tmp, length);
                 }
                 default: {
                     // Handle unknown format specifier
