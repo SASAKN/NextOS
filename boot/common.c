@@ -120,10 +120,10 @@ int custom_atoi(const char *str) {
 void zeroPad(char *input, int width) {
     int length = strlen(input);
 
-    if (length >= width) {
-        // 入力文字列が指定の幅以上の場合は何もしない
-        return;
-    }
+    // if (length >= width) {
+    //     // 入力文字列が指定の幅以上の場合は何もしない
+    //     return;
+    // }
 
     int padding = width - length;
     if (padding > 0) {
@@ -385,6 +385,7 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                             dest += itoa(dest, end - dest, num, 16);
                             /* ゼロ埋めを行う */
                             zeroPad(dest, length);
+                            format++;
                         } else {
                             puts(L"[ Text_gen ]: Format error!");
                         }
