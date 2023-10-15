@@ -155,7 +155,7 @@ void* custom_memset(void *dst, int c, size_t n) {
     return (dst);
 }
 
-size_t custom_zeroPad(char *input, int width) {
+size_t zeroPad(char *input, int width) {
     size_t length = strlen(input);
 
     if (length >= width) {
@@ -178,6 +178,7 @@ size_t custom_zeroPad(char *input, int width) {
     length += padding;
 
     return length;
+}
 
 
 
