@@ -377,11 +377,19 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                     } else {
                         puts(L"[ Text_gen ]: Format error!");
                     };
-                    /* 10進数を16進数の文字列にする */
-                    unsigned int num = va_arg(args, unsigned int);
-                    dest += itoa(dest, end - dest, num, 16);
-                    /* ゼロ埋めを行う */
-                    zeroPad(dest, length);
+                    if (*format == 'l') {
+                        if (*format == 'x') {
+                            /* 10進数を16進数の文字列にする */
+                            unsigned int num = va_arg(args, unsigned int);
+                            dest += itoa(dest, end - dest, num, 16);
+                            /* ゼロ埋めを行う */
+                            zeroPad(dest, length);
+                        } else {
+                            puts(L"[ Text_gen ]: Format error!");
+                        }
+                    } else {
+                        puts(L"[ Text_gen ]: Format error!");
+                    }
                 }
                 default: {
                     // Handle unknown format specifier
