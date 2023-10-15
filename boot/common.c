@@ -156,28 +156,19 @@ void* custom_memset(void *dst, int c, size_t n) {
 }
 
 size_t zeroPad(char *input, int width) {
-    size_t length = strlen(input);
-
-    if (length >= width) {
-        // 入力文字列が指定の幅以上の場合は何もしない
-        return length;
+    size_t length1 = strlen(input);
+    int padding = width - length1;
+    
+    if (padding <= 0) {
+        return length1; // No padding needed
     }
-
-    int padding = width - length;
-
-    if (length + padding + 1 > width) {
-        // バッファオーバーフローを避ける
-        return 0;
-    }
-
-    // パディングを '0' で埋める
-    custom_memset(input, '0', padding);
-    input[padding] = '\0'; // null 終端
-
-    // 長さを更新
-    length += padding;
-
-    return length;
+    
+    char buf_2[width + 1]; // +1 for null-terminator
+    custom_memset(buf_2, '0', padding);
+    custom_strcpy(buf_2 + padding, input);
+    custom_strcpy(input, buf_2);
+    
+    return width;
 }
 
 
