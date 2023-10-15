@@ -345,7 +345,7 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                 }
                 case '0': {
                     format++; /* ゼロ埋めの数字が予想される */
-                    int length;/* ゼロ埋めあとの、文字桁数 */
+                    int length = 0;/* ゼロ埋めあとの、文字桁数 */
                     /* 文字桁数で条件分岐 */
                     if (*format == '1') {
                         format++;
@@ -378,7 +378,6 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                         puts(L"[ Text_gen ]: Format error!");
                     };
                     /* 10進数を16進数の文字列にする */
-                    char tmp[500];
                     unsigned int num = va_arg(args, unsigned int);
                     dest += itoa(dest, end - dest, num, 16);
                     /* ゼロ埋めを行う */
