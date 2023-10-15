@@ -343,6 +343,41 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                         puts(L"[ Text_gen ]: Format error!");
                     }
                 }
+                case '0': {
+                    format++; /* ゼロ埋めの数字が予想される */
+                    int length;/* ゼロ埋めあとの、文字桁数 */
+                    /* 文字桁数で条件分岐 */
+                    if (*format == '1') {
+                        format++;
+                        length = 1;
+                    } else if (*format == '2') {
+                        format++;
+                        length = 2;
+                    } else if (*format == '3') {
+                        format++;
+                        length = 3;
+                    } else if (*format == '4') {
+                        format++;
+                        length = 4;
+                    } else if (*format == '5') {
+                        format++;
+                        length = 5;
+                    } else if (*format == '6') {
+                        format++;
+                        length = 6;
+                    } else if (*format == '7') {
+                        format++;
+                        length = 7;
+                    } else if (*format == '8') {
+                        format++;
+                        length = 8;
+                    } else if (*format == '9') {
+                        format++;
+                        length = 9;
+                    } else {
+                        puts(L"[ Text_gen ]: Format error!");
+                    }
+                }
                 default: {
                     // Handle unknown format specifier
                     *dest = *format;
