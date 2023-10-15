@@ -175,7 +175,7 @@ void custom_memmove(void *dest, const void *src, size_t n) {
 size_t zeroPad(char *input, int width) {
     int length;
     length = strlen(input);
-    int zeroCount = width - length
+    int zeroCount = width - length;
     if (zeroCount > 0) {
         if (zeroCount > length) {
             zeroCount = length;
