@@ -172,21 +172,6 @@ void custom_memmove(void *dest, const void *src, size_t n) {
     }
 };
 
-size_t zeroPad(char *input, int width) {
-    int length;
-    length = strlen(input);
-    int zeroCount = width - length;
-    if (zeroCount > 0) {
-        if (zeroCount > length) {
-            zeroCount = length;
-        }
-        custom_memmove(input + zeroCount, input, length - zeroCount);
-        custom_memset(input, '0', zeroCount);
-    };
-    length = strlen(input);
-    return length;
-}
-
 
 /* 標準ライブラリで実装されているitoa */
 size_t itoa(char *str, size_t max_size, unsigned int value, int base) {
