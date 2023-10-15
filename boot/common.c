@@ -118,7 +118,7 @@ int custom_atoi(const char *str) {
 }
 
 void zeroPad(char *input, int width) {
-    int length = custom_strlen(input);
+    int length = strlen(input);
 
     if (length >= width) {
         // 入力文字列が指定の幅以上の場合は何もしない
