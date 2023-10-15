@@ -7,21 +7,30 @@
 #include "include/graphics.h"
 #include "include/mem.h"
 
+EFI_STATUS OpenRootDir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root) {
+    EFI_LOADED_IMAGE_PROTOCOL* loaded_image;
+    EFI_SIMPLE_FILE_SYSTEM_PROTOCOL* fs;
+
+    BS->OpenProtocol(image_handle, &)
+}
+
+
 /* Entry Point ! */
 /* 起動時の最初に実行されます。 */
 EFI_STATUS EfiMain(
     IN EFI_HANDLE ImageHandle,
     IN EFI_SYSTEM_TABLE *SystemTable)
 {
+    custom_printf("Welcome to Neos !\n");
     efi_init(SystemTable); /* UEFIの全てを初期化する関数 */
-    /* メモリーのバッファーなどを設定 */
+    /* メモリーバッファー */
     CHAR8 memmap_buf[MEM_DESC_SIZE];
     UINT64 memmap_size = MEM_DESC_SIZE;
-    /* メモリーマップ構造体の設定 */
+    /* 構造体の初期化 */
     struct MemoryMap map;
     map.buffer = memmap_buf;
     map.buffer_size = memmap_size;
-    /* メモリーの管理をスタート */
+    /* メモリーマップの初期化と、表示 */
     init_memmap(&map);
     print_memmap(&map);
     while (1);
