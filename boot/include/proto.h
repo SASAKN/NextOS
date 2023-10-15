@@ -19,22 +19,20 @@ void graphics_init(struct frame_buffer);
 /* Common */
 void putc (UINT16 c);
 void puts(UINT16 *s);
-void puts_uint32(UINT32 s);
-void Print(UINT16 *s); /* EDK2などに合わせるためにある関数 */
-UINTN EFIAPI strlen(const CHAR8 *String); /* 文字数を数える */
 UINT16 getc(void);
 UINT32 gets(UINT16 *buf, UINT32 buf_size);
 void PrintHex(UINT64 val, UINT8 num_degits); /* 16進数の出力 */
 UINT8 check_warn_error (UINT64 status, UINT16 *mess);
+UINTN EFIAPI strlen(const CHAR8 *String); /* 文字数を数える */
 void assert (UINT64 status, UINT16 *mess);
 /* 基本的なテキストの表示 */
-void custom_wctomb(wchar_t wc, char* dest, size_t destSize);
-void text_gen(char *str, size_t max_size, const char *format, ...);
-size_t itoa(char *str, size_t max_size, unsigned int value, int base);
-void custom_printf(const char *format, ...);
-void custom_wprintf(const wchar_t *format, ...);
 int custom_atoi(const char *str);
-void zero_pad(char *str, int width);
+size_t itoa(char *str, size_t max_size, unsigned int value, int base);
+void zeroPad(char *input, int width); /* ゼロ埋めの実装 */
+void custom_wctomb(wchar_t wc, char* dest, size_t destSize);
+void custom_wprintf(const wchar_t *format, ...);
+void custom_printf(const char *format, ...);
+void text_gen(char *str, size_t max_size, const char *format, ...);
 
 /* Memory */
 void print_memmap(struct MemoryMap* map);
