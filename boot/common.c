@@ -143,7 +143,19 @@ void custom_strcpy(char *dest, const char *src) {
     *dest = '\0'; // 文字列の終端を追加
 }
 
-size_t zeroPad(char *input, int width) {
+void* custom_memset(void *dst, int c, size_t n) {
+    size_t i;
+    UINT8 *str;
+    i = 0;
+    str = (UINT8 *)dst;
+    while (i < n) {
+        str[i] = (UINT8)c;
+        i++;
+    };
+    return (dst);
+}
+
+size_t custom_zeroPad(char *input, int width) {
     size_t length = strlen(input);
 
     if (length >= width) {
@@ -158,21 +170,14 @@ size_t zeroPad(char *input, int width) {
         return 0;
     }
 
-    // 右にずらす
-    for (int i = length; i >= 0; i--) {
-        input[i + padding] = input[i];
-    }
-
     // パディングを '0' で埋める
-    for (int i = 0; i < padding; i++) {
-        input[i] = '0';
-    }
+    custom_memset(input, '0', padding);
+    input[padding] = '\0'; // null 終端
 
     // 長さを更新
     length += padding;
 
     return length;
-}
 
 
 
