@@ -378,6 +378,7 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                         puts(L"[ Text_gen ]: Format error!");
                     };
                     if (*format == 'l') {
+                        format++;
                         if (*format == 'x') {
                             /* 10進数を16進数の文字列にする */
                             unsigned int num = va_arg(args, unsigned int);
