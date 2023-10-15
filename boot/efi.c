@@ -12,6 +12,7 @@ EFI_DEVICE_PATH_TO_TEXT_PROTOCOL *DPTTP;
 EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL *DPFTP;
 EFI_DEVICE_PATH_UTILITIES_PROTOCOL *DPUP;
 EFI_MP_SERVICES_PROTOCOL *MSP;
+EFI_LOADED_IMAGE_PROTOCOL *ELIP;
 
 EFI_SYSTEM_TABLE *ST;
 
@@ -19,6 +20,7 @@ void efi_init(EFI_SYSTEM_TABLE *SystemTable)
 {
 	/* GUID */
 	EFI_GUID sfsp_guid = {0x0964e5b22, 0x6459, 0x11d2,{0x8e, 0x39, 0x00, 0xa0,0xc9, 0x69, 0x72, 0x3b}};
+	EFI_GUID elip_guid = {0x5B1B31A1,0x9562,0x11d2,{0x8E,0x3F,0x00,0xA0,0xC9,0x69,0x72,0x3B}};
 	EFI_GUID gop_guid = {0x9042a9de, 0x23dc, 0x4a38, {0x96, 0xfb, 0x7a, 0xde, 0xd0, 0x80, 0x51, 0x6a}};
 	EFI_GUID spp_guid = {0x31878c87, 0xb75, 0x11d5, {0x9a, 0x4f, 0x0, 0x90, 0x27, 0x3f, 0xc1, 0x4d}};
 	EFI_GUID stiep_guid = {0xdd9e7534, 0x7762, 0x4698, {0x8c, 0x14, 0xf5, 0x85, 0x17, 0xa6, 0x25, 0xaa}};
@@ -34,6 +36,7 @@ void efi_init(EFI_SYSTEM_TABLE *SystemTable)
 	ST->BootServices->LocateProtocol(&spp_guid, NULL, (void **)&SPP);
 	ST->BootServices->LocateProtocol(&sfsp_guid, NULL, (void **)&SFSP);
 	ST->BootServices->LocateProtocol(&stiep_guid, NULL, (void **)&STIEP);
+	ST->BootServices->LocateProtocol(&elip_guid, NULL, (void **)&ELIP);
 	ST->BootServices->LocateProtocol(&dpttp_guid, NULL, (void **)&DPTTP);
 	ST->BootServices->LocateProtocol(&dpftp_guid, NULL, (void **)&DPFTP);
 	ST->BootServices->LocateProtocol(&dpup_guid, NULL, (void **)&DPUP);
