@@ -117,24 +117,63 @@ int custom_atoi(const char *str) {
     return result * sign;
 }
 
-void zeroPad(char *input, int width) {
+void custom_strcat(char *dest, const char *src) {
+    // デスティネーションの終端まで移動
+    while (*dest) {
+        dest++;
+    }
+
+    // ソース文字列をデスティネーションにコピー
+    while (*src) {
+        *dest = *src;
+        dest++;
+        src++;
+    }
+
+    *dest = '\0'; // 文字列の終端を追加
+}
+
+/* Strcpy - 標準ライブラリーにあるやつ */
+void custom_strcpy(char *dest, const char *src) {
+    while (*src) {
+        *dest = *src;
+        dest++;
+        src++;
+    }
+    *dest = '\0'; // 文字列の終端を追加
+}
+
+size_t zeroPad(char *input, int width) {
     int length = strlen(input);
 
-    // if (length >= width) {
-    //     // 入力文字列が指定の幅以上の場合は何もしない
-    //     return;
-    // }
+    if (length >= width) {
+        // 入力文字列が指定の幅以上の場合は何もしない
+        return length;
+    }
 
     int padding = width - length;
     if (padding > 0) {
-        for (int i = length; i >= 0; i--) {
-            input[i + padding] = input[i];
+        if (length + padding + 1 > width) {
+            // バッファオーバーフローを避ける
+            return 0;
         }
+
+        // パディングのために一時的なバッファを使用
+        char temp[256]; // サイズは適切に調整する必要があります
         for (int i = 0; i < padding; i++) {
-            input[i] = '0';
+            temp[i] = '0';
         }
+        temp[padding] = '\0'; // null 終端
+        custom_strcat(temp, input); // パディングを含む新しい文字列を作成
+        custom_strcpy(input, temp); // 元の文字列にコピー
+        length += padding; // 長さを更新
     }
+
+    return length;
 }
+
+
+
 
 /* 標準ライブラリで実装されているitoa */
 size_t itoa(char *str, size_t max_size, unsigned int value, int base) {
@@ -384,7 +423,7 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                             unsigned int num = va_arg(args, unsigned int);
                             dest += itoa(dest, end - dest, num, 16);
                             /* ゼロ埋めを行う */
-                            zeroPad(dest, length);
+                            dest += zeroPad(dest, length);
                             format++;
                         } else {
                             puts(L"[ Text_gen ]: Format error!");

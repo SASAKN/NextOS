@@ -28,11 +28,13 @@ void assert (UINT64 status, UINT16 *mess);
 /* 基本的なテキストの表示 */
 int custom_atoi(const char *str);
 size_t itoa(char *str, size_t max_size, unsigned int value, int base);
-void zeroPad(char *input, int width); /* ゼロ埋めの実装 */
+size_t zeroPad(char *input, int width); /* ゼロ埋めの実装 */
 void custom_wctomb(wchar_t wc, char* dest, size_t destSize);
 void custom_wprintf(const wchar_t *format, ...);
 void custom_printf(const char *format, ...);
 void text_gen(char *str, size_t max_size, const char *format, ...);
+void custom_strcpy(char *dest, const char *src);
+void custom_strcat(char *dest, const char *src);
 
 /* Memory */
 void print_memmap(struct MemoryMap* map);
