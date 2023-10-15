@@ -41,6 +41,7 @@ void* custom_memset(void *dst, int c, size_t n); /* メモリーにバイトの�
 /* Memory */
 void print_memmap(struct MemoryMap* map);
 EFI_STATUS init_memmap(struct MemoryMap *map);
+void save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *file);
 UINT16 *get_memtype_name(EFI_MEMORY_TYPE type);
 
 #endif
