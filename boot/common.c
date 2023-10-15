@@ -298,7 +298,7 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                     break;
                 }
                 case 'x': {
-                    /* 16進数のテキスト生成 */
+                    /* 10進数を16進数に変換したテキスト生成 */
                     unsigned int val = va_arg(args, unsigned int);
                     dest += itoa(dest, end - dest, val, 16);
                     break;
@@ -381,9 +381,8 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                     char tmp[500];
                     unsigned int num = va_arg(args, unsigned int);
                     dest += itoa(dest, end - dest, num, 16);
-                    tmp = itoa(dest, end - dest, num, 16);
                     /* ゼロ埋めを行う */
-                    zeroPad(tmp, length);
+                    zeroPad(dest, length);
                 }
                 default: {
                     // Handle unknown format specifier
