@@ -105,6 +105,8 @@ void save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *file) {
 	iter += map->descriptor_size, i++) {
 		EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR*)iter;
 		text_gen(buf, sizeof(buf), "%u, %x, %-ls, %08lx, %x, %x\n", i, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->Attribute & 0xffffflu);
+		custom_printf("A memory map file is saved in the root directory with the file name memmap.\n");
+		custom_printf("%s\n", buf);
 		size = strlen(buf);
 		file->Write(file, &size, buf);
 	};
