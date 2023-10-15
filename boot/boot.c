@@ -12,7 +12,9 @@ EFI_STATUS OpenRootDir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root) {
     EFI_LOADED_IMAGE_PROTOCOL* loaded_image;
     EFI_SIMPLE_FILE_SYSTEM_PROTOCOL* fs;
 
-    BS->OpenProtocol(image_handle, &EfiLoadedImageProtocolGuid, (VOID**)&fs, image_handle, NULL, EFI_OPEN_PROTOCOL)
+    BS->OpenProtocol(image_handle, &EfiLoadedImageProtocolGuid, (VOID**)&fs, image_handle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+    fs->OpenVolume(fs, root);
+    return EFI_SUCCESS;
 }
 
 
@@ -34,6 +36,11 @@ EFI_STATUS EfiMain(
     /* メモリーマップの初期化と、表示 */
     init_memmap(&map);
     print_memmap(&map);
+    /* ファイルプロトコルを開く */
+    EFI_FILE_PROTOCOL* root_dir;
+    OpenRootDir(image_handle, &root_dir);
+    EFI_FILE_PROTOCOL* memmap_file;
+    root_dir->Open(root_dir, &memmap_file, L"\\memmap", )
     while (1);
     return EFI_SUCCESS;
 };
