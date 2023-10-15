@@ -155,20 +155,35 @@ void* custom_memset(void *dst, int c, size_t n) {
     return (dst);
 }
 
-size_t zeroPad(char *input, int width) {
-    size_t length1 = strlen(input);
-    int padding = width - length1;
-    
-    if (padding <= 0) {
-        return length1; // No padding needed
+void rightShiftString(char *str, int shiftCount) {
+    if (str && shiftCount > 0) {
+        int length = 0;
+        while (str[length] != '\0') {
+            length++;
+        }
+
+        shiftCount = shiftCount % length;  // シフト数が文字列の長さを超えないように調整
+        char temp[shiftCount];
+
+        // 右端の文字を一時的に保存
+        for (int i = 0; i < shiftCount; i++) {
+            temp[i] = str[length - shiftCount + i];
+        }
+
+        // 残りの文字を右にシフト
+        for (int i = length - 1; i >= shiftCount; i--) {
+            str[i] = str[i - shiftCount];
+        }
+
+        // 一時的に保存した文字を左端にコピー
+        for (int i = 0; i < shiftCount; i++) {
+            str[i] = temp[i];
+        }
     }
-    
-    char buf_2[width + 1]; // +1 for null-terminator
-    custom_memset(buf_2, '0', padding);
-    custom_strcpy(buf_2 + padding, input);
-    custom_strcpy(input, buf_2);
-    
-    return width;
+}
+
+size_t zeroPad(char *input, int width) {
+
 }
 
 
