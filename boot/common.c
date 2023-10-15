@@ -122,29 +122,22 @@ int custom_atoi(const char *str) {
     return result * sign;
 }
 
-void zero_pad(char *str, int width) {
-    int str_length = strlen(str);
+void zeroPad(char *input, int width) {
+    int length = custom_strlen(input);
 
-    if (str_length < width) {
-        int pad_count = width - str_length;
+    if (length >= width) {
+        // 入力文字列が指定の幅以上の場合は何もしない
+        return;
+    }
 
-        // 移動元と移動先の位置を計算
-        char *src = str + str_length;  // 末尾から進む
-        char *dest = str + width;      // 末尾から進む
-
-        // 文字列を右にずらす
-        while (src >= str) {
-            *(--dest) = *(--src);
+    int padding = width - length;
+    if (padding > 0) {
+        for (int i = length; i >= 0; i--) {
+            input[i + padding] = input[i];
         }
-
-        // 残りの部分を '0' で埋める
-        while (pad_count > 0) {
-            *(str++) = '0';
-            pad_count--;
+        for (int i = 0; i < padding; i++) {
+            input[i] = '0';
         }
-
-        // 文字列の終了を示すヌル文字を追加
-        *str = '\0';
     }
 }
 
