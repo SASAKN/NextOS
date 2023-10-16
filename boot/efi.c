@@ -34,6 +34,7 @@ void efi_init(EFI_SYSTEM_TABLE *SystemTable)
 	SystemTable->ConOut->ClearScreen(SystemTable->ConOut); /* 画面クリア */
 	ST = SystemTable;
 	ST->BootServices->SetWatchdogTimer(0, 0, 0, NULL); /* 5分何もしないでいると、再起動してしまうバグを修正 */
+	/* プロトコルのハンドルを指定する */
 	ST->BootServices->LocateProtocol(&gop_guid, NULL, (void **)&GOP);
 	ST->BootServices->LocateProtocol(&spp_guid, NULL, (void **)&SPP);
 	ST->BootServices->LocateProtocol(&sfsp_guid, NULL, (void **)&SFSP);
