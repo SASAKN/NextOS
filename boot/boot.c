@@ -7,12 +7,12 @@
 #include "include/graphics.h"
 #include "include/mem.h"
 
-EFI_STATUS OpenRootDir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root, EFI_SYSTEM_TABLE *SystemTable) {
+EFI_STATUS OpenRootDir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root) {
     EFI_LOADED_IMAGE_PROTOCOL* loaded_image;
     EFI_SIMPLE_FILE_SYSTEM_PROTOCOL* fs;
-    SystemTable->BootServices->OpenProtocol(image_handle, &lip_guid, (VOID**)&fs, image_handle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
-    SystemTable->BootServices->OpenProtocol(loaded_image->DeviceHandle, &sfsp_guid, (VOID**)&fs, image_handle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
-    fs->OpenVolume(fs, root);
+    // BS->OpenProtocol(image_handle, &lip_guid, (VOID**)&fs, image_handle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+    // BS->OpenProtocol(loaded_image->DeviceHandle, &sfsp_guid, (VOID**)&fs, image_handle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+    // fs->OpenVolume(fs, root);
     return EFI_SUCCESS;
 };
 
@@ -37,7 +37,7 @@ EFI_STATUS EfiMain(
     print_memmap(&map);
     /* ファイルプロトコルを開く */
     EFI_FILE_PROTOCOL* root_dir;
-    OpenRootDir(ImageHandle, &root_dir, SystemTable);
+    OpenRootDir(ImageHandle, &root_dir);
     // /* メモリーマップをファイルに保存 */
     // EFI_FILE_PROTOCOL* memmap_file;
     // root_dir->Open(root_dir, &memmap_file, L"\\memmap", EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE, 0);
