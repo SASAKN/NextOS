@@ -20,22 +20,24 @@ EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle) {
 EFI_STATUS OpenRootDir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root, EFI_SYSTEM_TABLE* system_table) {
   EFI_LOADED_IMAGE_PROTOCOL* loaded_image;
   EFI_SIMPLE_FILE_SYSTEM_PROTOCOL* fs;
+  EFI_STATUS status;
 
-  system_table->BootServices->OpenProtocol(
+  status = system_table->BootServices->OpenProtocol(
       image_handle,
       &lip_guid,
       (VOID**)&loaded_image,
       image_handle,
       NULL,
       EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
-
-  gBS->OpenProtocol(
+    assert(status, L"OpenProtocol");
+  status = system_table->BootServices->OpenProtocol(
       loaded_image->DeviceHandle,
       &sfsp_guid,
       (VOID**)&fs,
       image_handle,
       NULL,
       EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+    assert(status, L"OpenProtocol");
 
   fs->OpenVolume(fs, root);
 
