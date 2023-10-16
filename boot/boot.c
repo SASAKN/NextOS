@@ -24,8 +24,8 @@ EFI_STATUS EfiMain(
     IN EFI_HANDLE ImageHandle,
     IN EFI_SYSTEM_TABLE *SystemTable)
 {
-    custom_printf("Welcome to Neos !\n");
     efi_init(SystemTable); /* UEFIの全てを初期化する関数 */
+    custom_printf("Welcome to Neos !");
     /* メモリーバッファー */
     CHAR8 memmap_buf[MEM_DESC_SIZE];
     UINT64 memmap_size = MEM_DESC_SIZE;
@@ -37,13 +37,13 @@ EFI_STATUS EfiMain(
     init_memmap(&map);
     print_memmap(&map);
     /* ファイルプロトコルを開く */
-    // EFI_FILE_PROTOCOL* root_dir;
-    // OpenRootDir(ImageHandle, &root_dir);
-    // /* メモリーマップをファイルに保存 */
-    // EFI_FILE_PROTOCOL* memmap_file;
-    // root_dir->Open(root_dir, &memmap_file, L"\\memmap", EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE, 0);
-    // save_memmap(&map, memmap_file);
-    // memmap_file->Close(memmap_file);
+    EFI_FILE_PROTOCOL* root_dir;
+    OpenRootDir(ImageHandle, &root_dir);
+    /* メモリーマップをファイルに保存 */
+    EFI_FILE_PROTOCOL* memmap_file;
+    root_dir->Open(root_dir, &memmap_file, L"\\memmap", EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE, 0);
+    save_memmap(&map, memmap_file);
+    memmap_file->Close(memmap_file);
     while (1);
     return EFI_SUCCESS;
 };
