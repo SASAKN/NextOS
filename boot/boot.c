@@ -66,6 +66,12 @@ EFI_STATUS EfiMain(
     EFI_FILE_PROTOCOL* root_dir;
     EFI_FILE_PROTOCOL* memmap_file;
     OpenRootDir(ImageHandle, &root_dir, SystemTable);
+    root_dir->Open(
+      root_dir, &memmap_file, L"\\memmap",
+      EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE, 0);
+      save_memmap(&memmap, memmap_file);
+      memmap_file->Close(memmap_file);
+    custom_printf("All Done !\n");
     while (TRUE);
     return EFI_SUCCESS;
 };
