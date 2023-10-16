@@ -17,15 +17,30 @@ EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle) {
     return status;
 };
 
-// EFI_STATUS OpenRootDir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root) {
-//     EFI_LOADED_IMAGE_PROTOCOL* loaded_image;
-//     EFI_SIMPLE_FILE_SYSTEM_PROTOCOL* fs;
-//     /* 例外の原因は、OpenProtocol */
-//     // ST->BootServices->OpenProtocol(image_handle, &lip_guid, (VOID**)&fs, image_handle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
-//     // ST->BootServices->OpenProtocol(loaded_image->DeviceHandle, &sfsp_guid, (VOID**)&fs, image_handle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
-//     fs->OpenVolume(fs, root);
-//     return EFI_SUCCESS;
-// };
+EFI_STATUS OpenRootDir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root, EFI_SYSTEM_TABLE* system_table) {
+  EFI_LOADED_IMAGE_PROTOCOL* loaded_image;
+  EFI_SIMPLE_FILE_SYSTEM_PROTOCOL* fs;
+
+  system_table->BootServices->OpenProtocol(
+      image_handle,
+      &lip_guid,
+      (VOID**)&loaded_image,
+      image_handle,
+      NULL,
+      EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+
+  gBS->OpenProtocol(
+      loaded_image->DeviceHandle,
+      &sfsp_guid,
+      (VOID**)&fs,
+      image_handle,
+      NULL,
+      EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+
+  fs->OpenVolume(fs, root);
+
+  return EFI_SUCCESS;
+}
 
 
 /* Entry Point ! */
@@ -44,9 +59,13 @@ EFI_STATUS EfiMain(
     struct MemoryMap map;
     map.buffer = memmap_buf;
     map.buffer_size = memmap_size;
-    /* メモリーマップの初期化と、表示 */
+    /* メモリーマップの初期化,表示 */
     init_memmap(&map);
     print_memmap(&map);
+    /* ファイルのプロトコル */
+    EFI_FILE_PROTOCOL* root_dir;
+    EFI_FILE_PROTOCOL* memmap_file;
+    save_memmap(&map,)
     while (1);
     return EFI_SUCCESS;
 };
