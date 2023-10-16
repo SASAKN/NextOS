@@ -10,9 +10,11 @@
 EFI_STATUS OpenRootDir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root) {
     EFI_LOADED_IMAGE_PROTOCOL* loaded_image;
     EFI_SIMPLE_FILE_SYSTEM_PROTOCOL* fs;
+    EFI_LOADED_IMAGE_PROTOCOL *lip;
     /* 例外の原因は、OpenProtocol */
-    BS->OpenProtocol(image_handle, &lip_guid, (VOID**)&fs, image_handle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
-    BS->OpenProtocol(loaded_image->DeviceHandle, &sfsp_guid, (VOID**)&fs, image_handle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+    ST->BootServices->OpenProtocol(image_handle, &lip_guid, (VOID**)&lip, image_handle, NULL, EFI_OPEN_PROTOCOL_GET_PROTOCOL);
+    ST->BootServices->OpenProtocol(image_handle, &lip_guid, (VOID**)&fs, image_handle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+    ST->BootServices->OpenProtocol(loaded_image->DeviceHandle, &sfsp_guid, (VOID**)&fs, image_handle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
     fs->OpenVolume(fs, root);
     return EFI_SUCCESS;
 };
