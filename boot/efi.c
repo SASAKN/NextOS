@@ -36,6 +36,7 @@ void efi_init(EFI_SYSTEM_TABLE *SystemTable)
 	ST->BootServices->LocateProtocol(&gop_guid, NULL, (void **)&GOP);
 	ST->BootServices->LocateProtocol(&spp_guid, NULL, (void **)&SPP);
 	ST->BootServices->LocateProtocol(&sfsp_guid, NULL, (void **)&SFSP);
+	ST->BootServices->LocateProtocol(&sfsp_guid, NULL, (void **)&LIP);
 	ST->BootServices->LocateProtocol(&stiep_guid, NULL, (void **)&STIEP);
 	ST->BootServices->LocateProtocol(&dpttp_guid, NULL, (void **)&DPTTP);
 	ST->BootServices->LocateProtocol(&dpftp_guid, NULL, (void **)&DPFTP);

@@ -10,6 +10,7 @@
 EFI_STATUS OpenRootDir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root) {
     EFI_LOADED_IMAGE_PROTOCOL* loaded_image;
     EFI_SIMPLE_FILE_SYSTEM_PROTOCOL* fs;
+    /* 例外の原因は、OpenProtocol */
     // BS->OpenProtocol(image_handle, &lip_guid, (VOID**)&fs, image_handle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
     // BS->OpenProtocol(loaded_image->DeviceHandle, &sfsp_guid, (VOID**)&fs, image_handle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
     // fs->OpenVolume(fs, root);
@@ -26,18 +27,18 @@ EFI_STATUS EfiMain(
     efi_init(SystemTable); /* UEFIの全てを初期化する関数 */
     custom_printf("Welcome to Neos !\n");
     /* メモリーバッファー */
-    CHAR8 memmap_buf[MEM_DESC_SIZE];
-    UINT64 memmap_size = MEM_DESC_SIZE;
-    /* 構造体の初期化 */
-    struct MemoryMap map;
-    map.buffer = memmap_buf;
-    map.buffer_size = memmap_size;
-    /* メモリーマップの初期化と、表示 */
-    init_memmap(&map);
-    print_memmap(&map);
-    /* ファイルプロトコルを開く */
-    EFI_FILE_PROTOCOL* root_dir;
-    OpenRootDir(ImageHandle, &root_dir);
+    // CHAR8 memmap_buf[MEM_DESC_SIZE];
+    // UINT64 memmap_size = MEM_DESC_SIZE;
+    // /* 構造体の初期化 */
+    // struct MemoryMap map;
+    // map.buffer = memmap_buf;
+    // map.buffer_size = memmap_size;
+    // /* メモリーマップの初期化と、表示 */
+    // init_memmap(&map);
+    // print_memmap(&map);
+    // /* ファイルプロトコルを開く */
+    // EFI_FILE_PROTOCOL* root_dir;
+    // OpenRootDir(ImageHandle, &root_dir);
     // /* メモリーマップをファイルに保存 */
     // EFI_FILE_PROTOCOL* memmap_file;
     // root_dir->Open(root_dir, &memmap_file, L"\\memmap", EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE, 0);
