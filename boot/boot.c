@@ -28,6 +28,9 @@ EFI_STATUS EfiMain(
     custom_printf("Welcome to Neos !\n");
     EFI_LOADED_IMAGE_PROTOCOL *lip;
     ST->BootServices->OpenProtocol(ImageHandle, &lip_guid, (VOID**)&lip, ImageHandle, NULL, EFI_OPEN_PROTOCOL_GET_PROTOCOL);
+    assert(status, L"OpenProtocol");
+    puts(L"lip->FilePath :");
+    puts(DPTTP->ConvertDevicePathToText)
     // /* メモリーバッファー */
     // CHAR8 memmap_buf[MEM_DESC_SIZE];
     // UINT64 memmap_size = MEM_DESC_SIZE;

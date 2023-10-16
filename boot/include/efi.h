@@ -491,10 +491,11 @@ typedef struct EFI_LOADED_IMAGE_PROTOCOL
 
 typedef struct EFI_DEVICE_PATH_TO_TEXT_PROTOCOL
 {
-    EFI_DEVICE_PATH_PROTOCOL *(*ConvertTextToDeviceNode)(
-        const unsigned short *TextDeviceNode);
-    EFI_DEVICE_PATH_PROTOCOL *(*ConvertTextToDevicePath)(
-        const unsigned short *TextDevicePath);
+    UINT64 _buf;
+    UINT16 *(*ConvertDevicePathToText)(
+        const EFI_DEVICE_PATH_PROTOCOL* DeviceNode,
+        UINT8 DisplayOnly,
+        UINT8 AllowShortcuts);
 } EFI_DEVICE_PATH_TO_TEXT_PROTOCOL;
 
 typedef struct EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL
