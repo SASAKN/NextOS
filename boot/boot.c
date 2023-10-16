@@ -30,7 +30,8 @@ EFI_STATUS EfiMain(
     ST->BootServices->OpenProtocol(ImageHandle, &lip_guid, (VOID**)&lip, ImageHandle, NULL, EFI_OPEN_PROTOCOL_GET_PROTOCOL);
     assert(status, L"OpenProtocol");
     puts(L"lip->FilePath :");
-    puts(DPTTP->ConvertDevicePathToText)
+    puts(DPTTP->ConvertDevicePathToText(lip->FilePath, FALSE, FALSE));
+    puts(L"\r\n");
     // /* メモリーバッファー */
     // CHAR8 memmap_buf[MEM_DESC_SIZE];
     // UINT64 memmap_size = MEM_DESC_SIZE;
