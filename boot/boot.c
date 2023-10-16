@@ -65,7 +65,7 @@ EFI_STATUS EfiMain(
     /* ファイルのプロトコル */
     EFI_FILE_PROTOCOL* root_dir;
     EFI_FILE_PROTOCOL* memmap_file;
-    save_memmap(&map,)
-    while (1);
+    OpenRootDir(ImageHandle, &root_dir, SystemTable);
+    while (TRUE);
     return EFI_SUCCESS;
 };
