@@ -37,24 +37,16 @@ EFI_STATUS EfiMain(
     efi_init(SystemTable); /* UEFIの全てを初期化する関数 */
     PrintEfiFileLocation(ImageHandle); /* 実行しているEFIファイルの場所を表示 */
     custom_printf("Welcome to Neos !\n"); /* ようこそメッセージ */
-    // /* メモリーバッファー */
-    // CHAR8 memmap_buf[MEM_DESC_SIZE];
-    // UINT64 memmap_size = MEM_DESC_SIZE;
-    // /* 構造体の初期化 */
-    // struct MemoryMap map;
-    // map.buffer = memmap_buf;
-    // map.buffer_size = memmap_size;
-    // /* メモリーマップの初期化と、表示 */
-    // init_memmap(&map);
-    // print_memmap(&map);
-    // /* ファイルプロトコルを開く */
-    // EFI_FILE_PROTOCOL* root_dir;
-    // OpenRootDir(ImageHandle, &root_dir);
-    // /* メモリーマップをファイルに保存 */
-    // EFI_FILE_PROTOCOL* memmap_file;
-    // root_dir->Open(root_dir, &memmap_file, L"\\memmap", EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE, 0);
-    // save_memmap(&map, memmap_file);
-    // memmap_file->Close(memmap_file);
+    /* メモリーバッファー */
+    CHAR8 memmap_buf[MEM_DESC_SIZE];
+    UINT64 memmap_size = MEM_DESC_SIZE;
+    /* 構造体の初期化 */
+    struct MemoryMap map;
+    map.buffer = memmap_buf;
+    map.buffer_size = memmap_size;
+    /* メモリーマップの初期化と、表示 */
+    init_memmap(&map);
+    print_memmap(&map);
     while (1);
     return EFI_SUCCESS;
 };
