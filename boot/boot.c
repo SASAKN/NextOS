@@ -7,6 +7,7 @@
 #include "include/graphics.h"
 #include "include/mem.h"
 
+/* 実行中のファイルの場所を表示 */
 EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle) {
     EFI_LOADED_IMAGE_PROTOCOL *lip;
     UINT64 status = ST->BootServices->OpenProtocol(ImageHandle, &lip_guid, (VOID**)&lip, ImageHandle, NULL, EFI_OPEN_PROTOCOL_GET_PROTOCOL);
@@ -15,7 +16,6 @@ EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle) {
     puts(L"\r\n");
     return status;
 };
-
 
 // EFI_STATUS OpenRootDir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root) {
 //     EFI_LOADED_IMAGE_PROTOCOL* loaded_image;
