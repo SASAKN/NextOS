@@ -93,28 +93,16 @@ EFI_STATUS init_memmap(struct MemoryMap *map)
 
 
 void save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *file) {
-	EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer;
-	UINT32 i;
-	UINT16 *header = L"Index, Buffer, Type, Type(name),PhysicalStart, VirtualStart, NumberOfPages, Attribute\n";
-	puts(header);
-	putc(L' ');
-	for (i = 0; i < map->memmap_desc_entry; i++)
-	{
-		PrintHex((unsigned long long)desc, 16);
-		putc(L' ');
-		PrintHex(desc->Type, 2);
-		putc(L' ');
-		puts(get_memtype_name(desc->Type));
-		putc(L' ');
-		PrintHex(desc->PhysicalStart, 16);
-		putc(L' ');
-		PrintHex(desc->VirtualStart, 16);
-		putc(L' ');
-		PrintHex(desc->NumberOfPages, 16);
-		putc(L' ');
-		PrintHex(desc->Attribute, 16);
-		puts(L"\r\n");
-
+	EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer; /* メモリーの中身 */
+	UINT32 i; /* カウント */
+	char buffer[560]; /* バッファー */
+	UINTN size; /* サイズ用 */
+	CHAR8 *header = "Index, Buffer, Type, Type(name),PhysicalStart, VirtualStart, NumberOfPages, Attribute\n"; /* Header */
+	size = strlen(header); /* ヘッダーのサイズ */
+	for (i = 0; i < map->memmap_desc_entry; i++) {
+		text_gen(buffer, sizeof(buffer), "%u, %x, %x, %-ls, %x, %x, %x, %x", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->Attribute);
+		size = strlen(buffer);
+		file->Write(file, &size, buffer);
 		desc = (EFI_MEMORY_DESCRIPTOR *)((UINT8 *)desc + map->descriptor_size);
 	};
 };
