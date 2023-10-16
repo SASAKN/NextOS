@@ -7,12 +7,13 @@
 #include "include/graphics.h"
 #include "include/mem.h"
 
-EFI_STATUS PrintEfiFileLocation(void) {
+EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle) {
     EFI_LOADED_IMAGE_PROTOCOL *lip;
     UINT64 status = ST->BootServices->OpenProtocol(ImageHandle, &lip_guid, (VOID**)&lip, ImageHandle, NULL, EFI_OPEN_PROTOCOL_GET_PROTOCOL);
     assert(status, L"OpenProtocol");
     custom_wprintf(L"EfiFileLocation(lip->FilePath) : %s", DPTTP->ConvertDevicePathToText(lip->FilePath, FALSE, FALSE));
     puts(L"\r\n");
+    return status;
 };
 
 
@@ -34,7 +35,7 @@ EFI_STATUS EfiMain(
     IN EFI_SYSTEM_TABLE *SystemTable)
 {
     efi_init(SystemTable); /* UEFIの全てを初期化する関数 */
-    PrintEfiFileLocation(); /* 実行しているEFIファイルの場所を表示 */
+    PrintEfiFileLocation(ImageHandle); /* 実行しているEFIファイルの場所を表示 */
     custom_printf("Welcome to Neos !\n"); /* ようこそメッセージ */
     // /* メモリーバッファー */
     // CHAR8 memmap_buf[MEM_DESC_SIZE];
