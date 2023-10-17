@@ -24,6 +24,18 @@ void PrintOK(EFI_SYSTEM_TABLE *SystemTable) {
     SystemTable->ConOut->SetAttribute(SystemTable->ConOut, 0x0F); /* 白に戻す */
 };
 
+void PrintWarn(EFI_SYSTEM_TABLE *SystemTable) {
+    SystemTable->ConOut->SetAttribute(SystemTable->ConOut, 0x0E); /* 黄色で、Warnを表示 */
+    SystemTable->ConOut->OutputString(SystemTable->ConOut, L"[ Warn ]");
+    SystemTable->ConOut->SetAttribute(SystemTable->ConOut, 0x0F); /* 白に戻す */
+};
+
+void PrintError(EFI_SYSTEM_TABLE *SystemTable) {
+    SystemTable->ConOut->SetAttribute(SystemTable->ConOut, 0x04); /* 緑で、OKを表示 */
+    SystemTable->ConOut->OutputString(SystemTable->ConOut, L"[ Error ! ]");
+    SystemTable->ConOut->SetAttribute(SystemTable->ConOut, 0x0F); /* 白に戻す */
+};
+
 /* ベンダーなどの情報を表示 */
 void PrintEfiConfigurationTable(void) {
   UINT64 i;
@@ -61,17 +73,17 @@ EFI_STATUS EfiMain(
     PrintEfiConfigurationTable(); /* ConfiguratonTableの表示 */
     PrintOK(SystemTable);
     custom_printf(" BootLoader \n");
-    /* メモリーバッファー */
-    CHAR8 memmap_buf[MEM_DESC_SIZE];
-    UINT64 memmap_size = MEM_DESC_SIZE;
-    /* 構造体の初期化 */
-    struct MemoryMap map;
-    map.buffer = memmap_buf;
-    map.buffer_size = memmap_size;
-    /* メモリーマップの初期化,表示 */
-    init_memmap(&map);
-    print_memmap(&map);
-    custom_printf("All Done !\n");
+    // /* メモリーバッファー */
+    // CHAR8 memmap_buf[MEM_DESC_SIZE];
+    // UINT64 memmap_size = MEM_DESC_SIZE;
+    // /* 構造体の初期化 */
+    // struct MemoryMap map;
+    // map.buffer = memmap_buf;
+    // map.buffer_size = memmap_size;
+    // /* メモリーマップの初期化,表示 */
+    // init_memmap(&map);
+    // print_memmap(&map);
+    // custom_printf("All Done !\n");
     while (TRUE);
     return EFI_SUCCESS;
 };
