@@ -16,6 +16,14 @@ EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle) {
     puts(L"\r\n");
     return status;
 };
+
+/* OKを緑で表示 */
+void PrintOK(EFI_SYSTEM_TABLE *SystemTable) {
+    SystemTable->ConOut->SetAttribute(SystemTable->ConOut, 0x02); /* 緑で、OKを表示 */
+    SystemTable->ConOut->OutputString(SystemTable->ConOut, L"[ OK ]");
+    SystemTable->ConOut->SetAttribute(SystemTable->ConOut, 0x0F); /* 白に戻す */
+};
+
 /* ベンダーなどの情報を表示 */
 void PrintEfiConfigurationTable(void) {
   UINT64 i;
@@ -40,33 +48,6 @@ void PrintEfiConfigurationTable(void) {
   }
 }
 
-EFI_STATUS OpenRootDir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root, EFI_SYSTEM_TABLE* system_table) {
-  EFI_LOADED_IMAGE_PROTOCOL* loaded_image;
-  EFI_SIMPLE_FILE_SYSTEM_PROTOCOL* fs;
-  EFI_STATUS status;
-
-  status = system_table->BootServices->OpenProtocol(
-      image_handle,
-      &lip_guid,
-      (VOID**)&loaded_image,
-      image_handle,
-      NULL,
-      EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
-    assert(status, L"OpenProtocol");
-  status = system_table->BootServices->OpenProtocol(
-      loaded_image->DeviceHandle,
-      &sfsp_guid,
-      (VOID**)&fs,
-      image_handle,
-      NULL,
-      EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
-    assert(status, L"OpenProtocol");
-
-  fs->OpenVolume(fs, root);
-
-  return EFI_SUCCESS;
-}
-
 
 /* Entry Point ! */
 /* 起動時の最初に実行されます。 */
@@ -75,7 +56,7 @@ EFI_STATUS EfiMain(
     IN EFI_SYSTEM_TABLE *SystemTable)
 {
     efi_init(SystemTable); /* UEFIの全てを初期化する関数 */
-    custom_printf("Welcome to Neos !\n"); /* ようこそメッセージ */
+    custom_printf("Starting NEOS BootLoader ...\n"); /* ようこそメッセージ */
     PrintEfiFileLocation(ImageHandle); /* 実行しているEFIファイルの場所を表示 */
     PrintEfiConfigurationTable(); /* ConfiguratonTableの表示 */
     /* メモリーバッファー */

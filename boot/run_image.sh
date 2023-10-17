@@ -2,8 +2,10 @@
 
 script_dir="$(dirname "$(readlink -f "$0")")"
 
+#    -nographic -serial mon:stdio
+
 qemu-system-x86_64 \
-    -nographic -serial mon:stdio\
+    -monitor stdio \
     -m 3G \
     -drive if=pflash,format=raw,file=${script_dir}/OVMF.fd \
     -drive if=ide,index=0,media=disk,format=raw,file=${script_dir}/neos.img \
