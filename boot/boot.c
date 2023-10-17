@@ -16,6 +16,29 @@ EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle) {
     puts(L"\r\n");
     return status;
 };
+/* ベンダーなどの情報を表示 */
+void PrintEfiConfigurationTable(void) {
+  UINT64 i;
+  for (i = 0; i < ST->NumberOfTableEntries; i++) {
+    PrintHex(i, 1);
+		putc(L':');
+    PrintHex((unsigned long long)&ST->ConfigurationTable[i], 16);
+		putc(L':');
+		PrintHex(ST->ConfigurationTable[i].VendorGuid.Data1, 8);
+		putc(L' ');
+		PrintHex(ST->ConfigurationTable[i].VendorGuid.Data2, 4);
+		putc(L' ');
+		PrintHex(ST->ConfigurationTable[i].VendorGuid.Data3, 4);
+		putc(L' ');
+		unsigned char j;
+		for (j = 0; j < 8; j++)
+			PrintHex(ST->ConfigurationTable[i].VendorGuid.Data4[j], 2);
+		putc(L':');
+		PrintHex((unsigned long long)ST->ConfigurationTable[i].VendorTable,
+		     16);
+		puts(L"\r\n");
+  }
+}
 
 EFI_STATUS OpenRootDir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root, EFI_SYSTEM_TABLE* system_table) {
   EFI_LOADED_IMAGE_PROTOCOL* loaded_image;
