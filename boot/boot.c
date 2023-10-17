@@ -17,25 +17,6 @@ EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle) {
     return status;
 };
 
-/* OKを緑で表示 */
-void PrintOK(EFI_SYSTEM_TABLE *SystemTable) {
-    SystemTable->ConOut->SetAttribute(SystemTable->ConOut, 0x02); /* 緑で、OKを表示 */
-    SystemTable->ConOut->OutputString(SystemTable->ConOut, L"[ OK ]");
-    SystemTable->ConOut->SetAttribute(SystemTable->ConOut, 0x0F); /* 白に戻す */
-};
-
-void PrintWarn(EFI_SYSTEM_TABLE *SystemTable) {
-    SystemTable->ConOut->SetAttribute(SystemTable->ConOut, 0x0E); /* 黄色で、Warnを表示 */
-    SystemTable->ConOut->OutputString(SystemTable->ConOut, L"[ Warn ]");
-    SystemTable->ConOut->SetAttribute(SystemTable->ConOut, 0x0F); /* 白に戻す */
-};
-
-void PrintError(EFI_SYSTEM_TABLE *SystemTable) {
-    SystemTable->ConOut->SetAttribute(SystemTable->ConOut, 0x05); /* あかで、Errorを表示 */
-    SystemTable->ConOut->OutputString(SystemTable->ConOut, L"[ Error ! ]");
-    SystemTable->ConOut->SetAttribute(SystemTable->ConOut, 0x0F); /* 白に戻す */
-};
-
 /* ベンダーなどの情報を表示 */
 void PrintEfiConfigurationTable(void) {
   UINT64 i;

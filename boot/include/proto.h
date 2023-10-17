@@ -37,6 +37,9 @@ void custom_strcpy(char *dest, const char *src);
 void custom_strcat(char *dest, const char *src);
 void custom_memmove(void *dest, const void *src, size_t n);
 void* custom_memset(void *dst, int c, size_t n); /* メモリーにバイトのセット */
+void PrintOK(EFI_SYSTEM_TABLE *SystemTable);
+void PrintWarn(EFI_SYSTEM_TABLE *SystemTable);
+void PrintError(EFI_SYSTEM_TABLE *SystemTable);
 
 /* Memory */
 void print_memmap(struct MemoryMap* map);

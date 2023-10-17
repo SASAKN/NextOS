@@ -443,3 +443,22 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
     *dest = '\0'; // Null-terminate the string
     va_end(args);
 };
+
+/* OKを緑で表示 */
+void PrintOK(EFI_SYSTEM_TABLE *SystemTable) {
+    SystemTable->ConOut->SetAttribute(SystemTable->ConOut, 0x02); /* 緑で、OKを表示 */
+    SystemTable->ConOut->OutputString(SystemTable->ConOut, L"[ OK ]");
+    SystemTable->ConOut->SetAttribute(SystemTable->ConOut, 0x0F); /* 白に戻す */
+};
+
+void PrintWarn(EFI_SYSTEM_TABLE *SystemTable) {
+    SystemTable->ConOut->SetAttribute(SystemTable->ConOut, 0x0E); /* 黄色で、Warnを表示 */
+    SystemTable->ConOut->OutputString(SystemTable->ConOut, L"[ Warn ]");
+    SystemTable->ConOut->SetAttribute(SystemTable->ConOut, 0x0F); /* 白に戻す */
+};
+
+void PrintError(EFI_SYSTEM_TABLE *SystemTable) {
+    SystemTable->ConOut->SetAttribute(SystemTable->ConOut, 0x04); /* あかで、Errorを表示 */
+    SystemTable->ConOut->OutputString(SystemTable->ConOut, L"[ Error ! ]");
+    SystemTable->ConOut->SetAttribute(SystemTable->ConOut, 0x0F); /* 白に戻す */
+};
