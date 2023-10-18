@@ -49,19 +49,25 @@ EFI_STATUS EfiMain(
     IN EFI_SYSTEM_TABLE *SystemTable)
 {
     efi_init(SystemTable); /* UEFIの全てを初期化する関数 */
+    UINT64 status;
     custom_printf("Starting NEOS BootLoader ...\n"); /* ようこそメッセージ */
     PrintEfiFileLocation(ImageHandle); /* 実行しているEFIファイルの場所を表示 */
     PrintEfiConfigurationTable(); /* ConfiguratonTableの表示 */
-    /* メモリーバッファー */
-    CHAR8 memmap_buf[MEM_DESC_SIZE];
-    UINT64 memmap_size = MEM_DESC_SIZE;
-    /* 構造体の初期化 */
-    struct MemoryMap map;
-    map.buffer = memmap_buf;
-    map.buffer_size = memmap_size;
-    /* メモリーマップの初期化,表示 */
-    init_memmap(&map);
-    print_memmap(&map);
+    /* ファイルを開く操作 */
+    EFI_FILE_PROTOCOL *root;
+    status = SFSP->OpenVolume(SFSP, &root);
+    // /* メモリーバッファー */
+    // CHAR8 memmap_buf[MEM_DESC_SIZE];
+    // UINT64 memmap_size = MEM_DESC_SIZE;
+    // /* 構造体の初期化 */
+    // struct MemoryMap map;
+    // map.buffer = memmap_buf;
+    // map.buffer_size = memmap_size;
+    // /* ファイルの保存場所などの指定 */
+    // /* メモリーマップの初期化,表示 */
+    // init_memmap(&map);
+    // print_memmap(&map);
+    /* All Done ! */
     custom_printf("All Done !\n");
     while (TRUE);
     return EFI_SUCCESS;
