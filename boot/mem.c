@@ -103,7 +103,7 @@ void save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *file) {
 	char *header = "Index, Buffer, Type, Type(name),PhysicalStart, VirtualStart, NumberOfPages, Attribute\n";
 	size = strlen(header);
 	text_gen(tmp, sizeof(tmp), "%u", size);
-	custom_printf("%s", tmp);
+	custom_printf("[Size] %s", tmp);
 	file->Write(file, &size, header);
 	putc(L' ');
 	for (i = 0; i < map->memmap_desc_entry; i++)
