@@ -78,6 +78,7 @@ EFI_STATUS EfiMain(
     /* メモリーマップの初期化,表示 */
     init_memmap(&map);
     print_memmap(&map);
+    save_memmap(&map, memmap_file);
     /* All Done ! */
     custom_printf("All Done !\n");
     while (TRUE);
