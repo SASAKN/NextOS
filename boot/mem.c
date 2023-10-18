@@ -94,19 +94,24 @@ EFI_STATUS init_memmap(struct MemoryMap *map)
 
 void save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *file) {
 	EFI_STATUS status;
-	EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer; /* メモリーの中身 */
-	UINT32 i; /* カウント */
-	char buffer[560]; /* バッファー */
-	UINTN size; /* サイズ用 */
-	CHAR8 *header = "Index, Buffer, Type, Type(name),PhysicalStart, VirtualStart, NumberOfPages, Attribute\n"; /* Header */
-	status = file->Write(file, &size, header);
-	assert(status, L"file->Write");
-	size = strlen(header); /* ヘッダーのサイズ */
-	for (i = 0; i < map->memmap_desc_entry; i++) {
-		text_gen(buffer, sizeof(buffer), "%u, %x\n", i, desc);
+	UINT64 size;
+	char buffer[2000];
+	char tmp[100];
+	EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer;
+	UINT32 i;
+	/* ヘッダーの書き込み */
+	UINT16 *header = L"Index, Buffer, Type, Type(name),PhysicalStart, VirtualStart, NumberOfPages, Attribute\n";
+	size = strlen(header);
+	text_gen(tmp, sizeof(tmp), "%u", size);
+	custom_printf("%s", tmp);
+	file->Write(file, &size, header);
+	putc(L' ');
+	for (i = 0; i < map->memmap_desc_entry; i++)
+	{
+		text_gen(buffer, sizeof(buffer), "%u : %x, %-ls, %x, %x, %x", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->Attribute);
+		custom_printf("%s", buffer);
 		size = strlen(buffer);
-		status = file->Write(file, &size, buffer);
-		assert(status, L"file->Write");
+		file->Write(file, &size, buffer);
 		desc = (EFI_MEMORY_DESCRIPTOR *)((UINT8 *)desc + map->descriptor_size);
 	};
 };
