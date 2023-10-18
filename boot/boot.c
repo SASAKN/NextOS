@@ -52,10 +52,6 @@ EFI_STATUS EfiMain(
     custom_printf("Starting NEOS BootLoader ...\n"); /* ようこそメッセージ */
     PrintEfiFileLocation(ImageHandle); /* 実行しているEFIファイルの場所を表示 */
     PrintEfiConfigurationTable(); /* ConfiguratonTableの表示 */
-    PrintOK(SystemTable);
-    PrintError(SystemTable);
-    PrintWarn(SystemTable);
-    custom_printf(" BootLoader \n");
     // /* メモリーバッファー */
     // CHAR8 memmap_buf[MEM_DESC_SIZE];
     // UINT64 memmap_size = MEM_DESC_SIZE;

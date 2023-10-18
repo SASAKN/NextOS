@@ -44,4 +44,6 @@ void efi_init(EFI_SYSTEM_TABLE *SystemTable)
 	ST->BootServices->LocateProtocol(&dpftp_guid, NULL, (void **)&DPFTP);
 	ST->BootServices->LocateProtocol(&dpup_guid, NULL, (void **)&DPUP);
 	ST->BootServices->LocateProtocol(&msp_guid, NULL, (void **)&MSP);
+	PrintOK(SystemTable);
+	custom_printf("SystemTable\n");
 };
