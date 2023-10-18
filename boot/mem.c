@@ -93,16 +93,20 @@ EFI_STATUS init_memmap(struct MemoryMap *map)
 
 
 void save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *file) {
+	EFI_STATUS status;
 	EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer; /* メモリーの中身 */
 	UINT32 i; /* カウント */
 	char buffer[560]; /* バッファー */
 	UINTN size; /* サイズ用 */
 	CHAR8 *header = "Index, Buffer, Type, Type(name),PhysicalStart, VirtualStart, NumberOfPages, Attribute\n"; /* Header */
+	status = file->Write(file, &size, header);
+	assert(status, L"file->Write");
 	size = strlen(header); /* ヘッダーのサイズ */
 	for (i = 0; i < map->memmap_desc_entry; i++) {
-		text_gen(buffer, sizeof(buffer), "%u, %x, %x, %-ls, %x, %x, %x, %x", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->Attribute & 0xffffflu);
+		text_gen(buffer, sizeof(buffer), "%u, %x\n", i, desc);
 		size = strlen(buffer);
-		file->Write(file, &size, buffer);
+		status = file->Write(file, &size, buffer);
+		assert(status, L"file->Write");
 		desc = (EFI_MEMORY_DESCRIPTOR *)((UINT8 *)desc + map->descriptor_size);
 	};
 };
