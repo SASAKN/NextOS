@@ -57,7 +57,7 @@ EFI_STATUS EfiMain(
     EFI_FILE_PROTOCOL *root_dir;
     EFI_FILE_PROTOCOL *memmap_file;
     /* ボリュームを開く */
-    status = SFSP->OpenVolume(SFSP, &root);
+    status = SFSP->OpenVolume(SFSP, &root_dir);
     assert(status, L"[ Error! ] SFSP->OpenVolume\n");
     PrintOK(SystemTable);
     custom_printf("OpenVolume\n");
