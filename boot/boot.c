@@ -53,12 +53,17 @@ EFI_STATUS EfiMain(
     custom_printf("Starting NEOS BootLoader ...\n"); /* ようこそメッセージ */
     PrintEfiFileLocation(ImageHandle); /* 実行しているEFIファイルの場所を表示 */
     PrintEfiConfigurationTable(); /* ConfiguratonTableの表示 */
-    /* ファイルを開く操作 */
-    EFI_FILE_PROTOCOL *root;
+    /* ファイル用の定義 */
+    EFI_FILE_PROTOCOL *root_dir;
+    EFI_FILE_PROTOCOL *memmap_file;
+    /* ボリュームを開く */
     status = SFSP->OpenVolume(SFSP, &root);
     assert(status, L"[ Error! ] SFSP->OpenVolume\n");
     PrintOK(SystemTable);
     custom_printf("OpenVolume\n");
+    /* memmapファイルの作成 */
+    root_dir->Open(root_dir, &memmap_file, L"\\memmap",
+    EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE, 0);
     // /* メモリーバッファー */
     // CHAR8 memmap_buf[MEM_DESC_SIZE];
     // UINT64 memmap_size = MEM_DESC_SIZE;
