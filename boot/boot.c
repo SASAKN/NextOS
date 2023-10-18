@@ -62,8 +62,11 @@ EFI_STATUS EfiMain(
     PrintOK(SystemTable);
     custom_printf("OpenVolume\n");
     /* memmapファイルの作成 */
-    root_dir->Open(root_dir, &memmap_file, L"\\memmap",
+    status = root_dir->Open(root_dir, &memmap_file, L"\\memmap",
     EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE, 0);
+    assert(status, L"[ Error! ] root_dir->Open\n");
+    PrintOK(SystemTable);
+    custom_printf("Created a file.\n");
     // /* メモリーバッファー */
     // CHAR8 memmap_buf[MEM_DESC_SIZE];
     // UINT64 memmap_size = MEM_DESC_SIZE;
