@@ -67,17 +67,17 @@ EFI_STATUS EfiMain(
     assert(status, L"[ Error! ] root_dir->Open\n");
     PrintOK(SystemTable);
     custom_printf("Created a file.\n");
-    // /* メモリーバッファー */
-    // CHAR8 memmap_buf[MEM_DESC_SIZE];
-    // UINT64 memmap_size = MEM_DESC_SIZE;
-    // /* 構造体の初期化 */
-    // struct MemoryMap map;
-    // map.buffer = memmap_buf;
-    // map.buffer_size = memmap_size;
-    // /* ファイルの保存場所などの指定 */
-    // /* メモリーマップの初期化,表示 */
-    // init_memmap(&map);
-    // print_memmap(&map);
+    /* メモリーバッファー */
+    CHAR8 memmap_buf[MEM_DESC_SIZE];
+    UINT64 memmap_size = MEM_DESC_SIZE;
+    /* 構造体の初期化 */
+    struct MemoryMap map;
+    map.buffer = memmap_buf;
+    map.buffer_size = memmap_size;
+    /* ファイルの保存場所などの指定 */
+    /* メモリーマップの初期化,表示 */
+    init_memmap(&map);
+    print_memmap(&map);
     /* All Done ! */
     custom_printf("All Done !\n");
     while (TRUE);
