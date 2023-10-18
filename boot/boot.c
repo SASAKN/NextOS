@@ -74,8 +74,7 @@ EFI_STATUS EfiMain(
     struct MemoryMap map;
     map.buffer = memmap_buf;
     map.buffer_size = memmap_size;
-    /* ファイルの保存場所などの指定 */
-    /* メモリーマップの初期化,表示 */
+    /* メモリーマップの初期化,表示,保存 */
     init_memmap(&map);
     print_memmap(&map);
     save_memmap(&map, memmap_file);
