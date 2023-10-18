@@ -100,7 +100,7 @@ void save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *file) {
 	EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer;
 	UINT32 i;
 	/* ヘッダーの書き込み */
-	UINT16 *header = L"Index, Buffer, Type, Type(name),PhysicalStart, VirtualStart, NumberOfPages, Attribute\n";
+	char *header = "Index, Buffer, Type, Type(name),PhysicalStart, VirtualStart, NumberOfPages, Attribute\n";
 	size = strlen(header);
 	text_gen(tmp, sizeof(tmp), "%u", size);
 	custom_printf("%s", tmp);
