@@ -58,7 +58,7 @@ EFI_STATUS EfiMain(
     status = SFSP->OpenVolume(SFSP, &root);
     assert(status, L"[ Error! ] SFSP->OpenVolume\n");
     PrintOK(SystemTable);
-    custom_printf("OpenVolume");
+    custom_printf("OpenVolume\n");
     // /* メモリーバッファー */
     // CHAR8 memmap_buf[MEM_DESC_SIZE];
     // UINT64 memmap_size = MEM_DESC_SIZE;
