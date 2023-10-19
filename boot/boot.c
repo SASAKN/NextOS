@@ -78,7 +78,6 @@ EFI_STATUS EfiMain(
     init_memmap(&map);
     print_memmap(&map);
     /* All Done ! */
-    PrintOK(SystemTable);
     custom_printf("All Done !\n");
     while (TRUE);
     return EFI_SUCCESS;
