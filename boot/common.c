@@ -407,8 +407,6 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                     } else if (*format == '9') {
                         format++;
                         length = 9;
-                    } else {
-                        puts(L"[ Text_gen ]: Format error!");
                     };
                     if (*format == 'l') {
                         format++;
