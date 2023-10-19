@@ -76,7 +76,7 @@ void print_memmap(struct MemoryMap *map)
 		PrintHex(desc->Attribute, 16);
 		puts(L"\r\n");
 		text_gen(buffer, sizeof(buffer), "%u : %x, %u, %-ls, %x, %x\n", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->Attribute);
-		custom_printf("%s", buffer);
+		custom_printf("%s\n", buffer);
 		desc = (EFI_MEMORY_DESCRIPTOR *)((UINT8 *)desc + map->descriptor_size);
 	};
 };
