@@ -373,12 +373,8 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                                 buffer++;
                             };
                             format++;
-                        } else {
-                            puts(L"[ Text_gen ]: Format error!");
-                        }
-                    } else {
-                        puts(L"[ Text_gen ]: Format error!");
-                    }
+                        };
+                    };
                 }
                 case '0': {
                     format++; /* ゼロ埋めの数字が予想される */
@@ -423,12 +419,8 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                             /* ゼロ埋めを行う */
                             // dest += zeroPad(dest, length);
                             format++;
-                        } else {
-                            puts(L"[ Text_gen ]: Format error!");
-                        }
-                    } else {
-                        puts(L"[ Text_gen ]: Format error!");
-                    }
+                        };
+                    };
                 }
                 default: {
                     // Handle unknown format specifier
