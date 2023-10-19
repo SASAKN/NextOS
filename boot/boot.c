@@ -55,6 +55,7 @@ EFI_STATUS EfiMain(
     PrintEfiConfigurationTable(); /* ConfiguratonTableの表示 */
     /* ファイル用の定義 */
     EFI_FILE_PROTOCOL *root_dir;
+    EFI_FILE_PROTOCOL *memmap_file;
     /* ボリュームを開く */
     status = SFSP->OpenVolume(SFSP, &root_dir);
     assert(status, L"[ Error! ] SFSP->OpenVolume\n");
@@ -77,6 +78,7 @@ EFI_STATUS EfiMain(
     init_memmap(&map);
     print_memmap(&map);
     /* All Done ! */
+    PrintOK(SystemTable);
     custom_printf("All Done !\n");
     while (TRUE);
     return EFI_SUCCESS;
