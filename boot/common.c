@@ -559,6 +559,33 @@ void text_gen(char *str, size_t max_size, const char *format, ...)
                     };
                 };
             }
+            case '1':
+            {
+                format++;
+                UINT8 length;
+                if (*format == '6')
+                {
+                    format++;
+                    length = 16;
+                }
+                else
+                {
+                    format++;
+                    length = 16;
+                };
+                char buf[20];
+                unsigned long long num = va_arg(args, int);
+                hex_gen(buf, num, length);
+                const char *arg_str = buf;
+                while (*arg_str && dest < end)
+                {
+                    *dest = *arg_str;
+                    dest++;
+                    arg_str++;
+                }
+                format++;
+                break;
+            }
             default:
             {
                 // Handle unknown format specifier
