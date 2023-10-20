@@ -433,7 +433,7 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                         format++;
                         if (*format == 'x') {
                             /* 10進数を16進数の文字列にする */
-                            char buf[5000];
+                            char buf[200];
                             unsigned int num = va_arg(args, unsigned int);
                             dest += itoa(dest, end - dest, num, 16);
                             genh(buf, sizeof(buf), length);
