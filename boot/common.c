@@ -75,7 +75,7 @@ void hex_gen(UINT16* out, UINT64 val, UINT8 num_degits) {
         val >>= 4;
     };
     str[num_degits] = L'\0';
-    for (int i = 0; i < num_degits+ 1; i++) {
+    for (int i = 0; i < num_degits + 1; i++) {
         out[i] = str[i];
     };
 };
@@ -432,22 +432,18 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                     } else if (*format == '9') {
                         format++;
                         length = 9;
-                    } else if (*format == '1') {
-                    }
+                    };
                     if (*format == 'l') {
                         format++;
                         if (*format == 'x') {
                             /* 10進数を16進数の文字列にする */
                             UINT16 wbuf[200];
-                            char tmp[200];
+                            char buf[200];
+                            char *tmp = NULL;
                             unsigned long long num = va_arg(args, unsigned long long);
                             hex_gen(wbuf, num, length);
                             text_gen(tmp, sizeof(tmp), "%-ls", wbuf);
-                            while (*tmp && dest < end) {
-                                *dest = *tmp;
-                                dest++;
-                                tmp++;
-                            }
+                            text_gen(dest, sizeof(dest), "%s", buf);
                             format++;
                         };
                     };
