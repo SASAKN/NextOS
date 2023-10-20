@@ -439,12 +439,10 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                         format++;
                         if (*format == 'x') {
                             /* 10進数を16進数の文字列にする */
-                            UINT16 wbuf[200];
-                            char *tmp = NULL;
+                            char buf[20];
                             unsigned long long num = va_arg(args, unsigned long long);
-                            hex_gen(wbuf, num, length);
-                            text_gen(tmp, sizeof(tmp), "%-ls", wbuf);
-                            text_gen(dest, sizeof(dest), "%s", tmp);
+                            hex_gen(buf, num, length);
+                            text_gen(dest, sizeof(dest), "%s", buf);
                             format++;
                         };
                     };
