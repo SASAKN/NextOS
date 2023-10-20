@@ -439,7 +439,7 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                             /* 10進数を16進数の文字列にする */
                             char *buf;
                             unsigned int num = va_arg(args, unsigned int);
-                            dest += itoa(dest, end - dest, num, 16);
+                            dest += hex_gen(num, length);
                             /* ゼロ埋めを行う */
                             format++;
                         };
