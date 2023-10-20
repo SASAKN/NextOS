@@ -400,6 +400,10 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                     /* 文字桁数で条件分岐 */
                     if (*format == '1') {
                         format++;
+                        if (*format == '6') {
+                            length = 16;
+                            break;
+                        };
                         length = 1;
                     } else if (*format == '2') {
                         format++;
@@ -425,9 +429,7 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                     } else if (*format == '9') {
                         format++;
                         length = 9;
-                    } else if (*format == '16') {
-                        format++;
-                        length = 16;
+                    } else if (*format == '1') {
                     }
                     if (*format == 'l') {
                         format++;
