@@ -441,7 +441,25 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                             UINT16 wbuf[200];
                             unsigned long long num = va_arg(args, unsigned long long);
                             hex_gen(wbuf, num, length);
-
+                            wchar_t *wsz = wbuf;
+                            for (int i = 0; wbuf[i] != L'\0'; i++) {
+                                wsz[i] = wbuf[i];
+                            }
+                            char str[2]; // 1文字 + NULL終端文字
+                            char fullStr[200];
+                            int fullStrIndex = 0;
+                            for (int i = 0; wsz[i] != L'\0'; i++) {
+                                custom_wctomb(wsz[i], str, sizeof(str));
+                                fullStr[fullStrIndex] = str[0];
+                                fullStrIndex++;
+                            };
+                            fullStr[fullStrIndex] = '\0';
+                            char *buffer = fullStr;
+                            while (*buffer && dest < end) {
+                                *dest = *buffer;
+                                dest++;
+                                buffer++;
+                            };
                             format++;
                         };
                     };
