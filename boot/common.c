@@ -323,6 +323,7 @@ void genh(char *buf, UINT64 val, UINT8 num_degits) {
         val >>= 4;
     };
     str[num_degits] = L'\0';
+    /* ワイド文字をCHARに変換 */
     text_gen(buf, sizeof(buf), "%-ls", str);
 }
 
@@ -429,10 +430,11 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                         format++;
                         if (*format == 'x') {
                             /* 10進数を16進数の文字列にする */
+                            char buf[5000];
                             unsigned int num = va_arg(args, unsigned int);
                             dest += itoa(dest, end - dest, num, 16);
+                            genh(buf, sizeof(buf), length);
                             /* ゼロ埋めを行う */
-                            // dest += zeroPad(dest, length);
                             format++;
                         };
                     };
