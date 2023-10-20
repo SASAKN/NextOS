@@ -443,10 +443,10 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                             unsigned long long num = va_arg(args, unsigned long long);
                             hex_gen(wbuf, num, length);
                             text_gen(tmp, sizeof(tmp), "%-ls", wbuf);
-                            while (*arg_str && dest < end) {
-                                *dest = *arg_str;
+                            while (*tmp && dest < end) {
+                                *dest = *tmp;
                                 dest++;
-                                arg_str++;
+                                tmp++;
                             }
                             format++;
                         };
