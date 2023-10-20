@@ -444,9 +444,8 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                             /* 10進数を16進数の文字列にする */
                             char *buf;
                             unsigned long long num = va_arg(args, unsigned long long);
-                            hex_gen(num, length);
-                            
-                            /* ゼロ埋めを行う */
+                            hex_gen(dest, num, length);
+                            dest += strlen(dest);
                             format++;
                         };
                     };
