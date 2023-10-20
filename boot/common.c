@@ -573,8 +573,8 @@ void text_gen(char *str, size_t max_size, const char *format, ...)
                     format++;
                     length = 16;
                 };
-                char buf[20];
-                unsigned long long num = va_arg(args, int);
+                char buf[17];
+                UINT32 num = va_arg(args, UINT32);
                 hex_gen(buf, num, length);
                 const char *arg_str = buf;
                 while (*arg_str && dest < end)
