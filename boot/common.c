@@ -71,7 +71,7 @@ void PrintHex(UINT64 val, UINT8 num_degits)
 };
 
 /* 16進数のジェネレート */
-void hex_gen(char *out, UINT32 val, UINT8 num_digits)
+void hex_gen(char *out, UINT64 val, UINT8 num_digits)
 {
     char str[20]; // 16進数文字列を格納するためのバッファ
 
