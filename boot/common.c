@@ -62,10 +62,10 @@ void PrintHex(UINT64 val, UINT8 num_degits) {
 };
 
 /* 16進数のジェネレート */
-UINT8 hex_gen(UINT64 val, UINT8 num_degits) {
+UINT8 hex_gen(char* out, UINT64 val, UINT8 num_degits) {
     char str[100];
 
-    for (int i = num_digits - 1; i >= 0; i--) {
+    for (int i = num_degits - 1; i >= 0; i--) {
         UINT16 u_val = (UINT16)(val & 0x0F);
         if (u_val < 0xA)
             str[i] = '0' + u_val;
@@ -74,7 +74,12 @@ UINT8 hex_gen(UINT64 val, UINT8 num_degits) {
         val >>= 4;
     }
 
-    str[num_digits] = '\0';
+    str[num_degits] = '\0';
+    while (*str) {
+        *str = *out;
+        str++;
+    }
+
 
     return num_degits + 1;
 };
@@ -438,8 +443,9 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                         if (*format == 'x') {
                             /* 10進数を16進数の文字列にする */
                             char *buf;
-                            unsigned int num = va_arg(args, unsigned int);
-                            dest += hex_gen(num, length);
+                            unsigned long long num = va_arg(args, unsigned long long);
+                            hex_gen(num, length);
+                            
                             /* ゼロ埋めを行う */
                             format++;
                         };
