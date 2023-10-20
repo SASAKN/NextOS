@@ -75,12 +75,10 @@ UINT8 hex_gen(char* out, UINT64 val, UINT8 num_degits) {
     }
 
     str[num_degits] = '\0';
-    while (*str) {
-        *str = *out;
-        str++;
-    }
-
-
+    for (int i = 0; i < num_degits+ 1; i++) {
+        out[i] = str[i];
+    };
+    
     return num_degits + 1;
 };
 
