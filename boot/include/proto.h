@@ -40,7 +40,7 @@ void* custom_memset(void *dst, int c, size_t n); /* メモリーにバイトの�
 void PrintOK(EFI_SYSTEM_TABLE *SystemTable);
 void PrintWarn(EFI_SYSTEM_TABLE *SystemTable);
 void PrintError(EFI_SYSTEM_TABLE *SystemTable);
-void genh(char *buf, UINT64 val, UINT8 num_degits);
+void hex_gen(char* out, UINT64 val, UINT8 num_degits);
 
 /* Memory */
 void print_memmap(struct MemoryMap* map);
