@@ -61,6 +61,24 @@ void PrintHex(UINT64 val, UINT8 num_degits) {
     puts(str);
 };
 
+/* 16進数のジェネレート */
+UINT8 hex_gen(UINT64 val, UINT8 num_degits) {
+    char str[100];
+
+    for (int i = num_digits - 1; i >= 0; i--) {
+        UINT16 u_val = (UINT16)(val & 0x0F);
+        if (u_val < 0xA)
+            str[i] = '0' + u_val;
+        else
+            str[i] = 'A' + (u_val - 0xA);
+        val >>= 4;
+    }
+
+    str[num_digits] = '\0';
+
+    return num_degits + 1;
+};
+
 /* エラーチェック */
 UINT8 check_warn_error (UINT64 status, UINT16 *mess) {
     if(status) {
@@ -308,24 +326,6 @@ void custom_wprintf(const wchar_t *format, ...) {
 
     va_end(args);
 };
-
-/* 16進数などのテキストフォーマットの生成 */
-void genh(char *buf, UINT64 val, UINT8 num_degits) {
-    UINT16 u_val;
-    UINT16 str[100];
-
-    for (int i = num_degits - 1; i >= 0; i--) {
-        u_val = (UINT16)(val & 0x0f);
-        if (u_val < 0xa)
-            str[i] = L'0' + u_val;
-        else
-            str[i] = L'A' + (u_val - 0xa);
-        val >>= 4;
-    };
-    str[num_degits] = L'\0';
-    /* ワイド文字をCHARに変換 */
-    text_gen(buf, sizeof(buf), "%-ls", str);
-}
 
 /* sprintf的なやつ */
 void text_gen(char *str, size_t max_size, const char *format, ...) {
