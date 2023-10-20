@@ -554,8 +554,8 @@ void text_gen(char *str, size_t max_size, const char *format, ...)
                             dest++;
                             arg_str++;
                         }
-                        break;
                         format++;
+                        break;
                     };
                 };
             }
