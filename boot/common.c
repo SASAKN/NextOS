@@ -402,6 +402,8 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                         format++;
                         if (*format == '6') {
                             length = 16;
+                            format++;
+                            format++;
                             break;
                         };
                         length = 1;
@@ -438,8 +440,6 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                             char *buf;
                             unsigned int num = va_arg(args, unsigned int);
                             dest += itoa(dest, end - dest, num, 16);
-                            genh(buf, sizeof(buf), length);
-                            text_gen(dest, sizeof(dest), "%s", buf);
                             /* ゼロ埋めを行う */
                             format++;
                         };
