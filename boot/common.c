@@ -309,6 +309,23 @@ void custom_wprintf(const wchar_t *format, ...) {
     va_end(args);
 };
 
+/* 16進数などのテキストフォーマットの生成 */
+void genh(char *buf, UINT64 val, UINT8 num_degits) {
+    UINT16 u_val;
+    UINT16 str[100];
+
+    for (int i = num_degits - 1; i >= 0; i--) {
+        u_val = (UINT16)(val & 0x0f);
+        if (u_val < 0xa)
+            str[i] = L'0' + u_val;
+        else
+            str[i] = L'A' + (u_val - 0xa);
+        val >>= 4;
+    };
+    str[num_degits] = L'\0';
+    text_gen(buf, sizeof(buf), "%-ls", str);
+}
+
 /* sprintf的なやつ */
 void text_gen(char *str, size_t max_size, const char *format, ...) {
     va_list args;
@@ -433,23 +450,6 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
     *dest = '\0'; // Null-terminate the string
     va_end(args);
 };
-
-/* 16進数などのテキストフォーマットの生成 */
-void genh(char *buf, UINT64 val, UINT8 num_degits) {
-    UINT16 u_val;
-    UINT16 str[100];
-
-    for (int i = num_degits - 1; i >= 0; i--) {
-        u_val = (UINT16)(val & 0x0f);
-        if (u_val < 0xa)
-            str[i] = L'0' + u_val;
-        else
-            str[i] = L'A' + (u_val - 0xa);
-        val >>= 4;
-    };
-    str[num_degits] = L'\0';
-    text_gen(buf, sizeof(buf), "%-ls", str);
-}
 
 /* OKを緑で表示 */
 void PrintOK(EFI_SYSTEM_TABLE *SystemTable) {
