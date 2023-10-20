@@ -399,7 +399,7 @@ void text_gen(char *str, size_t max_size, const char *format, ...) {
                 }
                 case '0': {
                     format++; /* ゼロ埋めの数字が予想される */
-                    int length = 0;/* ゼロ埋めあとの、文字桁数 */
+                    UINT8 length = 0;/* ゼロ埋めあとの、文字桁数 */
                     /* 文字桁数で条件分岐 */
                     if (*format == '1') {
                         format++;
