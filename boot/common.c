@@ -64,7 +64,7 @@ void PrintHex(UINT64 val, UINT8 num_degits) {
 /* 16進数のジェネレート */
 void hex_gen(char* out, UINT64 val, UINT8 num_degits) {
     char str[100];
-
+    
     for (int i = num_degits - 1; i >= 0; i--) {
         UINT16 u_val = (UINT16)(val & 0x0F);
         if (u_val < 0xA)
