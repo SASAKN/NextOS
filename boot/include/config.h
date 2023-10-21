@@ -7,7 +7,7 @@
 /* Defines */
 
 /* File Name */
-#define KERNEL_FILE L"neos.elf"
+#define KERNEL_FILE L"\\kernel.elf"
 #define CONFIG_FILE L"config.boot"
 
 /* Directory Name */

@@ -10,7 +10,12 @@
 /* カーネルの読み込み関数 */
 void LoadKernel(EFI_FILE_PROTOCOL* root_dir) {
   EFI_FILE_PROTOCOL* kernel_file;
-  root_dir->Open(root_dir, &kernel_file, )
+  EFI_STATUS status;
+  status = root_dir->Open(root_dir, &kernel_file, KERNEL_FILE, EFI_FILE_MODE_READ, 0);
+  assert(status, L"KernelLoadError !(root->Open)");
+  UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 12;
+  UINT8 file_info_buffer[file_info_size];
+  kernel_file->GetInfo(kernel_file, &fi_guid, &file_info_size, file_info_buffer);
 }
 
 /* 実行中のファイルの場所を表示 */
