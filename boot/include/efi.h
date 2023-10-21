@@ -66,7 +66,7 @@ typedef enum EFI_MEMORY_TYPE
     EfiMaxMemoryType
 } EFI_MEMORY_TYPE;
 
-typedef enum
+typedef enum EFI_ALLOCATE_TYPE
 {
     AllocateAnyPages,
     AllocateMaxAddress,
@@ -186,12 +186,15 @@ typedef struct EFI_BOOT_SERVICES
     UINT64 _buf2[2];
     /* Memory Services */
     UINT64 _buf3[2];
-    UINT64 (*AllocatePages)
+    UINT64(*AllocatePages)
     (
         EFI_ALLOCATE_TYPE Type,
         EFI_MEMORY_TYPE MemoryType,
         UINTN Pages,
         EFI_PHYSICAL_ADDRESS *Memory);
+    UINT64(*FreePages) (
+        EFI_PHYSICAL_ADDRESS Memory,
+        UINTN Pages);
     UINT64(*GetMemoryMap)
     (
         UINT64 *MemoryMapSize,
