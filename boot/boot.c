@@ -32,6 +32,13 @@ void LoadKernel(EFI_FILE_PROTOCOL* root_dir) {
   custom_printf("Kernel : 0x%x (%u bytes)\n", kernel_base_addr, kernel_file_size);
 };
 
+void call_kernel(EFI_PHYSICAL_ADDRESS kernel_base_addr) {
+  UINT64 entry_addr = *(UINT64*)(kernel_base_addr + 24);
+  typedef void EntryPointType(void);
+  EntryPointType* entry_point = (EntryPointType*)entry_addr;
+  entry_point();
+}
+
 /* 実行中のファイルの場所を表示 */
 EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle) {
     EFI_LOADED_IMAGE_PROTOCOL *lip;
@@ -101,6 +108,9 @@ EFI_STATUS EfiMain(
     /* カーネルの読み込み */
     custom_printf("Loading Kernel....");
     /* カーネルの読み込み処理 */
+    LoadKernel(root_dir);
+    /* ブートローダーから離脱 */
+    ExitBootLoader(ImageHandle, map);
     /* All Done ! */
     custom_printf("All Done !\n");
     while (TRUE);
