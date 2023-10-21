@@ -66,6 +66,14 @@ typedef enum EFI_MEMORY_TYPE
     EfiMaxMemoryType
 } EFI_MEMORY_TYPE;
 
+typedef enum {
+    AllocateAnyPages,
+    AllocateMaxAddress,
+    AllocateAddress,
+    MaxAllocateType
+} EFI_ALLOCATE_TYPE;
+
+
 typedef enum EFI_TIMER_DELAY
 {
     TimerCancel,
@@ -190,6 +198,9 @@ typedef struct EFI_BOOT_SERVICES
         EFI_MEMORY_TYPE PoolType,
         UINT64 Size,
         VOID **Buffer);
+    EFI_STATUS(*AllocatePages) (
+        
+    )
     UINT64(*FreePool)
     (
         VOID *Buffer);
