@@ -199,8 +199,10 @@ typedef struct EFI_BOOT_SERVICES
         UINT64 Size,
         VOID **Buffer);
     EFI_STATUS(*AllocatePages) (
-        
-    )
+        EFI_ALLOCATE_TYPE Type,
+        EFI_MEMORY_TYPE MemoryType,
+        UINTN Pages,
+        EFI_PHYSICAL_ADDRESS *Memory);
     UINT64(*FreePool)
     (
         VOID *Buffer);
