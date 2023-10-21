@@ -46,24 +46,24 @@ typedef enum EFI_LOCATE_SEARCH_TYPE
     ByProtocol
 } EFI_LOCATE_SEARCH_TYPE;
 
-typedef enum EFI_MEMORY_TYPE
-{
-    EfiReservedMemoryType,
-    EfiLoaderCode,
-    EfiLoaderData,
-    EfiBootServicesCode,
-    EfiBootServicesData,
-    EfiRuntimeServicesCode,
-    EfiRuntimeServicesData,
-    EfiConventionalMemory,
-    EfiUnusableMemory,
-    EfiACPIReclaimMemory,
-    EfiACPIMemoryNVS,
-    EfiMemoryMappedIO,
-    EfiMemoryMappedIOPortSpace,
-    EfiPalCode,
-    EfiPersistentMemory,
-    EfiMaxMemoryType
+typedef enum {
+   EfiReservedMemoryType,
+   EfiLoaderCode,
+   EfiLoaderData,
+   EfiBootServicesCode,
+   EfiBootServicesData,
+   EfiRuntimeServicesCode,
+   EfiRuntimeServicesData,
+   EfiConventionalMemory,
+   EfiUnusableMemory,
+   EfiACPIReclaimMemory,
+   EfiACPIMemoryNVS,
+   EfiMemoryMappedIO,
+   EfiMemoryMappedIOPortSpace,
+   EfiPalCode,
+   EfiPersistentMemory,
+   EfiUnacceptedMemoryType,
+   EfiMaxMemoryType
 } EFI_MEMORY_TYPE;
 
 typedef enum EFI_ALLOCATE_TYPE
@@ -178,9 +178,19 @@ typedef struct EFI_RUNTIME_SERVICES
                         VOID *ResetData);
 } EFI_RUNTIME_SERVICES;
 
+/* EFI_TABLE_HEADER */
+typedef struct {
+  UINT64    Signature;
+  UINT32    Revision;
+  UINT32    HeaderSize;
+  UINT32    CRC32;
+  UINT32    Reserved;
+} EFI_TABLE_HEADER;
+
 /* EFI_BOOT_SERVICES */
 typedef struct EFI_BOOT_SERVICES
 {
+    EFI_TABLE_HEADER 
     CHAR8 _buf1[24];
     /* Task Pririty Services */
     UINT64 _buf2[2];
@@ -192,7 +202,8 @@ typedef struct EFI_BOOT_SERVICES
         EFI_MEMORY_TYPE MemoryType,
         UINTN Pages,
         EFI_PHYSICAL_ADDRESS *Memory);
-    UINT64(*FreePages) (
+    UINT64 (*FreePages)
+    (
         EFI_PHYSICAL_ADDRESS Memory,
         UINTN Pages);
     UINT64(*GetMemoryMap)
