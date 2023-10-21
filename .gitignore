@@ -5,6 +5,7 @@
 *.efi
 *.fd
 *.dmg
+*.elf
 test.c
 *.img
 *.cdr
