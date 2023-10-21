@@ -7,6 +7,18 @@
 #include "include/graphics.h"
 #include "include/mem.h"
 
+/* 実行中のファイルの場所を表示 */
+EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle)
+{
+  EFI_LOADED_IMAGE_PROTOCOL *lip;
+  UINT64 status = ST->BootServices->OpenProtocol(ImageHandle, &lip_guid, (VOID **)&lip, ImageHandle, NULL, EFI_OPEN_PROTOCOL_GET_PROTOCOL);
+  assert(status, L"OpenProtocol");
+  custom_printf("[ INFO ]EfiFileLocation\n");
+  custom_wprintf(L"EfiFileLocation(lip->FilePath) : %s", DPTTP->ConvertDevicePathToText(lip->FilePath, FALSE, FALSE));
+  puts(L"\r\n");
+  return status;
+};
+
 /* UEFIから離脱 */
 void ExitBootLoader(EFI_HANDLE *ImageHandle, struct MemoryMap *map)
 {
@@ -23,18 +35,6 @@ void ExitBootLoader(EFI_HANDLE *ImageHandle, struct MemoryMap *map)
   status = BS->ExitBootServices(ImageHandle, map_key);
   assert(status, L"ExitBootServices");
 }
-
-/* 実行中のファイルの場所を表示 */
-EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle)
-{
-  EFI_LOADED_IMAGE_PROTOCOL *lip;
-  UINT64 status = ST->BootServices->OpenProtocol(ImageHandle, &lip_guid, (VOID **)&lip, ImageHandle, NULL, EFI_OPEN_PROTOCOL_GET_PROTOCOL);
-  assert(status, L"OpenProtocol");
-  custom_printf("[ INFO ]EfiFileLocation\n");
-  custom_wprintf(L"EfiFileLocation(lip->FilePath) : %s", DPTTP->ConvertDevicePathToText(lip->FilePath, FALSE, FALSE));
-  puts(L"\r\n");
-  return status;
-};
 
 /* ベンダーなどの情報を表示 */
 void PrintEfiConfigurationTable(void)
@@ -70,10 +70,10 @@ EFI_STATUS EfiMain(
     IN EFI_SYSTEM_TABLE *SystemTable)
 {
   efi_init(SystemTable); /* UEFIの全てを初期化する関数 */
-  UINT64 status;
   custom_printf("Starting NEOS BootLoader ...\n"); /* ようこそメッセージ */
   PrintEfiFileLocation(ImageHandle);               /* 実行しているEFIファイルの場所を表示 */
   PrintEfiConfigurationTable();                    /* ConfiguratonTableの表示 */
+  EFI_STATUS status;
   /* ファイル用の定義 */
   EFI_FILE_PROTOCOL *root_dir;
   /* ボリュームを開く */
@@ -91,27 +91,27 @@ EFI_STATUS EfiMain(
   /* メモリーマップの初期化,表示,保存 */
   init_memmap(&map);
   print_memmap(&map);
-  /* カーネルの読み込み */
+  // /* カーネルの読み込み */
   custom_printf("Loading Kernel....");
   /* カーネルの読み込み処理 */
-  EFI_FILE_PROTOCOL *kernel_file;
-  status = root_dir->Open(root_dir, &kernel_file, L"\\kernel.elf", EFI_FILE_MODE_READ, 0);
-  assert(status, L"KernelLoadError !(root->Open)");
-  UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 13;
-  UINT8 file_info_buffer[(sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 13)];
-  kernel_file->GetInfo(kernel_file, &fi_guid, &file_info_size, file_info_buffer);
-  EFI_FILE_INFO *file_info = (EFI_FILE_INFO *)file_info_buffer;
-  UINTN kernel_file_size = file_info->FileSize;
-  EFI_PHYSICAL_ADDRESS kernel_base_addr = 0x100000;
-  BS->AllocatePages(AllocateAddress, EfiLoaderData, (kernel_file_size + 0xfff) / 0x1000, &kernel_base_addr);
-  kernel_file->Read(kernel_file, &kernel_file_size, (VOID *)kernel_base_addr);
-  /* ブートローダーから離脱 */
-  ExitBootLoader(ImageHandle, &map);
-  /* カーネルの読み出し */
-  UINT64 entry_addr = *(UINT64 *)(kernel_base_addr + 24);
-  typedef void EntryPointType(void);
-  EntryPointType *entry_point = (EntryPointType *)entry_addr;
-  entry_point();
+  // EFI_FILE_PROTOCOL *kernel_file;
+  // status = root_dir->Open(root_dir, &kernel_file, L"\\kernel.elf", EFI_FILE_MODE_READ, 0);
+  // assert(status, L"KernelLoadError !(root->Open)");
+  // UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 13;
+  // UINT8 file_info_buffer[(sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 13)];
+  // kernel_file->GetInfo(kernel_file, &fi_guid, &file_info_size, file_info_buffer);
+  // EFI_FILE_INFO *file_info = (EFI_FILE_INFO *)file_info_buffer;
+  // UINTN kernel_file_size = file_info->FileSize;
+  // EFI_PHYSICAL_ADDRESS kernel_base_addr = 0x100000;
+  // SystemTable->BootServices->AllocatePages(AllocateAddress, EfiLoaderData, (kernel_file_size + 0xfff) / 0x1000, &kernel_base_addr);
+  // kernel_file->Read(kernel_file, &kernel_file_size, (VOID *)kernel_base_addr);
+  // /* ブートローダーから離脱 */
+  // ExitBootLoader(ImageHandle, &map);
+  // /* カーネルの読み出し */
+  // UINT64 entry_addr = *(UINT64 *)(kernel_base_addr + 24);
+  // typedef void EntryPointType(void);
+  // EntryPointType *entry_point = (EntryPointType *)entry_addr;
+  // entry_point();
   /* All Done ! */
   custom_printf("All Done !\n");
   while (TRUE)
