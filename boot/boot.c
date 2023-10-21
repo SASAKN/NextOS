@@ -7,6 +7,13 @@
 #include "include/graphics.h"
 #include "include/mem.h"
 
+/* UEFIから離脱 */
+void ExitBootLoader(EFI_HANDLE *ImageHandle, struct MemoryMap map) {
+  EFI_STATUS status;
+  status = BS->ExitBootServices(ImageHandle, map.map_key);
+  assert(status, L"ExitBootServices");
+} 
+
 /* カーネルの読み込み関数 */
 void LoadKernel(EFI_FILE_PROTOCOL* root_dir) {
   EFI_FILE_PROTOCOL* kernel_file;
