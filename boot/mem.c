@@ -60,6 +60,8 @@ void print_memmap(struct MemoryMap *map)
 	putc(L' ');
 	for (i = 0; i < map->memmap_desc_entry; i++)
 	{
+		PrintHex((unsigned long long)i, 2);
+		putc(L' ');
 		PrintHex((unsigned long long)desc, 16);
 		putc(L' ');
 		PrintHex(desc->Type, 2);
