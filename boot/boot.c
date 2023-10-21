@@ -8,10 +8,11 @@
 #include "include/mem.h"
 
 /* UEFIから離脱 */
-void ExitBootLoader(EFI_HANDLE *ImageHandle, struct MemoryMap *map, struct MemoryMap mmap)
+void ExitBootLoader(EFI_HANDLE *ImageHandle, struct MemoryMap *map)
 {
   EFI_STATUS status;
   unsigned int desc_ver;
+  UINT64 map_key = map->map_key;
   do
   {
     map->map_size = MEM_DESC_SIZE;
@@ -19,7 +20,7 @@ void ExitBootLoader(EFI_HANDLE *ImageHandle, struct MemoryMap *map, struct Memor
         &map->map_size, (struct EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key,
         &map->descriptor_size, &map->descriptor_version);
   } while (!check_warn_error(status, L"GetMemoryMap"));
-  status = BS->ExitBootServices(ImageHandle, mmap.map_key);
+  status = BS->ExitBootServices(ImageHandle, map_key);
   assert(status, L"ExitBootServices");
 }
 
@@ -94,7 +95,6 @@ EFI_STATUS EfiMain(
   custom_printf("Loading Kernel....");
   /* カーネルの読み込み処理 */
   EFI_FILE_PROTOCOL *kernel_file;
-  EFI_STATUS status;
   status = root_dir->Open(root_dir, &kernel_file, L"\\kernel.elf", EFI_FILE_MODE_READ, 0);
   assert(status, L"KernelLoadError !(root->Open)");
   UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 13;
@@ -106,7 +106,7 @@ EFI_STATUS EfiMain(
   BS->AllocatePages(AllocateAddress, EfiLoaderData, (kernel_file_size + 0xfff) / 0x1000, &kernel_base_addr);
   kernel_file->Read(kernel_file, &kernel_file_size, (VOID *)kernel_base_addr);
   /* ブートローダーから離脱 */
-  ExitBootLoader(ImageHandle, &map, map);
+  ExitBootLoader(ImageHandle, &map);
   /* カーネルの読み出し */
   UINT64 entry_addr = *(UINT64 *)(kernel_base_addr + 24);
   typedef void EntryPointType(void);
