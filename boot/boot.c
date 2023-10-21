@@ -19,6 +19,8 @@ void LoadKernel(EFI_FILE_PROTOCOL* root_dir) {
   EFI_FILE_INFO* file_info = (EFI_FILE_INFO*)file_info_buffer;
   UINTN kernel_file_size = file_info->FileSize;
   EFI_PHYSICAL_ADDRESS kernel_base_addr = 0x100000;
+  /* メモリーにファイルを置く */
+  BS->AllocatePages(AllocateAddress, EfiLoaderData, (kernel_file_size + 0xfff) / 0x1000, &kernel_base_addr);
 }
 
 /* 実行中のファイルの場所を表示 */
