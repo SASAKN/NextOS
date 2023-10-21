@@ -5,16 +5,16 @@
 #include "types.h" /* Must be First. */
 #include "status.h"
 
-#define EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL   0x00000001
-#define EFI_OPEN_PROTOCOL_GET_PROTOCOL         0x00000002
-#define EFI_OPEN_PROTOCOL_TEST_PROTOCOL        0x00000004
-#define EFI_OPEN_PROTOCOL_BY_CHILD_CONTROLLER  0x00000008
-#define EFI_OPEN_PROTOCOL_BY_DRIVER            0x00000010
-#define EFI_OPEN_PROTOCOL_EXCLUSIVE            0x00000020
-#define EFI_FILE_MODE_READ	0x0000000000000001
-#define EFI_FILE_MODE_WRITE	0x0000000000000002
+#define EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL 0x00000001
+#define EFI_OPEN_PROTOCOL_GET_PROTOCOL 0x00000002
+#define EFI_OPEN_PROTOCOL_TEST_PROTOCOL 0x00000004
+#define EFI_OPEN_PROTOCOL_BY_CHILD_CONTROLLER 0x00000008
+#define EFI_OPEN_PROTOCOL_BY_DRIVER 0x00000010
+#define EFI_OPEN_PROTOCOL_EXCLUSIVE 0x00000020
+#define EFI_FILE_MODE_READ 0x0000000000000001
+#define EFI_FILE_MODE_WRITE 0x0000000000000002
 #define EFI_FILE_MODE_CREATE 0x8000000000000000
-#define EFI_FILE_READ_ONLY	0x0000000000000001
+#define EFI_FILE_READ_ONLY 0x0000000000000001
 
 typedef struct EFI_INPUT_KEY
 {
@@ -66,13 +66,13 @@ typedef enum EFI_MEMORY_TYPE
     EfiMaxMemoryType
 } EFI_MEMORY_TYPE;
 
-typedef enum {
+typedef enum
+{
     AllocateAnyPages,
     AllocateMaxAddress,
     AllocateAddress,
     MaxAllocateType
 } EFI_ALLOCATE_TYPE;
-
 
 typedef enum EFI_TIMER_DELAY
 {
@@ -186,6 +186,12 @@ typedef struct EFI_BOOT_SERVICES
     UINT64 _buf2[2];
     /* Memory Services */
     UINT64 _buf3[2];
+    UINT64 (*AllocatePages)
+    (
+        EFI_ALLOCATE_TYPE Type,
+        EFI_MEMORY_TYPE MemoryType,
+        UINTN Pages,
+        EFI_PHYSICAL_ADDRESS *Memory);
     UINT64(*GetMemoryMap)
     (
         UINT64 *MemoryMapSize,
@@ -198,11 +204,6 @@ typedef struct EFI_BOOT_SERVICES
         EFI_MEMORY_TYPE PoolType,
         UINT64 Size,
         VOID **Buffer);
-    // UINT64(*AllocatePages) (
-    //     EFI_ALLOCATE_TYPE Type,
-    //     EFI_MEMORY_TYPE MemoryType,
-    //     UINTN Pages,
-    //     EFI_PHYSICAL_ADDRESS *Memory);
     UINT64(*FreePool)
     (
         VOID *Buffer);
@@ -506,7 +507,7 @@ typedef struct EFI_DEVICE_PATH_TO_TEXT_PROTOCOL
 {
     UINT64 _buf;
     UINT16 *(*ConvertDevicePathToText)(
-        const EFI_DEVICE_PATH_PROTOCOL* DeviceNode,
+        const EFI_DEVICE_PATH_PROTOCOL *DeviceNode,
         UINT8 DisplayOnly,
         UINT8 AllowShortcuts);
 } EFI_DEVICE_PATH_TO_TEXT_PROTOCOL;
@@ -598,11 +599,10 @@ extern EFI_DEVICE_PATH_TO_TEXT_PROTOCOL *DPTTP;
 extern EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL *DPFTP;
 extern EFI_DEVICE_PATH_UTILITIES_PROTOCOL *DPUP;
 extern EFI_MP_SERVICES_PROTOCOL *MSP;
-extern EFI_LOADED_IMAGE_PROTOCOL *LIP; 
+extern EFI_LOADED_IMAGE_PROTOCOL *LIP;
 extern EFI_GUID lip_guid;
 extern EFI_GUID dpp_guid;
 extern EFI_GUID fi_guid;
 extern EFI_GUID sfsp_guid;
-
 
 #endif
