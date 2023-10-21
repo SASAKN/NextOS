@@ -32,6 +32,9 @@ cd /Volumes/NEOS/EFI/BOOT
 #移動したら、ファイルを追加
 cp ${script_dir}/boot.efi ./BOOTX64.efi
 
+#カーネルもコピー
+cp ${script_dir}/kernel.elf /Volumes/NEOS/kernel.elf
+
 #作業フォルダーに戻る
 cd ${script_dir}
 
