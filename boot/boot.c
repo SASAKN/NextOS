@@ -7,6 +7,12 @@
 #include "include/graphics.h"
 #include "include/mem.h"
 
+/* カーネルの読み込み関数 */
+void LoadKernel(EFI_FILE_PROTOCOL* root_dir) {
+  EFI_FILE_PROTOCOL* kernel_file;
+  root_dir->Open(root_dir, &kernel_file, )
+}
+
 /* 実行中のファイルの場所を表示 */
 EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle) {
     EFI_LOADED_IMAGE_PROTOCOL *lip;
@@ -59,16 +65,10 @@ EFI_STATUS EfiMain(
     EFI_FILE_PROTOCOL *root_dir;
     EFI_FILE_PROTOCOL *memmap_file;
     /* ボリュームを開く */
-    status = SFSP->OpenVolume(SFSP, &root_dir);
+    status = SFSP->OpenVolume(SFSP, &root_dir); /* Root_Dirに読み込んでる */
     assert(status, L"[ Error! ] SFSP->OpenVolume\n");
     PrintOK(SystemTable);
     custom_printf("OpenVolume\n");
-    /* memmapファイルの作成 */
-    status = root_dir->Open(root_dir, &memmap_file, L"\\memmap",
-    EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE, 0);
-    assert(status, L"[ Error! ] root_dir->Open\n");
-    PrintOK(SystemTable);
-    custom_printf("Created a file.\n");
     /* メモリーバッファー */
     CHAR8 memmap_buf[MEM_DESC_SIZE];
     UINT64 memmap_size = MEM_DESC_SIZE;
