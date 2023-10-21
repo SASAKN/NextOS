@@ -23,7 +23,7 @@ void ExitBootLoader(EFI_HANDLE *ImageHandle, struct MemoryMap* map, struct Memor
 } 
 
 /* カーネルの読み込み関数 */
-void LoadKernel(EFI_FILE_PROTOCOL* root_dir) {
+EFI_PHYSICAL_ADDRESS LoadKernel(EFI_FILE_PROTOCOL* root_dir) {
   EFI_FILE_PROTOCOL* kernel_file;
   EFI_STATUS status;
   status = root_dir->Open(root_dir, &kernel_file, KERNEL_FILE, EFI_FILE_MODE_READ, 0);
@@ -40,6 +40,7 @@ void LoadKernel(EFI_FILE_PROTOCOL* root_dir) {
   char buffer[100];
   text_gen(buffer, sizeof(buffer), "Kernel : 0x%x (%u bytes)\n", kernel_base_addr, kernel_file_size);
   custom_printf("%s\n", buffer);
+  return kernel_base_addr;
 };
 
 void call_kernel(EFI_PHYSICAL_ADDRESS kernel_base_addr) {
@@ -118,9 +119,12 @@ EFI_STATUS EfiMain(
     /* カーネルの読み込み */
     custom_printf("Loading Kernel....");
     /* カーネルの読み込み処理 */
-    LoadKernel(root_dir);
+    EFI_PHYSICAL_ADDRESS kerneladdr;
+    kerneladdr = LoadKernel(root_dir);
     /* ブートローダーから離脱 */
-    ExitBootLoader(ImageHandle, &map);
+    ExitBootLoader(ImageHandle, &map, map);
+    /* カーネルの読み出し */
+    call_kernel(kerneladdr);
     /* All Done ! */
     custom_printf("All Done !\n");
     while (TRUE);
