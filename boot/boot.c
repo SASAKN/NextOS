@@ -8,10 +8,18 @@
 #include "include/mem.h"
 
 /* UEFIから離脱 */
-void ExitBootLoader(EFI_HANDLE *ImageHandle, struct MemoryMap map) {
+void ExitBootLoader(EFI_HANDLE *ImageHandle, struct MemoryMap* map) {
   EFI_STATUS status;
-  status = BS->ExitBootServices(ImageHandle, map.map_key);
-  assert(status, L"ExitBootServices");
+	unsigned long long mmap_size;
+	unsigned int desc_ver;
+	do {
+		map->map_size = MEM_DESC_SIZE;
+	status = ST->BootServices->GetMemoryMap(
+		&map->map_size, (struct EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key,
+		&map->descriptor_size, &map->descriptor_version);
+	} while (!check_warn_error(status, L"GetMemoryMap"));
+	status = BS->ExitBootServices(IH, map->map_key);
+	assert(status, L"ExitBootServices");
 } 
 
 /* カーネルの読み込み関数 */
