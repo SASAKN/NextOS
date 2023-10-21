@@ -29,7 +29,9 @@ void LoadKernel(EFI_FILE_PROTOCOL* root_dir) {
   /* メモリーにファイルを置く */
   BS->AllocatePages(AllocateAddress, EfiLoaderData, (kernel_file_size + 0xfff) / 0x1000, &kernel_base_addr);
   kernel_file->Read(kernel_file, &kernel_file_size, (VOID*)kernel_base_addr);
-  custom_printf("Kernel : 0x%x (%u bytes)\n", kernel_base_addr, kernel_file_size);
+  char buffer[100];
+  text_gen(buffer, sizeof(buffer), "Kernel : 0x%x (%u bytes)\n", kernel_base_addr, kernel_file_size);
+  custom_printf("%s\n", buffer);
 };
 
 void call_kernel(EFI_PHYSICAL_ADDRESS kernel_base_addr) {
