@@ -16,6 +16,10 @@ void LoadKernel(EFI_FILE_PROTOCOL* root_dir) {
   UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 12;
   UINT8 file_info_buffer[file_info_size];
   kernel_file->GetInfo(kernel_file, &fi_guid, &file_info_size, file_info_buffer);
+  EFI_FILE_INFO* file_info = (EFI_FILE_INFO*)file_info_buffer;
+  UINTN kernel_file_size = file_info->FileSize;
+  EFI_PHYSICAL_ADDRESS kernel_base_addr = 0x100000;
+  BS
 }
 
 /* 実行中のファイルの場所を表示 */

@@ -33,6 +33,7 @@ void efi_init(EFI_SYSTEM_TABLE *SystemTable)
 
 	SystemTable->ConOut->ClearScreen(SystemTable->ConOut); /* 画面クリア */
 	ST = SystemTable;
+	BS = SystemTable->BootServices;
 	ST->BootServices->SetWatchdogTimer(0, 0, 0, NULL); /* 5分何もしないでいると、再起動してしまうバグを修正 */
 	/* プロトコルのハンドルを指定する */
 	ST->BootServices->LocateProtocol(&gop_guid, NULL, (void **)&GOP);
