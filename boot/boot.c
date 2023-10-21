@@ -18,7 +18,7 @@ void ExitBootLoader(EFI_HANDLE *ImageHandle, struct MemoryMap* map, struct Memor
 		&map->map_size, (struct EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key,
 		&map->descriptor_size, &map->descriptor_version);
 	} while (!check_warn_error(status, L"GetMemoryMap"));
-	status = BS->ExitBootServices(IH, mmap.map_key);
+	status = BS->ExitBootServices(ImageHandle, mmap.map_key);
 	assert(status, L"ExitBootServices");
 } 
 
@@ -102,7 +102,6 @@ EFI_STATUS EfiMain(
     PrintEfiConfigurationTable(); /* ConfiguratonTableの表示 */
     /* ファイル用の定義 */
     EFI_FILE_PROTOCOL *root_dir;
-    EFI_FILE_PROTOCOL *memmap_file;
     /* ボリュームを開く */
     status = SFSP->OpenVolume(SFSP, &root_dir); /* Root_Dirに読み込んでる */
     assert(status, L"[ Error! ] SFSP->OpenVolume\n");
