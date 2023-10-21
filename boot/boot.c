@@ -12,6 +12,7 @@ EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle) {
     EFI_LOADED_IMAGE_PROTOCOL *lip;
     UINT64 status = ST->BootServices->OpenProtocol(ImageHandle, &lip_guid, (VOID**)&lip, ImageHandle, NULL, EFI_OPEN_PROTOCOL_GET_PROTOCOL);
     assert(status, L"OpenProtocol");
+    custom_printf("[ INFO ]EfiFileLocation");
     custom_wprintf(L"EfiFileLocation(lip->FilePath) : %s", DPTTP->ConvertDevicePathToText(lip->FilePath, FALSE, FALSE));
     puts(L"\r\n");
     return status;
@@ -20,6 +21,7 @@ EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle) {
 /* ベンダーなどの情報を表示 */
 void PrintEfiConfigurationTable(void) {
   UINT64 i;
+  custom_printf("[ INFO ] EfiConfigurationTable\n");
   for (i = 0; i < ST->NumberOfTableEntries; i++) {
     PrintHex(i, 1);
 		putc(L':');
@@ -39,7 +41,7 @@ void PrintEfiConfigurationTable(void) {
 		     16);
 		puts(L"\r\n");
   }
-}
+};
 
 
 /* Entry Point ! */
@@ -77,6 +79,9 @@ EFI_STATUS EfiMain(
     /* メモリーマップの初期化,表示,保存 */
     init_memmap(&map);
     print_memmap(&map);
+    /* カーネルの読み込み */
+    custom_printf("Loading Kernel....");
+    /* カーネルの読み込み処理 */
     /* All Done ! */
     custom_printf("All Done !\n");
     while (TRUE);
