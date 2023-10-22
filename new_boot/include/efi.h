@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "bs.h"
+#include "rt.h"
 
 /* EFI_H */
 
@@ -450,6 +451,8 @@ typedef struct
     //
     EFI_QUERY_VARIABLE_INFO QueryVariableInfo;
 } EFI_RUNTIME_SERVICES;
+
+
 
 typedef struct EFI_HII_PACKAGE_LIST_HEADER *EFI_HII_PACKAGE_LIST_PROTOCOL;
 extern EFI_SYSTEM_TABLE *ST;
