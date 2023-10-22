@@ -26,6 +26,8 @@ typedef struct {
    UINT32                              OpenCount;
 } EFI_OPEN_PROTOCOL_INFORMATION_ENTRY;
 
+typedef EFI_HII_PACKAGE_LIST_HEADER *EFI_HII_PACKAGE_LIST_PROTOCOL;
+
 typedef enum
 {
     AllHandles,

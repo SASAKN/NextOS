@@ -1,7 +1,7 @@
 #ifndef _EFI_BS_H
 #define _EFI_BS_H
 
-#include "types.h"
+#include "efi.h"
 
 /* Event Services */
 typedef
@@ -275,6 +275,99 @@ EFI_STATUS
    IN UINTN                            SourceSize,
    OUT EFI_HANDLE                      *ImageHandle
    );
+
+typedef
+EFI_STATUS
+(EFIAPI *EFI_IMAGE_START) (
+   IN EFI_HANDLE                             ImageHandle,
+   OUT UINTN                                 *ExitDataSize,
+   OUT CHAR16                                **ExitData OPTIONAL
+   );
+
+typedef
+EFI_STATUS
+(EFIAPI *EFI_IMAGE_UNLOAD) (
+   IN EFI_HANDLE           ImageHandle
+   );
+
+typedef
+EFI_STATUS
+(EFIAPI *EFI_IMAGE_ENTRY_POINT) (
+   IN EFI_HANDLE                             ImageHandle,
+   IN EFI_SYSTEM_TABLE                       *SystemTable
+   );
+
+typedef
+EFI_STATUS
+(EFIAPI *EFI_EXIT) (
+   IN EFI_HANDLE                      ImageHandle,
+   IN EFI_STATUS                      ExitStatus,
+   IN UINTN                           ExitDataSize,
+   IN CHAR16                          *ExitData OPTIONAL
+   );
+
+typedef
+EFI_STATUS
+(EFIAPI *EFI_EXIT_BOOT_SERVICES) (
+  IN EFI_HANDLE                       ImageHandle,
+  IN UINTN                            MapKey
+  );
+
+typedef
+EFI_STATUS
+(EFIAPI *EFI_SET_WATCHDOG_TIMER) (
+   IN UINTN                          Timeout,
+   IN UINT64                         WatchdogCode,
+   IN UINTN                          DataSize,
+   IN CHAR16                         *WatchdogData OPTIONAL
+   );
+
+typedef
+EFI_STATUS
+(EFIAPI *EFI_STALL) (
+   IN UINTN                Microseconds
+   );
+
+typedef
+VOID
+(EFIAPI *EFI_COPY_MEM) (
+   IN VOID                       *Destination,
+   IN VOID                       *Source,
+   IN UINTN                      Length
+   );
+
+typedef
+VOID
+(EFIAPI *EFI_SET_MEM) (
+   IN VOID                             *Buffer,
+   IN UINTN                            Size,
+   IN UINT8                            Value
+   );
+
+typedef
+EFI_STATUS
+(EFIAPI *EFI_GET_NEXT_MONOTONIC_COUNT) (
+   OUT UINT64                       *Count
+   );
+
+typedef
+EFI_STATUS
+(EFIAPI *EFI_INSTALL_CONFIGURATION_TABLE) (
+   IN EFI_GUID                               *Guid,
+   IN VOID                                   *Table
+   );
+
+typedef
+EFI_STATUS
+(EFIAPI *EFI_CALCULATE_CRC32) (
+   IN VOID                          *Data,
+   IN UINTN                         DataSize,
+   OUT UINT32                       *Crc32
+   );
+
+
+
+
 
 
 
