@@ -21,6 +21,22 @@ typedef enum
 } EFI_INTERFACE_TYPE;
 
 typedef struct {
+ INT32                  RelativeMovementX;
+ INT32                  RelativeMovementY;
+ INT32                  RelativeMovementZ;
+ BOOLEAN                LeftButton;
+ BOOLEAN                RightButton;
+} EFI_SIMPLE_POINTER_STATE;
+
+typedef struct {
+ UINT64                    ResolutionX;
+ UINT64                    ResolutionY;
+ UINT64                    ResolutionZ;
+ BOOLEAN                   LeftButton;
+ BOOLEAN                   RightButton;
+} EFI_SIMPLE_POINTER_MODE;
+
+typedef struct {
  INT32                              MaxMode;
  INT32                              Mode;
  INT32                              Attribute;
