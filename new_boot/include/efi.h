@@ -89,6 +89,13 @@ typedef struct
     UINT32 OpenCount;
 } EFI_OPEN_PROTOCOL_INFORMATION_ENTRY;
 
+typedef struct _EFI_DEVICE_PATH_PROTOCOL
+{
+    UINT8 Type;
+    UINT8 SubType;
+    UINT8 Length[2];
+} EFI_DEVICE_PATH_PROTOCOL;
+
 typedef enum
 {
     AllHandles,
@@ -451,8 +458,6 @@ typedef struct
     //
     EFI_QUERY_VARIABLE_INFO QueryVariableInfo;
 } EFI_RUNTIME_SERVICES;
-
-
 
 typedef struct EFI_HII_PACKAGE_LIST_HEADER *EFI_HII_PACKAGE_LIST_PROTOCOL;
 extern EFI_SYSTEM_TABLE *ST;
