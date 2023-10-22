@@ -45,6 +45,8 @@ typedef struct {
  CHAR16                             UnicodeChar;
 } EFI_INPUT_KEY;
 
+typedef UINT8 EFI_KEY_TOGGLE_STATE;
+
 typedef struct EFI_KEY_STATE {
  UINT32                       KeyShiftState;
  EFI_KEY_TOGGLE_STATE         KeyToggleState;
@@ -192,8 +194,8 @@ typedef enum
 {
     EfiResetCold,
     EfiResetWarm,
-    EfiResetShutdown
-        EfiResetPlatformSpecific
+    EfiResetShutdown,
+    EfiResetPlatformSpecific
 } EFI_RESET_TYPE;
 
 typedef struct
@@ -262,6 +264,23 @@ typedef struct _EFI_LOAD_OPTION
     UINT16 FilePathListLength;
 } EFI_LOAD_OPTION;
 
+typedef union
+{
+    struct
+    {
+        UINT32 Revision : 8;
+        UINT32 ShiftPressed : 1;
+        UINT32 ControlPressed : 1;
+        UINT32 AltPressed : 1;
+        UINT32 LogoPressed : 1;
+        UINT32 MenuPressed : 1;
+        UINT32 SysReqPressed : 1;
+        UINT32 Reserved : 16;
+        UINT32 InputKeyCount : 2;
+    } Options;
+    UINT32 PackedValue;
+} EFI_BOOT_KEY_DATA;
+
 typedef struct _EFI_KEY_OPTION
 {
     EFI_BOOT_KEY_DATA KeyData;
@@ -281,23 +300,6 @@ typedef struct
     EFI_GUID VendorGuid;
     VOID *VendorTable;
 } EFI_CONFIGURATION_TABLE;
-
-typedef union
-{
-    struct
-    {
-        UINT32 Revision : 8;
-        UINT32 ShiftPressed : 1;
-        UINT32 ControlPressed : 1;
-        UINT32 AltPressed : 1;
-        UINT32 LogoPressed : 1;
-        UINT32 MenuPressed : 1;
-        UINT32 SysReqPressed : 1;
-        UINT32 Reserved : 16;
-        UINT32 InputKeyCount : 2;
-    } Options;
-    UINT32 PackedValue;
-} EFI_BOOT_KEY_DATA;
 
 /* EFI_TABLE_HEADER */
 typedef struct
