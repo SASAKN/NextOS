@@ -19,10 +19,10 @@ typedef enum
     EFI_NATIVE_INTERFACE
 } EFI_INTERFACE_TYPE;
 
-typedef struct {
+struct EFI_HII_PACKAGE_LIST_HEADER {
   EFI_GUID           PackageListGuid;
   UINT32             PackagLength;
-}   EFI_HII_PACKAGE_LIST_HEADER;
+};
 
 typedef struct {
    EFI_HANDLE                          AgentHandle;
@@ -314,7 +314,7 @@ typedef struct
     EFI_QUERY_VARIABLE_INFO QueryVariableInfo;
 } EFI_RUNTIME_SERVICES;
 
-typedef EFI_HII_PACKAGE_LIST_HEADER *EFI_HII_PACKAGE_LIST_PROTOCOL;
+typedef struct EFI_HII_PACKAGE_LIST_HEADER *EFI_HII_PACKAGE_LIST_PROTOCOL;
 extern EFI_SYSTEM_TABLE *ST;
 extern EFI_BOOT_SERVICES *BS;
 extern EFI_RUNTIME_SERVICES *RT;
