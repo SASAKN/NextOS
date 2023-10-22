@@ -20,6 +20,11 @@ typedef enum
     EFI_NATIVE_INTERFACE
 } EFI_INTERFACE_TYPE;
 
+typedef struct {
+ UINT16                             ScanCode;
+ CHAR16                             UnicodeChar;
+} EFI_INPUT_KEY;
+
 typedef struct EFI_KEY_STATE {
  UINT32                       KeyShiftState;
  EFI_KEY_TOGGLE_STATE         KeyToggleState;
