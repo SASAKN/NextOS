@@ -17,6 +17,7 @@ typedef __builtin_va_list va_list;
 #define IN
 #define OUT
 #define EFIAPI
+#define OPTIONAL
 
 /* Data Types */
 typedef unsigned char BOOLEAN;

@@ -2,8 +2,75 @@
 #define _EFI_H
 
 #include "types.h"
+#include "bs.h"
 
 /* EFI_H */
+
+typedef struct
+{
+    UINT32 Data1;
+    UINT16 Data2;
+    UINT16 Data3;
+    UINT8 Data4[8];
+} EFI_GUID;
+
+typedef enum
+{
+    EFI_NATIVE_INTERFACE
+} EFI_INTERFACE_TYPE;
+
+typedef struct {
+   EFI_HANDLE                          AgentHandle;
+   EFI_HANDLE                          ControllerHandle;
+   UINT32                              Attributes;
+   UINT32                              OpenCount;
+} EFI_OPEN_PROTOCOL_INFORMATION_ENTRY;
+
+typedef enum
+{
+    AllHandles,
+    ByRegisterNotify,
+    ByProtocol
+} EFI_LOCATE_SEARCH_TYPE;
+
+typedef enum
+{
+    AllocateAnyPages,
+    AllocateMaxAddress,
+    AllocateAddress,
+    MaxAllocateType
+} EFI_ALLOCATE_TYPE;
+
+typedef enum
+{
+    EfiReservedMemoryType,
+    EfiLoaderCode,
+    EfiLoaderData,
+    EfiBootServicesCode,
+    EfiBootServicesData,
+    EfiRuntimeServicesCode,
+    EfiRuntimeServicesData,
+    EfiConventionalMemory,
+    EfiUnusableMemory,
+    EfiACPIReclaimMemory,
+    EfiACPIMemoryNVS,
+    EfiMemoryMappedIO,
+    EfiMemoryMappedIOPortSpace,
+    EfiPalCode,
+    EfiPersistentMemory,
+    EfiUnacceptedMemoryType,
+    EfiMaxMemoryType
+} EFI_MEMORY_TYPE;
+
+typedef struct
+{
+    UINT32 Type;
+    EFI_PHYSICAL_ADDRESS PhysicalStart;
+    EFI_VIRTUAL_ADDRESS VirtualStart;
+    UINT64 NumberOfPages;
+    UINT64 Attribute;
+} EFI_MEMORY_DESCRIPTOR;
+
 typedef struct _EFI_LOAD_OPTION
 {
     UINT32 Attributes;
@@ -17,10 +84,18 @@ typedef struct _EFI_KEY_OPTION
     UINT16 BootOption;
 } EFI_KEY_OPTION;
 
-typedef struct{
-  EFI_GUID           VendorGuid;
-  VOID               *VendorTable;
-}   EFI_CONFIGURATION_TABLE;
+typedef enum
+{
+    TimerCancel,
+    TimerPeriodic,
+    TimerRelative
+} EFI_TIMER_DELAY;
+
+typedef struct
+{
+    EFI_GUID VendorGuid;
+    VOID *VendorTable;
+} EFI_CONFIGURATION_TABLE;
 
 typedef union
 {
@@ -54,26 +129,29 @@ typedef struct
 } EFI_TABLE_HEADER;
 
 /* EFI_RT_PROPERTIES_TABLE */
-typedef struct {
+typedef struct
+{
     UINT16 Version;
     UINT16 Length;
     UINT32 RuntimeServicesSupported;
 } EFI_RT_PROPERTIES_TABLE;
 
 /* EFI_PROPERTIES_TABLE */
-typedef struct {
-  UINT32         Version;
-  UINT32         Length;
-  UINT64         MemoryProtectionAttribute;
-}   EFI_PROPERTIES_TABLE;
+typedef struct
+{
+    UINT32 Version;
+    UINT32 Length;
+    UINT64 MemoryProtectionAttribute;
+} EFI_PROPERTIES_TABLE;
 
 /* EFI_MEMORY_ATTRIBUTES_TABLE */
-typedef struct {
-  UINT32                       Version ;
-  UINT32                       NumberOfEntries ;
-  UINT32                       DescriptorSize ;
-  UINT32                       Flags ;
-  }  EFI_MEMORY_ATTRIBUTES_TABLE;
+typedef struct
+{
+    UINT32 Version;
+    UINT32 NumberOfEntries;
+    UINT32 DescriptorSize;
+    UINT32 Flags;
+} EFI_MEMORY_ATTRIBUTES_TABLE;
 
 /* EFI_SYSTEM_TABLE */
 typedef struct
@@ -188,56 +266,51 @@ typedef struct
 } EFI_BOOT_SERVICES;
 
 /* EFI_RUNTIME_SERVICES */
-typedef struct {
-    EFI_TABLE_HEADER                 Hdr;
+typedef struct
+{
+    EFI_TABLE_HEADER Hdr;
 
     //
     // Time Services
     //
-    EFI_GET_TIME                     GetTime;
-    EFI_SET_TIME                     SetTime;
-    EFI_GET_WAKEUP_TIME              GetWakeupTime;
-    EFI_SET_WAKEUP_TIME              SetWakeupTime;
+    EFI_GET_TIME GetTime;
+    EFI_SET_TIME SetTime;
+    EFI_GET_WAKEUP_TIME GetWakeupTime;
+    EFI_SET_WAKEUP_TIME SetWakeupTime;
 
     //
     // Virtual Memory Services
     //
-    EFI_SET_VIRTUAL_ADDRESS_MAP      SetVirtualAddressMap;
-  EFI_CONVERT_POINTER                ConvertPointer;
+    EFI_SET_VIRTUAL_ADDRESS_MAP SetVirtualAddressMap;
+    EFI_CONVERT_POINTER ConvertPointer;
 
     //
     // Variable Services
     //
-    EFI_GET_VARIABLE                 GetVariable;
-    EFI_GET_NEXT_VARIABLE_NAME       GetNextVariableName;
-    EFI_SET_VARIABLE                 SetVariable;
-
+    EFI_GET_VARIABLE GetVariable;
+    EFI_GET_NEXT_VARIABLE_NAME GetNextVariableName;
+    EFI_SET_VARIABLE SetVariable;
 
     //
     // Miscellaneous Services
     //
-    EFI_GET_NEXT_HIGH_MONO_COUNT     GetNextHighMonotonicCount;
-    EFI_RESET_SYSTEM                 ResetSystem;
+    EFI_GET_NEXT_HIGH_MONO_COUNT GetNextHighMonotonicCount;
+    EFI_RESET_SYSTEM ResetSystem;
 
-   //
-   // UEFI 2.0 Capsule Services
-   //
-   EFI_UPDATE_CAPSULE               UpdateCapsule;
-   EFI_QUERY_CAPSULE_CAPABILITIES   QueryCapsuleCapabilities;
+    //
+    // UEFI 2.0 Capsule Services
+    //
+    EFI_UPDATE_CAPSULE UpdateCapsule;
+    EFI_QUERY_CAPSULE_CAPABILITIES QueryCapsuleCapabilities;
 
-
- //
- // Miscellaneous UEFI 2.0 Service
- //
-  EFI_QUERY_VARIABLE_INFO          QueryVariableInfo;
+    //
+    // Miscellaneous UEFI 2.0 Service
+    //
+    EFI_QUERY_VARIABLE_INFO QueryVariableInfo;
 } EFI_RUNTIME_SERVICES;
-
-
-
 
 extern EFI_SYSTEM_TABLE *ST;
 extern EFI_BOOT_SERVICES *BS;
 extern EFI_RUNTIME_SERVICES *RT;
-
 
 #endif
