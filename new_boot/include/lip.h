@@ -4,6 +4,12 @@
 #include "efi.h"
 #include "types.h"
 
+typedef
+EFI_STATUS
+(EFIAPI *EFI_IMAGE_UNLOAD) (
+  IN EFI_HANDLE               ImageHandle,
+  );
+
 typedef struct {
    UINT32                        Revision;
    EFI_HANDLE                    ParentHandle;
