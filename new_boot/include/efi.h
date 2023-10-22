@@ -1,10 +1,24 @@
 #ifndef _EFI_H
 #define _EFI_H
 
-#include "base.h"
-#include "types.h"
+/* Include List */
+#include "types.h" /* Must be first. */
+#include "base.h" /* Must be second. */
+#include "status.h" /* Must be third. */
+#include "macros.h" /* Must be fourth. */
+#include "guid.h"
 #include "bs.h"
 #include "rt.h"
+#include "simpletext.h"
+#include "simplepointer.h"
+#include "lip.h"
+#include "dptp.h"
+#include "dpup.h"
+#include "dpttp.h"
+#include "dpftp.h"
+#include "file.h"
+#include "gop.h"
+
 
 /* EFI_H */
 
