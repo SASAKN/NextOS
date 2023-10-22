@@ -53,6 +53,13 @@ typedef struct
     UINT32 Reserved;
 } EFI_TABLE_HEADER;
 
+/* EFI_RT_PROPERTIES_TABLE */
+typedef struct {
+    UINT16 Version;
+    UINT16 Length;
+    UINT32 RuntimeServicesSupported;
+} EFI_RT_PROPERTIES_TABLE;
+
 /* EFI_SYSTEM_TABLE */
 typedef struct
 {
@@ -211,6 +218,11 @@ typedef struct {
 } EFI_RUNTIME_SERVICES;
 
 
+
+
+extern EFI_SYSTEM_TABLE *ST;
+extern EFI_BOOT_SERVICES *BS;
+extern EFI_RUNTIME_SERVICES *RT;
 
 
 #endif
