@@ -20,6 +20,16 @@ typedef enum
     EFI_NATIVE_INTERFACE
 } EFI_INTERFACE_TYPE;
 
+typedef struct EFI_KEY_STATE {
+ UINT32                       KeyShiftState;
+ EFI_KEY_TOGGLE_STATE         KeyToggleState;
+} EFI_KEY_STATE;
+
+typedef struct {
+ EFI_INPUT_KEY           Key;
+ EFI_KEY_STATE           KeyState;
+} EFI_KEY_DATA;
+
 struct EFI_HII_PACKAGE_LIST_HEADER
 {
     EFI_GUID PackageListGuid;
