@@ -1,5 +1,6 @@
 /* EFI.C */
 #include "include/efi.h"
+#include "include/proto.h"
 
 EFI_SYSTEM_TABLE *ST;
 EFI_BOOT_SERVICES *BS;
