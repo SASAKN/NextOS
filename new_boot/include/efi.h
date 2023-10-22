@@ -19,16 +19,73 @@ typedef enum
     EFI_NATIVE_INTERFACE
 } EFI_INTERFACE_TYPE;
 
-struct EFI_HII_PACKAGE_LIST_HEADER {
-  EFI_GUID           PackageListGuid;
-  UINT32             PackagLength;
+struct EFI_HII_PACKAGE_LIST_HEADER
+{
+    EFI_GUID PackageListGuid;
+    UINT32 PackagLength;
 };
 
-typedef struct {
-   EFI_HANDLE                          AgentHandle;
-   EFI_HANDLE                          ControllerHandle;
-   UINT32                              Attributes;
-   UINT32                              OpenCount;
+typedef struct
+{
+    UINT16 Year;  // 1900 - 9999
+    UINT8 Month;  // 1 - 12
+    UINT8 Day;    // 1 - 31
+    UINT8 Hour;   // 0 - 23
+    UINT8 Minute; // 0 - 59
+    UINT8 Second; // 0 - 59
+    UINT8 Pad1;
+    UINT32 Nanosecond; // 0 - 999,999,999
+    INT16 TimeZone;    // —1440 to 1440 or 2047
+    UINT8 Daylight;
+    UINT8 Pad2;
+} EFI_TIME;
+
+typedef struct
+{
+    UINT32 Resolution;
+    UINT32 Accuracy;
+    BOOLEAN SetsToZero;
+} EFI_TIME_CAPABILITIES;
+
+typedef struct
+{
+    UINT8 Type;
+    UINT32 IdSize;
+    // UINT8       Id[IdSize];
+} EFI_VARIABLE_AUTHENTICATION_3_CERT_ID;
+
+typedef struct
+{
+    UINT32 NonceSize;
+    // UINT8 Nonce[NonceSize];
+} EFI_VARIABLE_AUTHENTICATION_3_NONCE;
+
+typedef struct
+{
+    UINT64 MonotonicCount;
+    WIN_CERTIFICATE_UEFI_GUID AuthInfo;
+} EFI_VARIABLE_AUTHENTICATION;
+
+typedef struct
+{
+    EFI_TIME TimeStamp;
+    WIN_CERTIFICATE_UEFI_GUID AuthInfo;
+} EFI_VARIABLE_AUTHENTICATION_2;
+
+typedef struct
+{
+    UINT8 Version;
+    UINT8 Type;
+    UINT32 MetadataSize;
+    UINT32 Flags;
+} EFI_VARIABLE_AUTHENTICATION_3;
+
+typedef struct
+{
+    EFI_HANDLE AgentHandle;
+    EFI_HANDLE ControllerHandle;
+    UINT32 Attributes;
+    UINT32 OpenCount;
 } EFI_OPEN_PROTOCOL_INFORMATION_ENTRY;
 
 typedef enum
@@ -45,6 +102,18 @@ typedef enum
     AllocateAddress,
     MaxAllocateType
 } EFI_ALLOCATE_TYPE;
+
+typedef struct
+{
+    EFI_PHYSICAL_ADDRESS Address;
+    UINT64 Length;
+} EFI_MEMORY_RANGE;
+
+typedef struct
+{
+    UINT64 FirmwareMemoryRequirement;
+    UINT64 NumberOfMemoryRanges;
+} EFI_MEMORY_RANGE_CAPSULE_RESULT;
 
 typedef enum
 {
@@ -75,6 +144,74 @@ typedef struct
     UINT64 NumberOfPages;
     UINT64 Attribute;
 } EFI_MEMORY_DESCRIPTOR;
+
+typedef enum
+{
+    EfiResetCold,
+    EfiResetWarm,
+    EfiResetShutdown
+        EfiResetPlatformSpecific
+} EFI_RESET_TYPE;
+
+typedef struct
+{
+    EFI_GUID CapsuleGuid;
+    UINT32 HeaderSize;
+    UINT32 Flags;
+    UINT32 CapsuleImageSize;
+} EFI_CAPSULE_HEADER;
+
+typedef struct
+{
+    EFI_CAPSULE_HEADER Header;
+    UINT32 OsRequestedMemoryType;
+    UINT64 NumberOfMemoryRanges;
+    EFI_MEMORY_RANGE MemoryRanges[];
+} EFI_MEMORY_RANGE_CAPSULE;
+
+typedef struct
+{
+    UINT16 Version;
+    UINT8 PayloadIndex;
+    UINT8 UpdateImageIndex;
+
+    EFI_GUID UpdateImageTypeId;
+    // CHAR16            CapsuleFileName [];
+    // CHAR16            CapsuleTarget [];
+} EFI_CAPSULE_RESULT_VARIABLE_FMP;
+
+typedef struct
+{
+    UINT32 Version;
+    UINT32 CapsuleId;
+    UINT32 RespLength;
+    UINT8 Resp[];
+} EFI_CAPSULE_RESULT_VARIABLE_JSON;
+
+typedef struct
+{
+    UINT32 CapsuleArrayNumber;
+    VOID *CapsulePtr[1];
+} EFI_CAPSULE_TABLE;
+
+typedef struct
+{
+    UINT32 VariableTotalSize;
+    UINT32 Reserved; // for alignment
+    EFI_GUID CapsuleGuid;
+    EFI_TIME CapsuleProcessed;
+    EFI_STATUS CapsuleStatus;
+} EFI_CAPSULE_RESULT_VARIABLE_HEADER;
+
+typedef struct
+{
+    UINT64 Length;
+    union
+    {
+        EFI_PHYSICAL_ADDRESS DataBlock;
+        EFI_PHYSICAL_ADDRESS ContinuationPointer;
+    } Union;
+} EFI_CAPSULE_BLOCK_DESCRIPTOR;
 
 typedef struct _EFI_LOAD_OPTION
 {
