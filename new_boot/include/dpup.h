@@ -2,7 +2,6 @@
 #define _EFI_DPUP_H
 
 #include "efi.h"
-#include "types.h"
 
 /* EFI_DEVICE_PATH_UTILITIES_PROTOCOL */
 #define EFI_DEVICE_PATH_UTILITIES_PROTOCOL_GUID \
