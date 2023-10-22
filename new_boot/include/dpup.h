@@ -4,6 +4,11 @@
 #include "efi.h"
 #include "types.h"
 
+/* EFI_DEVICE_PATH_UTILITIES_PROTOCOL */
+#define EFI_DEVICE_PATH_UTILITIES_PROTOCOL_GUID \
+  {0x379be4e,0xd706,0x437d,\
+    {0xb0,0x37,0xed,0xb8,0x2f,0xb7,0x72,0xa4 }}
+
 typedef
 UINTN
 (EFIAPI *EFI_DEVICE_PATH_UTILS_GET_DEVICE_PATH_SIZE) (
