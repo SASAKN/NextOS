@@ -21,6 +21,15 @@ typedef enum
 } EFI_INTERFACE_TYPE;
 
 typedef struct {
+ INT32                              MaxMode;
+ INT32                              Mode;
+ INT32                              Attribute;
+ INT32                              CursorColumn;
+ INT32                              CursorRow;
+ BOOLEAN                            CursorVisible;
+} SIMPLE_TEXT_OUTPUT_MODE;
+
+typedef struct {
  UINT16                             ScanCode;
  CHAR16                             UnicodeChar;
 } EFI_INPUT_KEY;
