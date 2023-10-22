@@ -117,12 +117,4 @@ QueryCapsuleCapabilities (
    OUT EFI_RESET_TYPE            *ResetType
   );
 
-
-
-
-
-
-
-
-
 #endif
