@@ -60,6 +60,21 @@ typedef struct {
     UINT32 RuntimeServicesSupported;
 } EFI_RT_PROPERTIES_TABLE;
 
+/* EFI_PROPERTIES_TABLE */
+typedef struct {
+  UINT32         Version;
+  UINT32         Length;
+  UINT64         MemoryProtectionAttribute;
+}   EFI_PROPERTIES_TABLE;
+
+/* EFI_MEMORY_ATTRIBUTES_TABLE */
+typedef struct {
+  UINT32                       Version ;
+  UINT32                       NumberOfEntries ;
+  UINT32                       DescriptorSize ;
+  UINT32                       Flags ;
+  }  EFI_MEMORY_ATTRIBUTES_TABLE;
+
 /* EFI_SYSTEM_TABLE */
 typedef struct
 {
