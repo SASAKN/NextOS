@@ -218,4 +218,5 @@ typedef struct
     UINT32 Length;
     UINT64 MemoryProtectionAttribute;
 } EFI_PROPERTIES_TABLE;
+
 #endif
