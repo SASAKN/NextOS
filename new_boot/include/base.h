@@ -1,14 +1,92 @@
 #ifndef _EFI_BASE_H
 #define _EFI_BASE_H
 
+typedef struct _EFI_INPUT_KEY {
+ UINT16                             ScanCode;
+ CHAR16                             UnicodeChar;
+} EFI_INPUT_KEY;
 
-typedef struct
-{
+typedef struct _EFI_GUID {
     UINT32 Data1;
     UINT16 Data2;
     UINT16 Data3;
     UINT8 Data4[8];
 } EFI_GUID;
+
+typedef enum _EFI_GRAPHIICS_PIXEL_FORMAT {
+  PixelRedGreenBlueReserved8BitPerColor,
+  PixelBlueGreenRedReserved8BitPerColor,
+  PixelBitMask,
+  PixelBltOnly,
+  PixelFormatMax
+} EFI_GRAPHICS_PIXEL_FORMAT;
+
+typedef enum _EFI_LOCATE_SEARCH_TYPE {
+    AllHandles,
+    ByRegisterNotify,
+    ByProtocol
+} EFI_LOCATE_SEARCH_TYPE;
+
+typedef enum _EFI_MEMORY_TYPE {
+    EfiReservedMemoryType,
+    EfiLoaderCode,
+    EfiLoaderData,
+    EfiBootServicesCode,
+    EfiBootServicesData,
+    EfiRuntimeServicesCode,
+    EfiRuntimeServicesData,
+    EfiConventionalMemory,
+    EfiUnusableMemory,
+    EfiACPIReclaimMemory,
+    EfiACPIMemoryNVS,
+    EfiMemoryMappedIO,
+    EfiMemoryMappedIOPortSpace,
+    EfiPalCode,
+    EfiPersistentMemory,
+    EfiUnacceptedMemoryType,
+    EfiMaxMemoryType
+} EFI_MEMORY_TYPE;
+
+typedef enum _EFI_ALLOCATE_TYPE {
+    AllocateAnyPages,
+    AllocateMaxAddress,
+    AllocateAddress,
+    MaxAllocateType
+} EFI_ALLOCATE_TYPE;
+
+typedef struct {
+    UINT32 Type;
+    EFI_PHYSICAL_ADDRESS PhysicalStart;
+    EFI_VIRTUAL_ADDRESS VirtualStart;
+    UINT64 NumberOfPages;
+    UINT64 Attribute;
+} EFI_MEMORY_DESCRIPTOR;
+
+typedef enum {
+    TimerCancel,
+    TimerPeriodic,
+    TimerRelative
+} EFI_TIMER_DELAY;
+
+typedef enum {
+    EfiResetCold,
+    EfiResetWarm,
+    EfiResetShutdown,
+    EfiResetPlatformSpecific
+} EFI_RESET_TYPE;
+
+typedef struct _EFI_DEVICE_PATH_PROTOCOL {
+    UINT8 Type;
+    UINT8 SubType;
+    UINT8 Length[2];
+} EFI_DEVICE_PATH_PROTOCOL;
+
+
+
+
+
+
+
 
 typedef enum
 {
@@ -39,11 +117,6 @@ typedef struct {
  INT32                              CursorRow;
  BOOLEAN                            CursorVisible;
 } SIMPLE_TEXT_OUTPUT_MODE;
-
-typedef struct {
- UINT16                             ScanCode;
- CHAR16                             UnicodeChar;
-} EFI_INPUT_KEY;
 
 typedef UINT8 EFI_KEY_TOGGLE_STATE;
 
@@ -126,28 +199,6 @@ typedef struct
     UINT32 OpenCount;
 } EFI_OPEN_PROTOCOL_INFORMATION_ENTRY;
 
-typedef struct _EFI_DEVICE_PATH_PROTOCOL
-{
-    UINT8 Type;
-    UINT8 SubType;
-    UINT8 Length[2];
-} EFI_DEVICE_PATH_PROTOCOL;
-
-typedef enum
-{
-    AllHandles,
-    ByRegisterNotify,
-    ByProtocol
-} EFI_LOCATE_SEARCH_TYPE;
-
-typedef enum
-{
-    AllocateAnyPages,
-    AllocateMaxAddress,
-    AllocateAddress,
-    MaxAllocateType
-} EFI_ALLOCATE_TYPE;
-
 typedef struct
 {
     EFI_PHYSICAL_ADDRESS Address;
@@ -159,44 +210,6 @@ typedef struct
     UINT64 FirmwareMemoryRequirement;
     UINT64 NumberOfMemoryRanges;
 } EFI_MEMORY_RANGE_CAPSULE_RESULT;
-
-typedef enum
-{
-    EfiReservedMemoryType,
-    EfiLoaderCode,
-    EfiLoaderData,
-    EfiBootServicesCode,
-    EfiBootServicesData,
-    EfiRuntimeServicesCode,
-    EfiRuntimeServicesData,
-    EfiConventionalMemory,
-    EfiUnusableMemory,
-    EfiACPIReclaimMemory,
-    EfiACPIMemoryNVS,
-    EfiMemoryMappedIO,
-    EfiMemoryMappedIOPortSpace,
-    EfiPalCode,
-    EfiPersistentMemory,
-    EfiUnacceptedMemoryType,
-    EfiMaxMemoryType
-} EFI_MEMORY_TYPE;
-
-typedef struct
-{
-    UINT32 Type;
-    EFI_PHYSICAL_ADDRESS PhysicalStart;
-    EFI_VIRTUAL_ADDRESS VirtualStart;
-    UINT64 NumberOfPages;
-    UINT64 Attribute;
-} EFI_MEMORY_DESCRIPTOR;
-
-typedef enum
-{
-    EfiResetCold,
-    EfiResetWarm,
-    EfiResetShutdown,
-    EfiResetPlatformSpecific
-} EFI_RESET_TYPE;
 
 typedef struct
 {
@@ -287,13 +300,6 @@ typedef struct _EFI_KEY_OPTION
     UINT32 BootOptionCrc;
     UINT16 BootOption;
 } EFI_KEY_OPTION;
-
-typedef enum
-{
-    TimerCancel,
-    TimerPeriodic,
-    TimerRelative
-} EFI_TIMER_DELAY;
 
 typedef struct
 {

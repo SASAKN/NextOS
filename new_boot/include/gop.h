@@ -25,13 +25,7 @@ typedef struct EFI_GRAPHICS_OUTPUT_PROTCOL {
   UINT32              ReservedMask;
  } EFI_PIXEL_BITMASK;
 
- typedef enum {
-  PixelRedGreenBlueReserved8BitPerColor,
-  PixelBlueGreenRedReserved8BitPerColor,
-  PixelBitMask,
-  PixelBltOnly,
-  PixelFormatMax
-} EFI_GRAPHICS_PIXEL_FORMAT;
+
 
 typedef struct {
  UINT32                    Version;
