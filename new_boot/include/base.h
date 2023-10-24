@@ -13,7 +13,11 @@ typedef struct _EFI_GUID {
     UINT8 Data4[8];
 } EFI_GUID;
 
-
+typedef struct _EFI_LOAD_OPTION
+{
+    UINT32 Attributes;
+    UINT16 FilePathListLength;
+} EFI_LOAD_OPTION;
 
 typedef union _EFI_BOOT_KEY_DATA{
     struct {
@@ -143,12 +147,6 @@ typedef struct {
  BOOLEAN                            CursorVisible;
 } SIMPLE_TEXT_OUTPUT_MODE;
 
-struct EFI_HII_PACKAGE_LIST_HEADER
-{
-    EFI_GUID PackageListGuid;
-    UINT32 PackagLength;
-};
-
 typedef struct
 {
     UINT16 Year;  // 1900 - 9999
@@ -179,44 +177,6 @@ typedef struct
     UINT32 OpenCount;
 } EFI_OPEN_PROTOCOL_INFORMATION_ENTRY;
 
-typedef struct
-{
-    EFI_PHYSICAL_ADDRESS Address;
-    UINT64 Length;
-} EFI_MEMORY_RANGE;
-
-typedef struct
-{
-    UINT64 FirmwareMemoryRequirement;
-    UINT64 NumberOfMemoryRanges;
-} EFI_MEMORY_RANGE_CAPSULE_RESULT;
-
-typedef struct
-{
-    EFI_GUID CapsuleGuid;
-    UINT32 HeaderSize;
-    UINT32 Flags;
-    UINT32 CapsuleImageSize;
-} EFI_CAPSULE_HEADER;
-
-typedef struct
-{
-    EFI_CAPSULE_HEADER Header;
-    UINT32 OsRequestedMemoryType;
-    UINT64 NumberOfMemoryRanges;
-    EFI_MEMORY_RANGE MemoryRanges[];
-} EFI_MEMORY_RANGE_CAPSULE;
-
-typedef struct
-{
-    UINT16 Version;
-    UINT8 PayloadIndex;
-    UINT8 UpdateImageIndex;
-
-    EFI_GUID UpdateImageTypeId;
-    // CHAR16            CapsuleFileName [];
-    // CHAR16            CapsuleTarget [];
-} EFI_CAPSULE_RESULT_VARIABLE_FMP;
 
 typedef struct
 {
@@ -250,12 +210,6 @@ typedef struct
         EFI_PHYSICAL_ADDRESS ContinuationPointer;
     } Union;
 } EFI_CAPSULE_BLOCK_DESCRIPTOR;
-
-typedef struct _EFI_LOAD_OPTION
-{
-    UINT32 Attributes;
-    UINT16 FilePathListLength;
-} EFI_LOAD_OPTION;
 
 typedef struct
 {
