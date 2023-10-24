@@ -10,14 +10,16 @@
 /* 可変長引数 */
 typedef __builtin_va_list va_list;
 #define va_start(ap, param) __builtin_va_start(ap, param)
-#define va_end(ap)          __builtin_va_end(ap)
-#define va_arg(ap, type)    __builtin_va_arg(ap, type)
+#define va_end(ap) __builtin_va_end(ap)
+#define va_arg(ap, type) __builtin_va_arg(ap, type)
 
 /* UEFIデータ修飾子 */
+#ifndef IN
 #define IN
 #define OUT
 #define EFIAPI
 #define OPTIONAL
+#endif
 
 /* Data Types */
 typedef unsigned char BOOLEAN;
@@ -39,7 +41,6 @@ typedef VOID *EFI_HANDLE;
 typedef VOID *EFI_EVENT;
 typedef UINT64 EFI_LBA;
 typedef UINTN EFI_TPL;
-typedef UINT64 EFI_PHYSICAL_ADDRESS;
 
 /* Stdint.hで定義されているもの */
 typedef unsigned int uintptr_t;
@@ -56,6 +57,9 @@ typedef unsigned short wchar_t;
 typedef UINT64 EFI_PHYSICAL_ADDRESS;
 typedef UINT64 EFI_VIRTUAL_ADDRESS;
 
+/* キーボード系のため */
+typedef UINT8 EFI_KEY_TOGGLE_STATE;
+
 /* ELF Types */
 typedef uintptr_t Elf64_Addr;
 typedef uint64_t Elf64_Xword;
@@ -64,7 +68,5 @@ typedef uint32_t Elf64_Word;
 typedef uint16_t Elf64_Half;
 typedef int64_t Elf64_Sxword;
 typedef int32_t Elf64_Sword;
-
-
 
 #endif

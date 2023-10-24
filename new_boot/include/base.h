@@ -13,6 +13,43 @@ typedef struct _EFI_GUID {
     UINT8 Data4[8];
 } EFI_GUID;
 
+
+
+typedef union _EFI_BOOT_KEY_DATA{
+    struct {
+        UINT32 Revision : 8;
+        UINT32 ShiftPressed : 1;
+        UINT32 ControlPressed : 1;
+        UINT32 AltPressed : 1;
+        UINT32 LogoPressed : 1;
+        UINT32 MenuPressed : 1;
+        UINT32 SysReqPressed : 1;
+        UINT32 Reserved : 16;
+        UINT32 InputKeyCount : 2;
+    } Options;
+    UINT32 PackedValue;
+} EFI_BOOT_KEY_DATA;
+
+typedef struct _EFI_KEY_OPTION {
+    EFI_BOOT_KEY_DATA KeyData;
+    UINT32 BootOptionCrc;
+    UINT16 BootOption;
+} EFI_KEY_OPTION;
+
+typedef enum _EFI_INTERFACE_TYPE{
+    EFI_NATIVE_INTERFACE
+} EFI_INTERFACE_TYPE;
+
+typedef struct _EFI_KEY_STATE {
+ UINT32                       KeyShiftState;
+ EFI_KEY_TOGGLE_STATE         KeyToggleState;
+} EFI_KEY_STATE;
+
+typedef struct _EFI_KEY_DATA {
+ EFI_INPUT_KEY           Key;
+ EFI_KEY_STATE           KeyState;
+} EFI_KEY_DATA;
+
 typedef enum _EFI_GRAPHIICS_PIXEL_FORMAT {
   PixelRedGreenBlueReserved8BitPerColor,
   PixelBlueGreenRedReserved8BitPerColor,
@@ -81,18 +118,6 @@ typedef struct _EFI_DEVICE_PATH_PROTOCOL {
     UINT8 Length[2];
 } EFI_DEVICE_PATH_PROTOCOL;
 
-
-
-
-
-
-
-
-typedef enum
-{
-    EFI_NATIVE_INTERFACE
-} EFI_INTERFACE_TYPE;
-
 typedef struct {
  INT32                  RelativeMovementX;
  INT32                  RelativeMovementY;
@@ -117,18 +142,6 @@ typedef struct {
  INT32                              CursorRow;
  BOOLEAN                            CursorVisible;
 } SIMPLE_TEXT_OUTPUT_MODE;
-
-typedef UINT8 EFI_KEY_TOGGLE_STATE;
-
-typedef struct EFI_KEY_STATE {
- UINT32                       KeyShiftState;
- EFI_KEY_TOGGLE_STATE         KeyToggleState;
-} EFI_KEY_STATE;
-
-typedef struct {
- EFI_INPUT_KEY           Key;
- EFI_KEY_STATE           KeyState;
-} EFI_KEY_DATA;
 
 struct EFI_HII_PACKAGE_LIST_HEADER
 {
@@ -157,39 +170,6 @@ typedef struct
     UINT32 Accuracy;
     BOOLEAN SetsToZero;
 } EFI_TIME_CAPABILITIES;
-
-typedef struct
-{
-    UINT8 Type;
-    UINT32 IdSize;
-    // UINT8       Id[IdSize];
-} EFI_VARIABLE_AUTHENTICATION_3_CERT_ID;
-
-typedef struct
-{
-    UINT32 NonceSize;
-    // UINT8 Nonce[NonceSize];
-} EFI_VARIABLE_AUTHENTICATION_3_NONCE;
-
-typedef struct
-{
-    UINT64 MonotonicCount;
-    WIN_CERTIFICATE_UEFI_GUID AuthInfo;
-} EFI_VARIABLE_AUTHENTICATION;
-
-typedef struct
-{
-    EFI_TIME TimeStamp;
-    WIN_CERTIFICATE_UEFI_GUID AuthInfo;
-} EFI_VARIABLE_AUTHENTICATION_2;
-
-typedef struct
-{
-    UINT8 Version;
-    UINT8 Type;
-    UINT32 MetadataSize;
-    UINT32 Flags;
-} EFI_VARIABLE_AUTHENTICATION_3;
 
 typedef struct
 {
@@ -276,30 +256,6 @@ typedef struct _EFI_LOAD_OPTION
     UINT32 Attributes;
     UINT16 FilePathListLength;
 } EFI_LOAD_OPTION;
-
-typedef union
-{
-    struct
-    {
-        UINT32 Revision : 8;
-        UINT32 ShiftPressed : 1;
-        UINT32 ControlPressed : 1;
-        UINT32 AltPressed : 1;
-        UINT32 LogoPressed : 1;
-        UINT32 MenuPressed : 1;
-        UINT32 SysReqPressed : 1;
-        UINT32 Reserved : 16;
-        UINT32 InputKeyCount : 2;
-    } Options;
-    UINT32 PackedValue;
-} EFI_BOOT_KEY_DATA;
-
-typedef struct _EFI_KEY_OPTION
-{
-    EFI_BOOT_KEY_DATA KeyData;
-    UINT32 BootOptionCrc;
-    UINT16 BootOption;
-} EFI_KEY_OPTION;
 
 typedef struct
 {
