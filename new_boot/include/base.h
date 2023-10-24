@@ -19,7 +19,7 @@ typedef struct _EFI_LOAD_OPTION
     UINT16 FilePathListLength;
 } EFI_LOAD_OPTION;
 
-typedef union _EFI_BOOT_KEY_DATA{
+typedef union _EFI_BOOT_KEY_DATA {
     struct {
         UINT32 Revision : 8;
         UINT32 ShiftPressed : 1;
@@ -103,6 +103,15 @@ typedef struct {
     UINT64 Attribute;
 } EFI_MEMORY_DESCRIPTOR;
 
+typedef struct
+{
+    UINT32 Version;
+    UINT32 NumberOfEntries;
+    UINT32 DescriptorSize;
+    UINT32 Flags;
+} EFI_MEMORY_ATTRIBUTES_TABLE;
+
+
 typedef enum {
     TimerCancel,
     TimerPeriodic,
@@ -115,6 +124,13 @@ typedef enum {
     EfiResetShutdown,
     EfiResetPlatformSpecific
 } EFI_RESET_TYPE;
+
+typedef struct _EFI_OPEN_PROTOCOL_INFORMATION_ENTRY{
+    EFI_HANDLE AgentHandle;
+    EFI_HANDLE ControllerHandle;
+    UINT32 Attributes;
+    UINT32 OpenCount;
+} EFI_OPEN_PROTOCOL_INFORMATION_ENTRY;
 
 typedef struct _EFI_DEVICE_PATH_PROTOCOL {
     UINT8 Type;
@@ -171,48 +187,6 @@ typedef struct
 
 typedef struct
 {
-    EFI_HANDLE AgentHandle;
-    EFI_HANDLE ControllerHandle;
-    UINT32 Attributes;
-    UINT32 OpenCount;
-} EFI_OPEN_PROTOCOL_INFORMATION_ENTRY;
-
-
-typedef struct
-{
-    UINT32 Version;
-    UINT32 CapsuleId;
-    UINT32 RespLength;
-    UINT8 Resp[];
-} EFI_CAPSULE_RESULT_VARIABLE_JSON;
-
-typedef struct
-{
-    UINT32 CapsuleArrayNumber;
-    VOID *CapsulePtr[1];
-} EFI_CAPSULE_TABLE;
-
-typedef struct
-{
-    UINT32 VariableTotalSize;
-    UINT32 Reserved; // for alignment
-    EFI_GUID CapsuleGuid;
-    EFI_TIME CapsuleProcessed;
-    EFI_STATUS CapsuleStatus;
-} EFI_CAPSULE_RESULT_VARIABLE_HEADER;
-
-typedef struct
-{
-    UINT64 Length;
-    union
-    {
-        EFI_PHYSICAL_ADDRESS DataBlock;
-        EFI_PHYSICAL_ADDRESS ContinuationPointer;
-    } Union;
-} EFI_CAPSULE_BLOCK_DESCRIPTOR;
-
-typedef struct
-{
     EFI_GUID VendorGuid;
     VOID *VendorTable;
 } EFI_CONFIGURATION_TABLE;
@@ -242,14 +216,4 @@ typedef struct
     UINT32 Length;
     UINT64 MemoryProtectionAttribute;
 } EFI_PROPERTIES_TABLE;
-
-/* EFI_MEMORY_ATTRIBUTES_TABLE */
-typedef struct
-{
-    UINT32 Version;
-    UINT32 NumberOfEntries;
-    UINT32 DescriptorSize;
-    UINT32 Flags;
-} EFI_MEMORY_ATTRIBUTES_TABLE;
-
 #endif
