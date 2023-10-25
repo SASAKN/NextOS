@@ -259,6 +259,8 @@ typedef struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
     SIMPLE_TEXT_OUTPUT_MODE *Mode;
 } EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL;
 
+/* @End SimpleTextProtocol */
+
 typedef struct
 {
     INT32 RelativeMovementX;
