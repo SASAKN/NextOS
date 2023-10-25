@@ -190,22 +190,17 @@ typedef struct {
 /* EFI_BOOT_SERVICES */
 typedef struct EFI_BOOT_SERVICES
 {
-    EFI_TABLE_HEADER 
     CHAR8 _buf1[24];
     /* Task Pririty Services */
     UINT64 _buf2[2];
     /* Memory Services */
-    // UINT64 _buf3[2];
+    UINT64 _buf3[1];
     UINT64(*AllocatePages)
     (
         EFI_ALLOCATE_TYPE Type,
         EFI_MEMORY_TYPE MemoryType,
         UINTN Pages,
         EFI_PHYSICAL_ADDRESS *Memory);
-    UINT64 (*FreePages)
-    (
-        EFI_PHYSICAL_ADDRESS Memory,
-        UINTN Pages);
     UINT64(*GetMemoryMap)
     (
         UINT64 *MemoryMapSize,
