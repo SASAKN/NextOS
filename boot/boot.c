@@ -92,11 +92,10 @@ EFI_STATUS EfiMain(
   init_memmap(&map);
   print_memmap(&map);
   // /* カーネルの読み込み */
-  custom_printf("Loading Kernel....");
+  custom_printf("Loading Kernel....\n");
   /* カーネルの読み込み処理 */
   EFI_FILE_PROTOCOL *kernel_file;
-  status = root_dir->Open(root_dir, &kernel_file, L"\\kernel.elf", EFI_FILE_MODE_READ, 0);
-  assert(status, L"KernelLoadError !(root->Open)");
+  root_dir->Open(root_dir, &kernel_file, L"\\kernel.elf", EFI_FILE_MODE_READ, 0);
   PrintOK(SystemTable);
   custom_printf("Read\n");
   UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 13;

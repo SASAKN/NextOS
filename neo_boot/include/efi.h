@@ -415,6 +415,8 @@ typedef struct
 
 /* @End SystemTable */
 
+/* GraphicsOutputProtocol */
+
 typedef struct
 {
     INT32 RelativeMovementX;
