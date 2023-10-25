@@ -2,7 +2,6 @@
 #define _EFI_H
 
 #include "types.h"
-#include "bs.h"
 
 typedef struct _EFI_INPUT_KEY
 {
@@ -280,6 +279,8 @@ typedef struct _EFI_RUNTIME_SERVICES
 } EFI_RUNTIME_SERVICES;
 
 /* @End RuntimeServices */
+
+#include "bs.h"
 
 typedef _EFI_BOOT_SERVICES
 {
