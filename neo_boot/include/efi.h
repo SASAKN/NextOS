@@ -158,9 +158,10 @@ typedef struct _EFI_DEVICE_PATH_PROTOCOL
 
 /* SimpleTextProtocol */
 
-/* EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL */
 typedef EFI_STATUS(EFIAPI *EFI_KEY_NOTIFY_FUNCTION)(
     IN EFI_KEY_DATA *KeyData);
+
+/* EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL */
 
 typedef struct _EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL
 {
@@ -203,6 +204,61 @@ typedef struct _EFI_SIMPLE_TEXT_INPUT_PROTOCOL
     EFI_EVENT WaitForKey;
 } EFI_SIMPLE_TEXT_INPUT_PROTOCOL;
 
+/* SimpleTextOutputProtocol */
+
+typedef struct
+{
+    INT32 MaxMode;
+    INT32 Mode;
+    INT32 Attribute;
+    INT32 CursorColumn;
+    INT32 CursorRow;
+    BOOLEAN CursorVisible;
+} SIMPLE_TEXT_OUTPUT_MODE;
+
+typedef struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
+{
+    EFI_STATUS(*Reset)
+    (
+        IN struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
+        IN BOOLEAN ExtendedVerification);
+    EFI_STATUS(*OutputString)
+    (
+        IN struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
+        IN CHAR16 *String);
+    EFI_STATUS(*TestString)
+    (
+        IN struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
+        IN CHAR16 *String);
+    EFI_STATUS(*QueryMode)
+    (
+        IN struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL This,
+        IN UINTN ModeNumber,
+        OUT UINTN *Columns,
+        OUT UINTN *Rows);
+    EFI_STATUS(*SetMode)
+    (
+        IN struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
+        IN UINTN ModeNumber);
+    EFI_STATUS(*SetAttribute)
+    (
+        IN struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
+        IN UINTN Attribute);
+    EFI_STATUS(*ClearScreen)
+    (
+        IN struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This);
+    EFI_STATUS (*SetCursorPosition)
+    (
+        IN struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
+        IN UINTN Column,
+        IN UINTN Row);
+    EFI_STATUS(*EnableCursor) (
+        IN struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
+        IN BOOLEAN Visible
+    );
+    SIMPLE_TEXT_OUTPUT_MODE *Mode;
+} EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL;
+
 typedef struct
 {
     INT32 RelativeMovementX;
@@ -220,16 +276,6 @@ typedef struct
     BOOLEAN LeftButton;
     BOOLEAN RightButton;
 } EFI_SIMPLE_POINTER_MODE;
-
-typedef struct
-{
-    INT32 MaxMode;
-    INT32 Mode;
-    INT32 Attribute;
-    INT32 CursorColumn;
-    INT32 CursorRow;
-    BOOLEAN CursorVisible;
-} SIMPLE_TEXT_OUTPUT_MODE;
 
 typedef struct
 {

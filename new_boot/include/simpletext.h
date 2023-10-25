@@ -6,14 +6,14 @@
 // /* SimpleTextInputExProtocol */
 #include "efi.h"
 
-// /* Guid */
-// #define EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL_GUID             \
-//     {                                                      \
-//         0xdd9e7534, 0x7762, 0x4698,                        \
-//         {                                                  \
-//             0x8c, 0x14, 0xf5, 0x85, 0x17, 0xa6, 0x25, 0xaa \
-//         }                                                  \
-//     }
+/* Guid */
+#define EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL_GUID             \
+    {                                                      \
+        0xdd9e7534, 0x7762, 0x4698,                        \
+        {                                                  \
+            0x8c, 0x14, 0xf5, 0x85, 0x17, 0xa6, 0x25, 0xaa \
+        }                                                  \
+    }
 
 // typedef struct _EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL
 // {
@@ -25,33 +25,33 @@
 //     EFI_UNREGISTER_KEYSTROKE_NOTIFY UnregisterKeyNotify;
 // } EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL;
 
-// typedef EFI_STATUS(EFIAPI *EFI_INPUT_READ_KEY_EX)(
+// typedef EFI_STATUS(*EFI_INPUT_READ_KEY_EX)(
 //     IN struct _EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
 //     OUT EFI_KEY_DATA *KeyData);
 
-// typedef EFI_STATUS(EFIAPI *EFI_SET_STATE)(
+// typedef EFI_STATUS(*EFI_SET_STATE)(
 //     IN struct _EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
 //     IN EFI_KEY_TOGGLE_STATE *KeyToggleState);
 
-// typedef EFI_STATUS(EFIAPI *EFI_KEY_NOTIFY_FUNCTION)(
+// typedef EFI_STATUS(*EFI_KEY_NOTIFY_FUNCTION)(
 //     IN EFI_KEY_DATA *KeyData);
 
-// typedef EFI_STATUS(EFIAPI *EFI_REGISTER_KEYSTROKE_NOTIFY)(
+// typedef EFI_STATUS(*EFI_REGISTER_KEYSTROKE_NOTIFY)(
 //     IN struct _EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
 //     IN EFI_KEY_DATA *KeyData,
 //     IN EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction,
 //     OUT VOID **NotifyHandle);
 
-// typedef EFI_STATUS(EFIAPI *EFI_UNREGISTER_KEYSTROKE_NOTIFY)(
+// typedef EFI_STATUS(*EFI_UNREGISTER_KEYSTROKE_NOTIFY)(
 //     IN struct _EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
 //     IN VOID *NotificationHandle);
 
 // /* SimpleTextInputProtocol */
 
-// /* Guid */
-// #define EFI_SIMPLE_TEXT_INPUT_PROTOCOL_GUID \
-//  {0x387477c1,0x69c7,0x11d2,\
-//   {0x8e,0x39,0x00,0xa0,0xc9,0x69,0x72,0x3b}}
+/* Guid */
+#define EFI_SIMPLE_TEXT_INPUT_PROTOCOL_GUID \
+ {0x387477c1,0x69c7,0x11d2,\
+  {0x8e,0x39,0x00,0xa0,0xc9,0x69,0x72,0x3b}}
 
 // typedef struct _EFI_SIMPLE_TEXT_INPUT_PROTOCOL {
 //  EFI_INPUT_RESET                       Reset;
@@ -61,14 +61,14 @@
 
 // typedef
 // EFI_STATUS
-// (EFIAPI *EFI_INPUT_RESET) (
+// (*EFI_INPUT_RESET) (
 //  IN EFI_SIMPLE_TEXT_INPUT_PROTOCOL                 *This,
 //  IN BOOLEAN                                        ExtendedVerification
 //  );
 
 //  typedef
 // EFI_STATUS
-// (EFIAPI *EFI_INPUT_READ_KEY) (
+// (*EFI_INPUT_READ_KEY) (
 //  IN EFI_SIMPLE_TEXT_INPUT_PROTOCOL              *This,
 //  OUT EFI_INPUT_KEY                              *Key
 //  );
@@ -82,16 +82,16 @@
 
  typedef
 EFI_STATUS
-(EFIAPI *EFI_TEXT_SET_CURSOR_POSITION) (
- IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL             *This,
+(*EFI_TEXT_SET_CURSOR_POSITION) (
+ IN struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
  IN UINTN                                       Column,
  IN UINTN                                       Row
  );
 
 typedef
 EFI_STATUS
-(EFIAPI *EFI_TEXT_ENABLE_CURSOR) (
- IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL             *This,
+(*EFI_TEXT_ENABLE_CURSOR) (
+ IN struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
  IN BOOLEAN                                     Visible
  );
 
@@ -110,29 +110,29 @@ typedef struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
 
 typedef
 EFI_STATUS
-(EFIAPI *EFI_TEXT_RESET) (
- IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL       *This,
+(*EFI_TEXT_RESET) (
+ IN struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
  IN BOOLEAN                               ExtendedVerification
  );
 
  typedef
 EFI_STATUS
-(EFIAPI *EFI_TEXT_STRING) (
- IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL    *This,
+(*EFI_TEXT_STRING) (
+ IN struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
  IN CHAR16                             *String
  );
 
  typedef
 EFI_STATUS
-(EFIAPI *EFI_TEXT_TEST_STRING) (
- IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL       *This,
+(*EFI_TEXT_TEST_STRING) (
+ IN struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
  IN CHAR16                                *String
  );
 
 typedef
 EFI_STATUS
-(EFIAPI *EFI_TEXT_QUERY_MODE) (
- IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL          *This,
+(*EFI_TEXT_QUERY_MODE) (
+ IN struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL This,
  IN UINTN                                    ModeNumber,
  OUT UINTN                                   *Columns,
  OUT UINTN                                   *Rows
@@ -140,22 +140,22 @@ EFI_STATUS
 
   typedef
 EFI_STATUS
-(EFIAPI *EFI_TEXT_SET_MODE) (
- IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL          *This,
+(*EFI_TEXT_SET_MODE) (
+ IN struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
  IN UINTN                                    ModeNumber
  );
 
 typedef
 EFI_STATUS
-(EFIAPI *EFI_TEXT_SET_ATTRIBUTE) (
- IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL        *This,
+(*EFI_TEXT_SET_ATTRIBUTE) (
+ IN struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
  IN UINTN                                  Attribute
  );
 
  typedef
 EFI_STATUS
-(EFIAPI *EFI_TEXT_CLEAR_SCREEN) (
- IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL             *This
+(*EFI_TEXT_CLEAR_SCREEN) (
+ IN struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This
  );
 
 
