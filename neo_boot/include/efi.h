@@ -204,6 +204,8 @@ typedef struct _EFI_SIMPLE_TEXT_INPUT_PROTOCOL
     EFI_EVENT WaitForKey;
 } EFI_SIMPLE_TEXT_INPUT_PROTOCOL;
 
+
+
 /* SimpleTextOutputProtocol */
 
 typedef struct
@@ -247,19 +249,38 @@ typedef struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
     EFI_STATUS(*ClearScreen)
     (
         IN struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This);
-    EFI_STATUS (*SetCursorPosition)
+    EFI_STATUS(*SetCursorPosition)
     (
         IN struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
         IN UINTN Column,
         IN UINTN Row);
-    EFI_STATUS(*EnableCursor) (
+    EFI_STATUS (*EnableCursor)
+    (
         IN struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
-        IN BOOLEAN Visible
-    );
+        IN BOOLEAN Visible);
     SIMPLE_TEXT_OUTPUT_MODE *Mode;
 } EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL;
 
 /* @End SimpleTextProtocol */
+
+/* RuntimeServices */
+typedef struct _EFI_RUNTIME_SERVICES
+{
+    EFI_TABLE_HEADER Hdr;
+    CHAR8 _buf_rs1[24];
+    UINT64 _buf_rs2[4];
+    UINT64 _buf_rs3[2];
+    UIIINT64 _buf_rs4[3];
+    UINT64 _buf_rs5;
+    VOID (*ResetSystem)
+    (
+        IN EFI_RESET_TYPE ResetType,
+        IN EFI_STATUS ResetStatus,
+        IN UINTN DataSize,
+        IN VOID *ResetData OPTIONAL);
+} EFI_RUNTIME_SERVICES;
+
+/* @End RuntimeServices */
 
 typedef struct
 {
