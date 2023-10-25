@@ -3,12 +3,14 @@
 
 #include "types.h"
 
-typedef struct _EFI_INPUT_KEY {
- UINT16                             ScanCode;
- CHAR16                             UnicodeChar;
+typedef struct _EFI_INPUT_KEY
+{
+    UINT16 ScanCode;
+    CHAR16 UnicodeChar;
 } EFI_INPUT_KEY;
 
-typedef struct _EFI_GUID {
+typedef struct _EFI_GUID
+{
     UINT32 Data1;
     UINT16 Data2;
     UINT16 Data3;
@@ -21,8 +23,10 @@ typedef struct _EFI_LOAD_OPTION
     UINT16 FilePathListLength;
 } EFI_LOAD_OPTION;
 
-typedef union _EFI_BOOT_KEY_DATA {
-    struct {
+typedef union _EFI_BOOT_KEY_DATA
+{
+    struct
+    {
         UINT32 Revision : 8;
         UINT32 ShiftPressed : 1;
         UINT32 ControlPressed : 1;
@@ -36,41 +40,48 @@ typedef union _EFI_BOOT_KEY_DATA {
     UINT32 PackedValue;
 } EFI_BOOT_KEY_DATA;
 
-typedef struct _EFI_KEY_OPTION {
+typedef struct _EFI_KEY_OPTION
+{
     EFI_BOOT_KEY_DATA KeyData;
     UINT32 BootOptionCrc;
     UINT16 BootOption;
 } EFI_KEY_OPTION;
 
-typedef enum _EFI_INTERFACE_TYPE{
+typedef enum _EFI_INTERFACE_TYPE
+{
     EFI_NATIVE_INTERFACE
 } EFI_INTERFACE_TYPE;
 
-typedef struct _EFI_KEY_STATE {
- UINT32                       KeyShiftState;
- EFI_KEY_TOGGLE_STATE         KeyToggleState;
+typedef struct _EFI_KEY_STATE
+{
+    UINT32 KeyShiftState;
+    EFI_KEY_TOGGLE_STATE KeyToggleState;
 } EFI_KEY_STATE;
 
-typedef struct _EFI_KEY_DATA {
- EFI_INPUT_KEY           Key;
- EFI_KEY_STATE           KeyState;
+typedef struct _EFI_KEY_DATA
+{
+    EFI_INPUT_KEY Key;
+    EFI_KEY_STATE KeyState;
 } EFI_KEY_DATA;
 
-typedef enum _EFI_GRAPHIICS_PIXEL_FORMAT {
-  PixelRedGreenBlueReserved8BitPerColor,
-  PixelBlueGreenRedReserved8BitPerColor,
-  PixelBitMask,
-  PixelBltOnly,
-  PixelFormatMax
+typedef enum _EFI_GRAPHIICS_PIXEL_FORMAT
+{
+    PixelRedGreenBlueReserved8BitPerColor,
+    PixelBlueGreenRedReserved8BitPerColor,
+    PixelBitMask,
+    PixelBltOnly,
+    PixelFormatMax
 } EFI_GRAPHICS_PIXEL_FORMAT;
 
-typedef enum _EFI_LOCATE_SEARCH_TYPE {
+typedef enum _EFI_LOCATE_SEARCH_TYPE
+{
     AllHandles,
     ByRegisterNotify,
     ByProtocol
 } EFI_LOCATE_SEARCH_TYPE;
 
-typedef enum _EFI_MEMORY_TYPE {
+typedef enum _EFI_MEMORY_TYPE
+{
     EfiReservedMemoryType,
     EfiLoaderCode,
     EfiLoaderData,
@@ -90,14 +101,16 @@ typedef enum _EFI_MEMORY_TYPE {
     EfiMaxMemoryType
 } EFI_MEMORY_TYPE;
 
-typedef enum _EFI_ALLOCATE_TYPE {
+typedef enum _EFI_ALLOCATE_TYPE
+{
     AllocateAnyPages,
     AllocateMaxAddress,
     AllocateAddress,
     MaxAllocateType
 } EFI_ALLOCATE_TYPE;
 
-typedef struct {
+typedef struct
+{
     UINT32 Type;
     EFI_PHYSICAL_ADDRESS PhysicalStart;
     EFI_VIRTUAL_ADDRESS VirtualStart;
@@ -113,56 +126,95 @@ typedef struct
     UINT32 Flags;
 } EFI_MEMORY_ATTRIBUTES_TABLE;
 
-
-typedef enum {
+typedef enum
+{
     TimerCancel,
     TimerPeriodic,
     TimerRelative
 } EFI_TIMER_DELAY;
 
-typedef enum {
+typedef enum
+{
     EfiResetCold,
     EfiResetWarm,
     EfiResetShutdown,
     EfiResetPlatformSpecific
 } EFI_RESET_TYPE;
 
-typedef struct _EFI_OPEN_PROTOCOL_INFORMATION_ENTRY{
+typedef struct _EFI_OPEN_PROTOCOL_INFORMATION_ENTRY
+{
     EFI_HANDLE AgentHandle;
     EFI_HANDLE ControllerHandle;
     UINT32 Attributes;
     UINT32 OpenCount;
 } EFI_OPEN_PROTOCOL_INFORMATION_ENTRY;
 
-typedef struct _EFI_DEVICE_PATH_PROTOCOL {
+typedef struct _EFI_DEVICE_PATH_PROTOCOL
+{
     UINT8 Type;
     UINT8 SubType;
     UINT8 Length[2];
 } EFI_DEVICE_PATH_PROTOCOL;
 
-typedef struct {
- INT32                  RelativeMovementX;
- INT32                  RelativeMovementY;
- INT32                  RelativeMovementZ;
- BOOLEAN                LeftButton;
- BOOLEAN                RightButton;
+/* SimpleTextProtocol */
+
+/* EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL */
+typedef EFI_STATUS(EFIAPI *EFI_KEY_NOTIFY_FUNCTION)(
+    IN EFI_KEY_DATA *KeyData);
+
+typedef struct _EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL
+{
+    EFI_STATUS(*Reset)
+    (
+        IN struct _EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
+        IN BOOLEAN ExtendedVerification);
+    EFI_STATUS(*EFI_INPUT_READ_KEY_EX)
+    (
+        IN struct _EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
+        OUT EFI_KEY_DATA *KeyData);
+    EFI_EVENT WaitForKeyEx;
+    EFI_STATUS(*SetState)
+    (
+        IN struct _EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
+        IN EFI_KEY_TOGGLE_STATE *KeyToggleState);
+    EFI_STATUS(*EFI_REGISTER_KEYSTROKE_NOTIFY)
+    (
+        IN struct _EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
+        IN EFI_KEY_DATA *KeyData,
+        IN EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction,
+        OUT VOID **NotifyHandle);
+    EFI_STATUS(*UnregisterKeyNotify)
+    (
+        IN struct _EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
+        IN VOID *NotificationHandle);
+} EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL;
+
+typedef struct
+{
+    INT32 RelativeMovementX;
+    INT32 RelativeMovementY;
+    INT32 RelativeMovementZ;
+    BOOLEAN LeftButton;
+    BOOLEAN RightButton;
 } EFI_SIMPLE_POINTER_STATE;
 
-typedef struct {
- UINT64                    ResolutionX;
- UINT64                    ResolutionY;
- UINT64                    ResolutionZ;
- BOOLEAN                   LeftButton;
- BOOLEAN                   RightButton;
+typedef struct
+{
+    UINT64 ResolutionX;
+    UINT64 ResolutionY;
+    UINT64 ResolutionZ;
+    BOOLEAN LeftButton;
+    BOOLEAN RightButton;
 } EFI_SIMPLE_POINTER_MODE;
 
-typedef struct {
- INT32                              MaxMode;
- INT32                              Mode;
- INT32                              Attribute;
- INT32                              CursorColumn;
- INT32                              CursorRow;
- BOOLEAN                            CursorVisible;
+typedef struct
+{
+    INT32 MaxMode;
+    INT32 Mode;
+    INT32 Attribute;
+    INT32 CursorColumn;
+    INT32 CursorRow;
+    BOOLEAN CursorVisible;
 } SIMPLE_TEXT_OUTPUT_MODE;
 
 typedef struct
