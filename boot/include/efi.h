@@ -195,7 +195,7 @@ typedef struct EFI_BOOT_SERVICES
     /* Task Pririty Services */
     UINT64 _buf2[2];
     /* Memory Services */
-    UINT64 _buf3[2];
+    // UINT64 _buf3[2];
     UINT64(*AllocatePages)
     (
         EFI_ALLOCATE_TYPE Type,

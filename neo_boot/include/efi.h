@@ -40,6 +40,21 @@ typedef union _EFI_BOOT_KEY_DATA
     UINT32 PackedValue;
 } EFI_BOOT_KEY_DATA;
 
+typedef struct
+{
+    UINT16 Year;  // 1900 - 9999
+    UINT8 Month;  // 1 - 12
+    UINT8 Day;    // 1 - 31
+    UINT8 Hour;   // 0 - 23
+    UINT8 Minute; // 0 - 59
+    UINT8 Second; // 0 - 59
+    UINT8 Pad1;
+    UINT32 Nanosecond; // 0 - 999,999,999
+    INT16 TimeZone;    // —1440 to 1440 or 2047
+    UINT8 Daylight;
+    UINT8 Pad2;
+} EFI_TIME;
+
 typedef struct _EFI_KEY_OPTION
 {
     EFI_BOOT_KEY_DATA KeyData;
@@ -261,25 +276,6 @@ typedef struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
 
 /* @End SimpleTextProtocol */
 
-/* RuntimeServices */
-typedef struct _EFI_RUNTIME_SERVICES
-{
-    EFI_TABLE_HEADER Hdr;
-    CHAR8 _buf_rs1[24];
-    UINT64 _buf_rs2[4];
-    UINT64 _buf_rs3[2];
-    UIIINT64 _buf_rs4[3];
-    UINT64 _buf_rs5;
-    VOID(*ResetSystem)
-    (
-        IN EFI_RESET_TYPE ResetType,
-        IN EFI_STATUS ResetStatus,
-        IN UINTN DataSize,
-        IN VOID *ResetData OPTIONAL);
-} EFI_RUNTIME_SERVICES;
-
-/* @End RuntimeServices */
-
 /* BootServices */
 
 #include "bs.h"
@@ -379,6 +375,25 @@ typedef _EFI_BOOT_SERVICES
 
 /* @End BootServices */
 
+/* RuntimeServices */
+typedef struct _EFI_RUNTIME_SERVICES
+{
+    EFI_TABLE_HEADER Hdr;
+    CHAR8 _buf_rs1[24];
+    UINT64 _buf_rs2[4];
+    UINT64 _buf_rs3[2];
+    UIIINT64 _buf_rs4[3];
+    UINT64 _buf_rs5;
+    VOID(*ResetSystem)
+    (
+        IN EFI_RESET_TYPE ResetType,
+        IN EFI_STATUS ResetStatus,
+        IN UINTN DataSize,
+        IN VOID *ResetData OPTIONAL);
+} EFI_RUNTIME_SERVICES;
+
+/* @End RuntimeServices */
+
 typedef struct
 {
     INT32 RelativeMovementX;
@@ -396,21 +411,6 @@ typedef struct
     BOOLEAN LeftButton;
     BOOLEAN RightButton;
 } EFI_SIMPLE_POINTER_MODE;
-
-typedef struct
-{
-    UINT16 Year;  // 1900 - 9999
-    UINT8 Month;  // 1 - 12
-    UINT8 Day;    // 1 - 31
-    UINT8 Hour;   // 0 - 23
-    UINT8 Minute; // 0 - 59
-    UINT8 Second; // 0 - 59
-    UINT8 Pad1;
-    UINT32 Nanosecond; // 0 - 999,999,999
-    INT16 TimeZone;    // —1440 to 1440 or 2047
-    UINT8 Daylight;
-    UINT8 Pad2;
-} EFI_TIME;
 
 typedef struct
 {
