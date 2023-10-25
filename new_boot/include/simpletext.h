@@ -23,13 +23,26 @@ typedef struct _EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL
     EFI_UNREGISTER_KEYSTROKE_NOTIFY UnregisterKeyNotify;
 } EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL;
 
-typedef 
+typedef EFI_STATUS(EFIAPI *EFI_INPUT_READ_KEY_EX)(
+    IN struct _EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
+    OUT EFI_KEY_DATA *KeyData);
 
-typedef 
+typedef EFI_STATUS(EFIAPI *EFI_SET_STATE)(
+    IN struct _EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
+    IN EFI_KEY_TOGGLE_STATE *KeyToggleState);
 
-typedef 
+typedef EFI_STATUS(EFIAPI *EFI_KEY_NOTIFY_FUNCTION)(
+    IN EFI_KEY_DATA *KeyData);
 
-typedef 
+typedef EFI_STATUS(EFIAPI *EFI_REGISTER_KEYSTROKE_NOTIFY)(
+    IN struct _EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
+    IN EFI_KEY_DATA *KeyData,
+    IN EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction,
+    OUT VOID **NotifyHandle);
+
+typedef EFI_STATUS(EFIAPI *EFI_UNREGISTER_KEYSTROKE_NOTIFY)(
+    IN struct _EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *This,
+    IN VOID *NotificationHandle);
 
 /* SimpleTextInputProtocol */
 

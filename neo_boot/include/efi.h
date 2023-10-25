@@ -189,6 +189,20 @@ typedef struct _EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL
         IN VOID *NotificationHandle);
 } EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL;
 
+/* SimpleTextInputProtocol */
+typedef struct _EFI_SIMPLE_TEXT_INPUT_PROTOCOL
+{
+    EFI_STATUS(*Reset)
+    (
+        IN struct _EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This,
+        IN BOOLEAN ExtendedVerification);
+    EFI_STATUS(*ReadKeyStroke)
+    (
+        IN struct _EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This,
+        OUT EFI_INPUT_KEY *Key);
+    EFI_EVENT WaitForKey;
+} EFI_SIMPLE_TEXT_INPUT_PROTOCOL;
+
 typedef struct
 {
     INT32 RelativeMovementX;
