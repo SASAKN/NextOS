@@ -55,6 +55,14 @@ typedef struct
     UINT8 Pad2;
 } EFI_TIME;
 
+
+typedef struct
+{
+    UINT32 Resolution;
+    UINT32 Accuracy;
+    BOOLEAN SetsToZero;
+} EFI_TIME_CAPABILITIES;
+
 typedef struct _EFI_KEY_OPTION
 {
     EFI_BOOT_KEY_DATA KeyData;
@@ -489,13 +497,13 @@ typedef enum
 
 typedef struct EFI_GRAPHICS_OUTPUT_PROTCOL
 {
-    EFI_STATUS (*QueryMode)
+    EFI_STATUS(*QueryMode)
     (
         IN EFI_GRAPHICS_OUTPUT_PROTOCOL *This,
         IN UINT32 ModeNumber,
         OUT UINTN *SizeOfInfo
             OUT EFI_GRAPHICS_OUTPUT_MODE_INFORMATION **Info);
-    EFI_STATUS (*SetMode)
+    EFI_STATUS(*SetMode)
     (
         IN EFI_GRAPHICS_OUTPUT_PROTOCOL *This,
         IN UINT32 ModeNumber);
@@ -515,9 +523,7 @@ typedef struct EFI_GRAPHICS_OUTPUT_PROTCOL
 
 /* @End GraphicsOutputProtocol */
 
-/*  */
-
-
+/* SimplePointerProtocol */
 
 typedef struct
 {
@@ -537,12 +543,21 @@ typedef struct
     BOOLEAN RightButton;
 } EFI_SIMPLE_POINTER_MODE;
 
-typedef struct
+typedef struct _EFI_SIMPLE_POINTTER_PROTOCOL
 {
-    UINT32 Resolution;
-    UINT32 Accuracy;
-    BOOLEAN SetsToZero;
-} EFI_TIME_CAPABILITIES;
+    EFI_STATUS(*Reset)
+    (
+        IN EFI_SIMPLE_POINTER_PROTOCOL *This,
+        IN BOOLEAN ExtendedVerification);
+    EFI_STATUS(*GetState)
+    (
+        IN EFI_SIMPLE_POINTER_PROTOCOL *This,
+        OUT EFI_SIMPLE_POINTER_STATE *State);
+    EFI_EVENT WaitForInput;
+    EFI_SIMPLE_POINTER_MODE *Mode;
+};
+
+/* @End SimplePointerProtocol */
 
 /* EFI_PROPERTIES_TABLE */
 typedef struct
