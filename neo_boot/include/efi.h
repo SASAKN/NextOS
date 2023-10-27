@@ -147,6 +147,22 @@ typedef enum
     EfiResetPlatformSpecific
 } EFI_RESET_TYPE;
 
+typedef struct _EFI_CONFIGURATION_TABLE
+{
+    EFI_GUID VendorGuid;
+    VOID *VendorTable;
+} EFI_CONFIGURATION_TABLE;
+
+/* EFI_TABLE_HEADER */
+typedef struct _EFI_TABLE_HEADER
+{
+    UINT64 Signature;
+    UINT32 Revision;
+    UINT32 HeaderSize;
+    UINT32 CRC32;
+    UINT32 Reserved;
+} EFI_TABLE_HEADER;
+
 typedef struct _EFI_OPEN_PROTOCOL_INFORMATION_ENTRY
 {
     EFI_HANDLE AgentHandle;
@@ -491,6 +507,8 @@ typedef struct EFI_GRAPHICS_OUTPUT_PROTCOL
 
 /* @End GraphicsOutputProtocol */
 
+/*  */
+
 
 
 typedef struct
@@ -517,22 +535,6 @@ typedef struct
     UINT32 Accuracy;
     BOOLEAN SetsToZero;
 } EFI_TIME_CAPABILITIES;
-
-typedef struct
-{
-    EFI_GUID VendorGuid;
-    VOID *VendorTable;
-} EFI_CONFIGURATION_TABLE;
-
-/* EFI_TABLE_HEADER */
-typedef struct
-{
-    UINT64 Signature;
-    UINT32 Revision;
-    UINT32 HeaderSize;
-    UINT32 CRC32;
-    UINT32 Reserved;
-} EFI_TABLE_HEADER;
 
 /* EFI_RT_PROPERTIES_TABLE */
 typedef struct
