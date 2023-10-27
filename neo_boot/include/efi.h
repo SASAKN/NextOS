@@ -501,7 +501,7 @@ typedef enum
     EfiGraphicsOutputBltOperationMax
 } EFI_GRAPHICS_OUTPUT_BLT_OPERATION;
 
-typedef struct EFI_GRAPHICS_OUTPUT_PROTCOL
+typedef struct _EFI_GRAPHICS_OUTPUT_PROTOCOL
 {
     EFI_STATUS(*QueryMode)
     (
