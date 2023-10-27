@@ -17,6 +17,14 @@ typedef struct _EFI_GUID
     UINT8 Data4[8];
 } EFI_GUID;
 
+/* EFI_PROPERTIES_TABLE */
+typedef struct
+{
+    UINT32 Version;
+    UINT32 Length;
+    UINT64 MemoryProtectionAttribute;
+} EFI_PROPERTIES_TABLE;
+
 typedef struct _EFI_LOAD_OPTION
 {
     UINT32 Attributes;
@@ -558,13 +566,5 @@ typedef struct _EFI_SIMPLE_POINTTER_PROTOCOL
 };
 
 /* @End SimplePointerProtocol */
-
-/* EFI_PROPERTIES_TABLE */
-typedef struct
-{
-    UINT32 Version;
-    UINT32 Length;
-    UINT64 MemoryProtectionAttribute;
-} EFI_PROPERTIES_TABLE;
 
 #endif
