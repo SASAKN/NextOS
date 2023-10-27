@@ -310,7 +310,7 @@ typedef struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
 
 #include "bs.h"
 
-typedef _EFI_BOOT_SERVICES
+typedef struct _EFI_BOOT_SERVICES
 {
     EFI_TABLE_HEADER Hdr;
 
@@ -401,8 +401,7 @@ typedef _EFI_BOOT_SERVICES
     EFI_COPY_MEM CopyMem;              // EFI 1.1+
     EFI_SET_MEM SetMem;                // EFI 1.1+
     EFI_CREATE_EVENT_EX CreateEventEx; // UEFI 2.0+
-}
-EFI_BOOT_SERVICES;
+} EFI_BOOT_SERVICES;
 
 /* @End BootServices */
 

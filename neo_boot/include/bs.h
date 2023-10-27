@@ -260,9 +260,8 @@ EFI_STATUS
 
 typedef
 EFI_STATUS
-EFIAPI *EFI_UNINSTALL_MULTIPLE_PROTOCOL_INTERFACES) (
-   IN EFI_HANDLE Handle,
-   …
+(EFIAPI *EFI_UNINSTALL_MULTIPLE_PROTOCOL_INTERFACES) (
+   IN EFI_HANDLE Handle
   );
 
 typedef
@@ -271,10 +270,9 @@ EFI_STATUS
    IN BOOLEAN                          BootPolicy,
    IN EFI_HANDLE                       ParentImageHandle,
    IN EFI_DEVICE_PATH_PROTOCOL         *DevicePath   OPTIONAL,
-   IN VOID                             *SourceBuffer OPTIONAL
+   IN VOID                             *SourceBuffer OPTIONAL,
    IN UINTN                            SourceSize,
-   OUT EFI_HANDLE                      *ImageHandle
-   );
+   OUT EFI_HANDLE                      *ImageHandle);
 
 typedef
 EFI_STATUS
@@ -288,13 +286,6 @@ typedef
 EFI_STATUS
 (EFIAPI *EFI_IMAGE_UNLOAD) (
    IN EFI_HANDLE           ImageHandle
-   );
-
-typedef
-EFI_STATUS
-(EFIAPI *EFI_IMAGE_ENTRY_POINT) (
-   IN EFI_HANDLE                             ImageHandle,
-   IN EFI_SYSTEM_TABLE                       *SystemTable
    );
 
 typedef
