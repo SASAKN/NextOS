@@ -698,17 +698,11 @@ typedef struct _EFI_LOADED_IMAGE_PROTOCOL
     UINT32 Revision;
     EFI_HANDLE ParentHandle;
     EFI_SYSTEM_TABLE *SystemTable;
-
-    // Source location of the image
     EFI_HANDLE DeviceHandle;
     EFI_DEVICE_PATH_PROTOCOL *FilePath;
     VOID *Reserved;
-
-    // Image’s load options
     UINT32 LoadOptionsSize;
     VOID *LoadOptions;
-
-    // Location where image was loaded
     VOID *ImageBase;
     UINT64 ImageSize;
     EFI_MEMORY_TYPE ImageCodeType;
@@ -783,5 +777,74 @@ typedef struct _EFI_DEVICE_PATH_UTILITIES_PROTOCOL
 /* @End EFI_DEVICE_PATH_UTILITIES_PROTOCOL */
 
 /* @End DeviceProtocols */
+
+/* Multi Core CPU */
+
+typedef struct EFI_CPU_PHYSICAL_LOCATION
+{
+    UINT32 Package;
+    UINT32 Core;
+    UINT32 Thread;
+} EFI_CPU_PHYSICAL_LOCATION;
+
+typedef struct EFI_PROCESSOR_INFOMATION
+{
+    UINT64 ProcessorId;
+    UINT32 StatusFlag;
+    EFI_CPU_PHYSICAL_LOCATION Location;
+} EFI_PROCESSOR_INFOMATION;
+
+typedef struct EFI_MP_SERVICES_PROTOCOL
+{
+    UINT64(*GetNumberOfProcessors)
+    (
+        struct EFI_MP_SERVICES_PROTOCOL *This,
+        UINT64 *NumberOfProcessors,
+        UINT64 *NumberOfEnabledProcessors);
+    UINT64(*GetProcessorInfo)
+    (
+        struct EFI_MP_SERVICES_PROTOCOL *This,
+        UINT64 ProcessorNumber,
+        EFI_PROCESSOR_INFOMATION *ProcessorInfoBuffer);
+    UINT64(*StartupAllAPs)
+    (
+        struct EFI_MP_SERVICES_PROTOCOL *This,
+        VOID (*Procedure)(VOID *ProcedureArgument),
+        UINT8 SingleThread,
+        VOID *WaitEvent,
+        UINT64 TimeoutInMicroSeconds,
+        VOID *ProcudureArgument,
+        UINT64 **FailedCpuList);
+    UINT64(*StartuphisAP)
+    (
+        struct EFI_MP_SERVICES_PROTOCOL *This,
+        VOID (*Procudure)(VOID *ProcedureArgument),
+        UINT64 ProcessorNumber,
+        VOID *WaitEvent,
+        UINT64 TimeoutInMicroseconds,
+        VOID *ProcedureArgument,
+        UINT8 *Finished);
+    UINT64(*SwitchBSP)
+    (
+        struct EFI_MP_SERVICES_PROTOCOL *This,
+        UINT64 ProcessorNumber,
+        UINT8 EnableOldBSP);
+    UINT64(*EnableDisableAP)
+    (
+        struct EFI_MP_SERVICES_PROTOCOL *This,
+        UINT64 ProcessorNumber,
+        UINT8 EnableAP,
+        UINT32 *HealthFlag);
+    UINT64(*WhoAmI)
+    (
+        struct EFI_MP_SERVICES_PROTOCOL *This,
+        UINT64 *ProcessorNumber);
+} EFI_MP_SERVICES_PROTOCOL;
+
+/* @End Multi Core CPU */
+
+/* Extern */
+
+
 
 #endif
