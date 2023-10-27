@@ -63,7 +63,6 @@ typedef struct
     UINT8 Pad2;
 } EFI_TIME;
 
-
 typedef struct
 {
     UINT32 Resolution;
@@ -507,17 +506,17 @@ typedef struct EFI_GRAPHICS_OUTPUT_PROTCOL
 {
     EFI_STATUS(*QueryMode)
     (
-        IN EFI_GRAPHICS_OUTPUT_PROTOCOL *This,
+        IN struct _EFI_GRAPHICS_OUTPUT_PROTOCOL *This,
         IN UINT32 ModeNumber,
         OUT UINTN *SizeOfInfo
             OUT EFI_GRAPHICS_OUTPUT_MODE_INFORMATION **Info);
     EFI_STATUS(*SetMode)
     (
-        IN EFI_GRAPHICS_OUTPUT_PROTOCOL *This,
+        IN struct _EFI_GRAPHICS_OUTPUT_PROTOCOL *This,
         IN UINT32 ModeNumber);
     EFI_STATUS(*Blt)
     (
-        IN EFI_GRAPHICS_OUTPUT_PROTOCOL *This,
+        IN struct _EFI_GRAPHICS_OUTPUT_PROTOCOL *This,
         IN OUT EFI_GRAPHICS_OUTPUT_BLT_PIXEL *BltBuffer, OPTIONAL IN EFI_GRAPHICS_OUTPUT_BLT_OPERATION BltOperation,
         IN UINTN SourceX,
         IN UINTN SourceY,
@@ -555,16 +554,112 @@ typedef struct _EFI_SIMPLE_POINTTER_PROTOCOL
 {
     EFI_STATUS(*Reset)
     (
-        IN EFI_SIMPLE_POINTER_PROTOCOL *This,
+        IN struct _EFI_SIMPLE_POINTER_PROTOCOL *This,
         IN BOOLEAN ExtendedVerification);
     EFI_STATUS(*GetState)
     (
-        IN EFI_SIMPLE_POINTER_PROTOCOL *This,
+        IN struct _EFI_SIMPLE_POINTER_PROTOCOL *This,
         OUT EFI_SIMPLE_POINTER_STATE *State);
     EFI_EVENT WaitForInput;
     EFI_SIMPLE_POINTER_MODE *Mode;
 };
 
 /* @End SimplePointerProtocol */
+
+/* EFI_FILE */
+
+typedef struct _EFI_FILE_INFO
+{
+    UINT64 Size;
+    UINT64 FileSize;
+    UINT64 PhysicalSize;
+    EFI_TIME CreateTime;
+    EFI_TIME LastAccessTime;
+    EFI_TIME ModificationTime;
+    UINT64 Attribute;
+    CHAR16 FileName[]; // FMA サイズの計算が必要になると思われます。
+} EFI_FILE_INFO;
+
+/* EFI_FILE_PROTOCOL */
+
+typedef struct
+{
+    EFI_EVENT Event;
+    EFI_STATUS Status;
+    UINTN BufferSize;
+    VOID *Buffer;
+} EFI_FILE_IO_TOKEN;
+
+typedef struct _EFI_FILE_PROTOCOL
+{
+    UINT64 Revision;
+    EFI_STATUS(*Open)
+    (
+        IN struct _EFI_FILE_PROTOCOL *This,
+        OUT EFI_FILE_PROTOCOL **NewHandle,
+        IN CHAR16 *FileName,
+        IN UINT64 OpenMode,
+        IN UINT64 Attributes);
+    EFI_STATUS(*Close)
+    (
+        IN struct _EFI_FILE_PROTOCOL *This);
+    EFI_STATUS(*Delete)
+    (
+        IN struct _EFI_FILE_PROTOCOL *This);
+    EFI_STATUS(*Read)
+    (
+        IN struct _EFI_FILE_PROTOCOL *This,
+        IN OUT UINTN *BufferSize,
+        OUT VOID);
+    EFI_STATUS(*Write)
+    (
+        IN struct _EFI_FILE_PROTOCOL *This,
+        IN OUT UINTN *BufferSize,
+        IN VOID *Buffer);
+    EFI_STATUS(*GetPosition)
+    (
+        IN struct _EFI_FILE_PROTOCOL *This,
+        OUT UINT64 *Position);
+    EFI_STATUS(*SetPosition)
+    (
+        IN struct _EFI_FILE_PROTOCOL *This,
+        IN UINT64 Position);
+    EFI_STATUS(*GetInfo)
+    (
+        IN struct _EFI_FILE_PROTOCOL *This,
+        IN EFI_GUID *InformationType,
+        IN UINTN BufferSize,
+        IN VOID *Buffer);
+    EFI_STATUS(*SetInfo)
+    (
+        IN struct _EFI_FILE_PROTOCOL *This,
+        IN EFI_GUID *InformationType,
+        IN UINTN BufferSize,
+        IN VOID *Buffer);
+    EFI_STATUS(*Flush)
+    (
+        IN struct _EFI_FILE_PROTOCOL *This);
+    EFI_STATUS (*OpenEx)
+    (
+        IN struct _EFI_FILE_PROTOCOL *This,
+        OUT struct _EFI_FILE_PROTOCOL **NewHandle,
+        IN CHAR16 *FileName,
+        IN UINT64 OpenMode,
+        IN UINT64 Attributes,
+        IN OUT EFI_FILE_IO_TOKEN *Token);
+    EFI_STATUS (*ReadEx) (
+        IN struct _EFI_FILE_PROTOCOL *This,
+        IN OUT EFI_FILE_IO_TOKEN *Token);
+    EFI_STATUS (*WriteEx) (
+        IN struct _EFI_FILE_PROTOCOL *This,
+        IN OUT EFI_FILE_IO_TOKEN *Token);
+    EFI_STATUS (*FlushEx) (
+        IN struct _EFI_FILE_PROTOCOL *This,
+        IN OUT EFI_FILE_IO_TOKEN *Token);
+} EFI_FILE_PROTOCOL;
+
+/* @End EFI_FILE_PROTOCOL */
+
+/* @End EFI_FILE */
 
 #endif

@@ -19,7 +19,7 @@ typedef struct _EFI_SIMPLE_FILE_SYSTEM_PROTOCOL {
 
 typedef
 EFI_STATUS
-(EFIAPI *EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_OPEN_VOLUME) (
+(*EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_OPEN_VOLUME) (
   IN EFI_SIMPLE_FILE_SYSTEM PROTOCOL                   *This,
   OUT EFI_FILE_PROTOCOL                                **Root
   );
@@ -36,7 +36,7 @@ typedef struct {
   VOID                              *Buffer;
   } EFI_FILE_IO_TOKEN;
 
-typedef struct_EFI_FILE_PROTOCOL {
+typedef struct _EFI_FILE_PROTOCOL {
   UINT64                          Revision;
   EFI_FILE_OPEN                   Open;
   EFI_FILE_CLOSE                  Close;
@@ -56,7 +56,7 @@ typedef struct_EFI_FILE_PROTOCOL {
 
 typedef
 EFI_STATUS
-(EFIAPI *EFI_FILE_OPEN) (
+(*EFI_FILE_OPEN) (
   IN EFI_FILE_PROTOCOL                  *This,
   OUT EFI_FILE_PROTOCOL                 **NewHandle,
   IN CHAR16                             *FileName,
@@ -66,19 +66,19 @@ EFI_STATUS
 
 typedef
 EFI_STATUS
-(EFIAPI *EFI_FILE_CLOSE) (
+(*EFI_FILE_CLOSE) (
   IN EFI_FILE_PROTOCOL                     *This
   );
 
 typedef
 EFI_STATUS
-(EFIAPI *EFI_FILE_DELETE) (
+(*EFI_FILE_DELETE) (
   IN EFI_FILE_PROTOCOL                     *This
   );
 
 typedef
 EFI_STATUS
-(EFIAPI *EFI_FILE_READ) (
+(*EFI_FILE_READ) (
   IN EFI_FILE_PROTOCOL           *This,
   IN OUT UINTN                   *BufferSize,
   OUT VOID                       *Buffer
@@ -86,7 +86,7 @@ EFI_STATUS
 
 typedef
 EFI_STATUS
-(EFIAPI *EFI_FILE_WRITE) (
+(*EFI_FILE_WRITE) (
   IN EFI_FILE_PROTOCOL              *This,
   IN OUT UINTN                      *BufferSize,
   IN VOID                           *Buffer
@@ -94,7 +94,7 @@ EFI_STATUS
 
 typedef
 EFI_STATUS
-(EFIAPI *EFI_FILE_OPEN_EX) (
+(*EFI_FILE_OPEN_EX) (
 IN EFI_FILE_PROTOCOL                  *This,
 OUT EFI_FILE_PROTOCOL                 **NewHandle,
 IN CHAR16                             *FileName,
@@ -105,42 +105,42 @@ IN OUT EFI_FILE_IO_TOKEN              *Token
 
 typedef
 EFI_STATUS
-(EFIAPI *EFI_FILE_READ_EX) (
+(*EFI_FILE_READ_EX) (
   IN EFI_FILE_PROTOCOL                      *This,
   IN OUT EFI_FILE_IO_TOKEN                  *Token
   );
 
 typedef
 EFI_STATUS
-(EFIAPI *EFI_FILE_WRITE_EX) (
+(*EFI_FILE_WRITE_EX) (
   IN EFI_FILE_PROTOCOL                *This,
   IN OUT EFI_FILE_IO_TOKEN            *Token
   );
 
 typedef
 EFI_STATUS
-(EFIAPI *EFI_FILE_FLUSH_EX) (
+(*EFI_FILE_FLUSH_EX) (
   IN EFI_FILE_PROTOCOL                       *This,
   IN OUT EFI_FILE_IO_TOKEN                   *Token
   );
 
 typedef
 EFI_STATUS
-(EFIAPI *EFI_FILE_SET_POSITION) (
+(*EFI_FILE_SET_POSITION) (
    IN EFI_FILE_PROTOCOL      *This,
    IN UINT64                 Position
    );
 
 typedef
 EFI_STATUS
-(EFIAPI *EFI_FILE_GET_POSITION) (
+(*EFI_FILE_GET_POSITION) (
   IN EFI_FILE_PROTOCOL                *This,
   OUT UINT64                          *Position
   );
 
 typedef
 EFI_STATUS
-(EFIAPI *EFI_FILE_GET_INFO) (
+(*EFI_FILE_GET_INFO) (
   IN EFI_FILE_PROTOCOL             *This,
   IN EFI_GUID                      *InformationType,
   IN OUT UINTN                     *BufferSize,
@@ -149,7 +149,7 @@ EFI_STATUS
 
 typedef
 EFI_STATUS
-(EFIAPI *EFI_FILE_SET_INFO) (
+(*EFI_FILE_SET_INFO) (
   IN EFI_FILE_PROTOCOL                *This,
   IN EFI_GUID                         *InformationType,
   IN UINTN                            BufferSize,
@@ -158,7 +158,7 @@ EFI_STATUS
 
 typedef
 EFI_STATUS
-(EFIAPI *EFI_FILE_FLUSH) (
+(*EFI_FILE_FLUSH) (
   IN EFI_FILE_PROTOCOL             *This
   );
 
