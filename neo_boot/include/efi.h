@@ -580,17 +580,19 @@ typedef struct _EFI_FILE_INFO
     CHAR16 FileName[]; // FMA サイズの計算が必要になると思われます。
 } EFI_FILE_INFO;
 
-typedef struct _EFI_FILE_SYSTEM_INFO {
+typedef struct _EFI_FILE_SYSTEM_INFO
+{
     UINT64 Size;
     BOOLEAN ReadOnly;
     UINT64 VolumeSize;
     UINT64 FreeSpace;
     UINT32 BlockSize;
-    CHAR16 VolumeLabel[]; //FMA サイズの計算が必要
+    CHAR16 VolumeLabel[]; // FMA サイズの計算が必要
 };
 
-typedef struct _EFI_FILE_SYSTEM_VOLUME_LABEL {
-    CHAR16 VolumeLable[]; //FMA サイズの計算が必要
+typedef struct _EFI_FILE_SYSTEM_VOLUME_LABEL
+{
+    CHAR16 VolumeLable[]; // FMA サイズの計算が必要
 }
 
 /* EFI_FILE_PROTOCOL */
@@ -652,7 +654,7 @@ typedef struct _EFI_FILE_PROTOCOL
     EFI_STATUS(*Flush)
     (
         IN struct _EFI_FILE_PROTOCOL *This);
-    EFI_STATUS (*OpenEx)
+    EFI_STATUS(*OpenEx)
     (
         IN struct _EFI_FILE_PROTOCOL *This,
         OUT struct _EFI_FILE_PROTOCOL **NewHandle,
@@ -660,13 +662,16 @@ typedef struct _EFI_FILE_PROTOCOL
         IN UINT64 OpenMode,
         IN UINT64 Attributes,
         IN OUT EFI_FILE_IO_TOKEN *Token);
-    EFI_STATUS (*ReadEx) (
+    EFI_STATUS(*ReadEx)
+    (
         IN struct _EFI_FILE_PROTOCOL *This,
         IN OUT EFI_FILE_IO_TOKEN *Token);
-    EFI_STATUS (*WriteEx) (
+    EFI_STATUS(*WriteEx)
+    (
         IN struct _EFI_FILE_PROTOCOL *This,
         IN OUT EFI_FILE_IO_TOKEN *Token);
-    EFI_STATUS (*FlushEx) (
+    EFI_STATUS(*FlushEx)
+    (
         IN struct _EFI_FILE_PROTOCOL *This,
         IN OUT EFI_FILE_IO_TOKEN *Token);
 } EFI_FILE_PROTOCOL;
@@ -677,43 +682,106 @@ typedef struct _EFI_FILE_PROTOCOL
 typedef struct _EFI_SIMPLE_FILE_SYSTEM_PROTOCOL
 {
     UINT64 Revision;
-    EFI_STATUS (*OpenVolume) (
+    EFI_STATUS(*OpenVolume)
+    (
         IN struct _EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *This,
-        OUT EFI_FILE_PROTOCOL **Root
-    );
+        OUT EFI_FILE_PROTOCOL **Root);
 };
 
 /* @End EFI_SIMPLE_FILE_SYSTEM_PROTOCOL */
 
+/* @End EFI_FILE */
+
 /* EFI_LOADED_IMAGE_PROTOCOL */
-typedef struct _EFI_LOADED_IMAGE_PROTOCOL{
-   UINT32                        Revision;
-   EFI_HANDLE                    ParentHandle;
-   EFI_SYSTEM_TABLE              *SystemTable;
+typedef struct _EFI_LOADED_IMAGE_PROTOCOL
+{
+    UINT32 Revision;
+    EFI_HANDLE ParentHandle;
+    EFI_SYSTEM_TABLE *SystemTable;
 
-   // Source location of the image
-   EFI_HANDLE                    DeviceHandle;
-   EFI_DEVICE_PATH_PROTOCOL      *FilePath;
-   VOID                          *Reserved;
+    // Source location of the image
+    EFI_HANDLE DeviceHandle;
+    EFI_DEVICE_PATH_PROTOCOL *FilePath;
+    VOID *Reserved;
 
-   // Image’s load options
-   UINT32                        LoadOptionsSize;
-   VOID                          *LoadOptions;
+    // Image’s load options
+    UINT32 LoadOptionsSize;
+    VOID *LoadOptions;
 
-   // Location where image was loaded
-   VOID                          *ImageBase;
-   UINT64                        ImageSize;
-   EFI_MEMORY_TYPE               ImageCodeType;
-   EFI_MEMORY_TYPE               ImageDataType;
-   EFI_STATUS(*Unload) (
-    IN EFI_HANDLE ImageHandle
-   );
+    // Location where image was loaded
+    VOID *ImageBase;
+    UINT64 ImageSize;
+    EFI_MEMORY_TYPE ImageCodeType;
+    EFI_MEMORY_TYPE ImageDataType;
+    EFI_STATUS(*Unload)
+    (
+        IN EFI_HANDLE ImageHandle);
 } EFI_LOADED_IMAGE_PROTOCOL;
 
 /* @End EFI_LOADED_PROTOCOL */
 
+/* Device Protocol */
 
+/* EFI_DEVICE_PATH_TO_TEXT_PROTOCOL */
+typedef struct _EFI_DEVICE_PATH_TO_TEXT_PROTOCOL
+{
+    CHAR16 *(*ConvertDeviceNodeToText)(
+        IN CONST EFI_DEVICE_PATH_PROTOCOL *DeviceNode,
+        IN BOOLEAN DisplayOnly,
+        IN BOOLEAN AllowShortcuts);
+    CHAR16 *(*ConvertDevicePathToText)(
+        IN CONST EFI_DEVICE_PATH_PROTOCOL *DevicePath,
+        IN BOOLEAN DisplayOnly,
+        IN BOOLEAN AllowShortcuts);
+} EFI_DEVICE_PATH_TO_TEXT_PROTOCOL;
 
-/* @End EFI_FILE */
+/* @End EFI_DEVICE_PATH_TO_TEXT_PROTOCOL */
+
+/* EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL */
+
+typedef struct _EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL
+{
+    EFI_DEVICE_PATH_PROTOCOL *(*ConvertTextToDeviceNode)(
+        IN CONST CHAR16 *TextDeviceNode);
+    EFI_DEVICE_PATH_PROTOCOL *(*ConvertTextToDevicePath)(
+        IN CONST CHAR16 *TextDevicePath);
+} EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL;
+
+/* @End EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL */
+
+/* EFI_DEVICE_PATH_UTILITIES_PROTOCOL */
+
+typedef struct _EFI_DEVICE_PATH_UTILITIES_PROTOCOL
+{
+    UINTN(*GetDevicePathSize)
+    (
+        IN CONST EFI_DEVICE_PATH_PROTOCOL *DevicePath);
+    EFI_DEVICE_PATH_PROTOCOL *(*DuplicateDevicePath)(
+        IN CONST EFI_DEVICE_PATH_PROTOCOL *Src1,
+        IN CONST EFI_DEVICE_PATH_PROTOCOL *Src2);
+    EFI_DEVICE_PATH_PROTOCOL *(*AppendDevicePath)(
+        IN CONST EFI_DEVICE_PATH_PROTOCOL *Src1,
+        IN CONST EFI_DEVICE_PATH_PROTOCOL *Src2);
+    EFI_DEVICE_PATH_PROTOCOL *(*AppendDeviceNode)(
+        IN CONST EFI_DEVICE_PATH_PROTOCOL *DevicePath,
+        IN CONST EFI_DEVICE_PATH_PROTOCOL *DeviceNode);
+    EFI_DEVICE_PATH_PROTOCOL *(*AppendDevicePathInstance)(
+        IN CONST EFI_DEVICE_PATH_PROTOCOL *DevicePath,
+        IN CONST EFI_DEVICE_PATH_PROTOCOL *DevicePathInstance);
+    EFI_DEVICE_PATH_PROTOCOL *(*GetNextDevicePathInstance)(
+        IN OUT EFI_DEVICE_PATH_PROTOCOL **DevicePathInstance,
+        OUT UINTN *DevicePathInstanceSize *OPTIONAL);
+    BOOLEAN(*IsDevicePathMultiInstance)
+    (
+        IN CONST EFI_DEVICE_PATH_PROTOCOL *DevicePath);
+    EFI_DEVICE_PATH_PROTOCOL *(*CreateDeviceNode)(
+        IN UINT8 NodeType,
+        IN UINT8 NodeSubType,
+        IN UINT16 NodeLength);
+} EFI_DEVICE_PATH_UTILITIES_PROTOCOL;
+
+/* @End EFI_DEVICE_PATH_UTILITIES_PROTOCOL */
+
+/* @End DeviceProtocols */
 
 #endif
