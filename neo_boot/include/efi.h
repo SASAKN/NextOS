@@ -580,6 +580,19 @@ typedef struct _EFI_FILE_INFO
     CHAR16 FileName[]; // FMA サイズの計算が必要になると思われます。
 } EFI_FILE_INFO;
 
+typedef struct _EFI_FILE_SYSTEM_INFO {
+    UINT64 Size;
+    BOOLEAN ReadOnly;
+    UINT64 VolumeSize;
+    UINT64 FreeSpace;
+    UINT32 BlockSize;
+    CHAR16 VolumeLabel[]; //FMA サイズの計算が必要
+};
+
+typedef struct _EFI_FILE_SYSTEM_VOLUME_LABEL {
+    CHAR16 VolumeLable[]; //FMA サイズの計算が必要
+}
+
 /* EFI_FILE_PROTOCOL */
 
 typedef struct
@@ -659,6 +672,20 @@ typedef struct _EFI_FILE_PROTOCOL
 } EFI_FILE_PROTOCOL;
 
 /* @End EFI_FILE_PROTOCOL */
+
+/* EFI_SIMPLE_FILE_SYSTEM_PROTOCOL */
+typedef struct _EFI_SIMPLE_FILE_SYSTEM_PROTOCOL
+{
+    UINT64 Revision;
+    EFI_STATUS (*OpenVolume) (
+        IN struct _EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *This,
+        OUT EFI_FILE_PROTOCOL **Root
+    );
+};
+
+/* @End EFI_SIMPLE_FILE_SYSTEM_PROTOCOL */
+
+
 
 /* @End EFI_FILE */
 
