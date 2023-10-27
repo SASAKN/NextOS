@@ -153,6 +153,14 @@ typedef struct _EFI_CONFIGURATION_TABLE
     VOID *VendorTable;
 } EFI_CONFIGURATION_TABLE;
 
+/* EFI_RT_PROPERTIES_TABLE */
+typedef struct
+{
+    UINT16 Version;
+    UINT16 Length;
+    UINT32 RuntimeServicesSupported;
+} EFI_RT_PROPERTIES_TABLE;
+
 /* EFI_TABLE_HEADER */
 typedef struct _EFI_TABLE_HEADER
 {
@@ -535,14 +543,6 @@ typedef struct
     UINT32 Accuracy;
     BOOLEAN SetsToZero;
 } EFI_TIME_CAPABILITIES;
-
-/* EFI_RT_PROPERTIES_TABLE */
-typedef struct
-{
-    UINT16 Version;
-    UINT16 Length;
-    UINT32 RuntimeServicesSupported;
-} EFI_RT_PROPERTIES_TABLE;
 
 /* EFI_PROPERTIES_TABLE */
 typedef struct
