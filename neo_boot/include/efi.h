@@ -412,7 +412,7 @@ typedef struct _EFI_RUNTIME_SERVICES
     CHAR8 _buf_rs1[24];
     UINT64 _buf_rs2[4];
     UINT64 _buf_rs3[2];
-    UIIINT64 _buf_rs4[3];
+    UINT64 _buf_rs4[3];
     UINT64 _buf_rs5;
     VOID(*ResetSystem)
     (
@@ -507,8 +507,8 @@ typedef struct EFI_GRAPHICS_OUTPUT_PROTCOL
     (
         IN struct _EFI_GRAPHICS_OUTPUT_PROTOCOL *This,
         IN UINT32 ModeNumber,
-        OUT UINTN *SizeOfInfo
-            OUT EFI_GRAPHICS_OUTPUT_MODE_INFORMATION **Info);
+        OUT UINTN *SizeOfInfo,
+        OUT EFI_GRAPHICS_OUTPUT_MODE_INFORMATION **Info);
     EFI_STATUS(*SetMode)
     (
         IN struct _EFI_GRAPHICS_OUTPUT_PROTOCOL *This,
@@ -549,7 +549,7 @@ typedef struct
     BOOLEAN RightButton;
 } EFI_SIMPLE_POINTER_MODE;
 
-typedef struct _EFI_SIMPLE_POINTTER_PROTOCOL
+typedef struct _EFI_SIMPLE_POINTER_PROTOCOL
 {
     EFI_STATUS(*Reset)
     (
@@ -561,7 +561,7 @@ typedef struct _EFI_SIMPLE_POINTTER_PROTOCOL
         OUT EFI_SIMPLE_POINTER_STATE *State);
     EFI_EVENT WaitForInput;
     EFI_SIMPLE_POINTER_MODE *Mode;
-};
+} EFI_SIMPLE_POINTER_PROTOCOL;
 
 /* @End SimplePointerProtocol */
 
@@ -587,12 +587,7 @@ typedef struct _EFI_FILE_SYSTEM_INFO
     UINT64 FreeSpace;
     UINT32 BlockSize;
     CHAR16 VolumeLabel[]; // FMA サイズの計算が必要
-};
-
-typedef struct _EFI_FILE_SYSTEM_VOLUME_LABEL
-{
-    CHAR16 VolumeLable[]; // FMA サイズの計算が必要
-}
+} EFI_FILE_SYSTEM_INFO;
 
 /* EFI_FILE_PROTOCOL */
 
@@ -610,7 +605,7 @@ typedef struct _EFI_FILE_PROTOCOL
     EFI_STATUS(*Open)
     (
         IN struct _EFI_FILE_PROTOCOL *This,
-        OUT EFI_FILE_PROTOCOL **NewHandle,
+        OUT struct _EFI_FILE_PROTOCOL **NewHandle,
         IN CHAR16 *FileName,
         IN UINT64 OpenMode,
         IN UINT64 Attributes);
@@ -624,7 +619,7 @@ typedef struct _EFI_FILE_PROTOCOL
     (
         IN struct _EFI_FILE_PROTOCOL *This,
         IN OUT UINTN *BufferSize,
-        OUT VOID);
+        OUT VOID *Buffer);
     EFI_STATUS(*Write)
     (
         IN struct _EFI_FILE_PROTOCOL *This,
@@ -685,7 +680,7 @@ typedef struct _EFI_SIMPLE_FILE_SYSTEM_PROTOCOL
     (
         IN struct _EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *This,
         OUT EFI_FILE_PROTOCOL **Root);
-};
+} EFI_SIMPLE_FILE_SYSTEM_PROTOCOL;
 
 /* @End EFI_SIMPLE_FILE_SYSTEM_PROTOCOL */
 
@@ -763,7 +758,7 @@ typedef struct _EFI_DEVICE_PATH_UTILITIES_PROTOCOL
         IN CONST EFI_DEVICE_PATH_PROTOCOL *DevicePathInstance);
     EFI_DEVICE_PATH_PROTOCOL *(*GetNextDevicePathInstance)(
         IN OUT EFI_DEVICE_PATH_PROTOCOL **DevicePathInstance,
-        OUT UINTN *DevicePathInstanceSize *OPTIONAL);
+        OUT UINTN *DevicePathInstanceSize OPTIONAL);
     BOOLEAN(*IsDevicePathMultiInstance)
     (
         IN CONST EFI_DEVICE_PATH_PROTOCOL *DevicePath);
