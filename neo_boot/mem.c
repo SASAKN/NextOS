@@ -85,7 +85,7 @@ EFI_STATUS init_memmap(struct MemoryMap *map)
 {
 	unsigned long long status;
 	status = ST->BootServices->GetMemoryMap(
-		&map->map_size, (struct EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key,
+		&map->map_size, (EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key,
 		&map->descriptor_size, &map->descriptor_version);
 	assert(status, L"GetMemoryMap");
 	map->memmap_desc_entry = map->map_size / map->descriptor_size;
@@ -95,7 +95,6 @@ EFI_STATUS init_memmap(struct MemoryMap *map)
 
 
 void save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *file) {
-	EFI_STATUS status;
 	UINT64 size;
 	char buffer[2000];
 	char tmp[100];
