@@ -2,6 +2,10 @@
 #define _EFI_H
 
 #include "types.h"
+#include "macros.h"
+#include "guid.h"
+/* #include "bs.h" */
+/* 絶対にこれを入力しないでください。 */
 
 typedef struct _EFI_INPUT_KEY
 {
