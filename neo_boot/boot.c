@@ -6,6 +6,7 @@
 #include "include/elf.h"
 #include "include/graphics.h"
 #include "include/mem.h"
+#include "include/macros.h"
 
 /* 実行中のファイルの場所を表示 */
 EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle)
@@ -23,13 +24,12 @@ EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle)
 void ExitBootLoader(EFI_HANDLE *ImageHandle, struct MemoryMap *map)
 {
   EFI_STATUS status;
-  unsigned int desc_ver;
   UINT64 map_key = map->map_key;
   do
   {
     map->map_size = MEM_DESC_SIZE;
     status = ST->BootServices->GetMemoryMap(
-        &map->map_size, (struct EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key,
+        &map->map_size, (EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key,
         &map->descriptor_size, &map->descriptor_version);
   } while (!check_warn_error(status, L"GetMemoryMap"));
   status = BS->ExitBootServices(ImageHandle, map_key);

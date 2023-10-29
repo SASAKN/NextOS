@@ -102,6 +102,12 @@
 #define EFI_OPEN_PROTOCOL_BY_DRIVER            0x00000010
 #define EFI_OPEN_PROTOCOL_EXCLUSIVE            0x00000020
 
+/* EFI_FILE_MODE */
+#define EFI_FILE_MODE_READ 0x0000000000000001
+#define EFI_FILE_MODE_WRITE 0x0000000000000002
+#define EFI_FILE_MODE_CREATE 0x8000000000000000
+#define EFI_FILE_READ_ONLY 0x0000000000000001
+
 /* Variable Attributes */
 #define EFI_VARIABLE_NON_VOLATILE                           0x00000001
 #define EFI_VARIABLE_BOOTSERVICE_ACCESS                     0x00000002
@@ -213,7 +219,6 @@
 #define EFI_BROWN                              0x06
 #define EFI_LIGHTGRAY                          0x07
 #define EFI_BRIGHT                             0x08
-#define EFI_DARKGRAY(EFI_BLACK \| EFI_BRIGHT)  0x08
 #define EFI_LIGHTBLUE                          0x09
 #define EFI_LIGHTGREEN                         0x0A
 #define EFI_LIGHTCYAN                          0x0B

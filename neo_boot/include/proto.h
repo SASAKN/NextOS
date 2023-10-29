@@ -1,6 +1,10 @@
 #ifndef _BOOT_PROTO_H
 #define _BOOT_PROTO_H
 
+#include "efi.h"
+#include "mem.h"
+#include "graphics.h"
+
 /* Boot Proto Defines */
 /* EFI */
 void efi_init(EFI_SYSTEM_TABLE *SystemTable);
