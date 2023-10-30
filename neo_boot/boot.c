@@ -96,28 +96,32 @@ EFI_STATUS EfiMain(
   /* カーネルの読み込み処理 */
   EFI_FILE_PROTOCOL *kernel_file;
   root_dir->Open(root_dir, &kernel_file, L"\\kernel.elf", EFI_FILE_MODE_READ, 0);
+  // PrintOK(SystemTable);
+  // custom_printf("Read\n");
+  // UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 13;
+  // UINT8 file_info_buffer[(sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 13)];
+  // kernel_file->GetInfo(kernel_file, &fi_guid, file_info_size, file_info_buffer);
+  // EFI_FILE_INFO *file_info = (EFI_FILE_INFO *)file_info_buffer;
+  // UINTN kernel_file_size = file_info->FileSize;
+  // EFI_PHYSICAL_ADDRESS kernel_base_addr = 0x100000;
+  // SystemTable->BootServices->AllocatePages(AllocateAddress, EfiLoaderData, (kernel_file_size + 0xfff) / 0x1000, &kernel_base_addr);
+  // PrintOK(SystemTable);
+  // custom_printf("AllocatePages\n");
+  // status = kernel_file->Read(kernel_file, &kernel_file_size, (VOID *)kernel_base_addr);
+  // assert(status, L"KernelFile");
+  /* 最後のOK */
   PrintOK(SystemTable);
-  custom_printf("Read\n");
-  UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 13;
-  UINT8 file_info_buffer[(sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 13)];
-  kernel_file->GetInfo(kernel_file, &fi_guid, file_info_size, file_info_buffer);
-  EFI_FILE_INFO *file_info = (EFI_FILE_INFO *)file_info_buffer;
-  UINTN kernel_file_size = file_info->FileSize;
-  EFI_PHYSICAL_ADDRESS kernel_base_addr = 0x100000;
-  SystemTable->BootServices->AllocatePages(AllocateAddress, EfiLoaderData, (kernel_file_size + 0xfff) / 0x1000, &kernel_base_addr);
-  PrintOK(SystemTable);
-  custom_printf("AllocatePages\n");
-  kernel_file->Read(kernel_file, &kernel_file_size, (VOID *)kernel_base_addr);
+  custom_printf("KernelFile\n");
   /* ブートローダーから離脱 */
   ExitBootLoader(ImageHandle, &map);
-  /* カーネルの読み出し */
-  UINT64 entry_addr = *(UINT64 *)(kernel_base_addr + 24);
-  typedef void EntryPointType(void);
-  EntryPointType *entry_point = (EntryPointType *)entry_addr;
-  entry_point();
   /* All Done ! */
   custom_printf("All Done !\n");
-  while (TRUE)
-    ;
+  // /* カーネルの読み出し */
+  // UINT64 entry_addr = *(UINT64 *)(kernel_base_addr + 24);
+  // typedef void EntryPointType(void);
+  // EntryPointType *entry_point = (EntryPointType *)entry_addr;
+  // entry_point();
+  // while (TRUE)
+  //   ;
   return EFI_SUCCESS;
 };
