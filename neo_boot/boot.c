@@ -111,10 +111,10 @@ EFI_STATUS EfiMain(
   /* ブートローダーから離脱 */
   ExitBootLoader(ImageHandle, &map);
   /* カーネルの読み出し */
-  // UINT64 entry_addr = *(UINT64 *)(kernel_base_addr + 24);
-  // typedef void EntryPointType(void);
-  // EntryPointType *entry_point = (EntryPointType *)entry_addr;
-  // entry_point();
+  UINT64 entry_addr = *(UINT64 *)(kernel_base_addr + 24);
+  typedef void EntryPointType(void);
+  EntryPointType *entry_point = (EntryPointType *)entry_addr;
+  entry_point();
   /* All Done ! */
   custom_printf("All Done !\n");
   while (TRUE)
