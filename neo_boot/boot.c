@@ -91,7 +91,7 @@ EFI_STATUS EfiMain(
   map.descriptor_size = 0;
   map.descriptor_version = 0;
   map.map_key = 0;
-  map.map_size = 0;
+  map.map_size = memmap_size;
   /* メモリーマップの初期化,表示,保存 */
   init_memmap(&map);
   print_memmap(&map);
