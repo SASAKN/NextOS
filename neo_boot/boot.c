@@ -28,14 +28,14 @@ void Halt(void) {
 /* UEFIから離脱 */
 void ExitBootLoader(EFI_HANDLE *ImageHandle, struct MemoryMap *memmap)
 {
-  EFI_STATUS status;
+  EFI_STATUS status = 0;
   if (EFI_ERROR(status)) {
-    status = init_memmap(&memmap);
+    status = init_memmap(memmap);
     if (EFI_ERROR(status)) {
-      puts(status);
+      puts((UINT16 *)status);
       Halt();
     }
-    status = gBS->ExitBootServices(image_handle, memmap.map_key);
+    status = ST->BootServices->ExitBootServices(ImageHandle, memmap->map_key);
     if (EFI_ERROR(status)) {
       assert(status, L"ExitBootServices");
       Halt();
@@ -120,19 +120,24 @@ EFI_STATUS EfiMain(
   custom_printf("AllocatePages\n");
   status = kernel_file->Read(kernel_file, &kernel_file_size, (VOID *)kernel_base_addr);
   assert(status, L"KernelFile");
-  /* 最後のOK */
+  /* カーネルファイルの読み出しに成功 */
   PrintOK(SystemTable);
   custom_printf("KernelFile\n");
+  /* カーネルに移ります。 */
+  PrintOK(SystemTable);
+  custom_printf("Now, Jump to Kernel !\n");
   /* ブートローダーから離脱 */
   ExitBootLoader(ImageHandle, &map);
-  // /* All Done ! */
-  // custom_printf("All Done !\n");
-  // // /* カーネルの読み出し */
-  // UINT64 entry_addr = *(UINT64 *)(kernel_base_addr + 24);
-  // typedef void EntryPointType(void);
-  // EntryPointType *entry_point = (EntryPointType *)entry_addr;
-  // entry_point();
-  // while (TRUE)
-  //   ;
+  PrintOK(SystemTable);
+  custom_printf("Welcome to NEOS !\n");
+  /* カーネルの読み出し */
+  UINT64 entry_addr = *(UINT64*)(kernel_base_addr + 24);
+  char buf_final[200];
+  text_gen(buf_final, sizeof(buf_final), "0x%x", entry_addr);
+  custom_printf("NEOS Kernel Entry Point Address :%s\n", buf_final);
+  typedef void EntryPointType(void);
+  EntryPointType* entry_point = (EntryPointType *)kernel_base_addr;
+  entry_point();
+  while (1);
   return EFI_SUCCESS;
 };
