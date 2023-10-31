@@ -20,20 +20,27 @@ EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle)
   return status;
 };
 
+/* Halt */
+void Halt(void) {
+  while(1) __asm__("hlt");
+}
+
 /* UEFIから離脱 */
-void ExitBootLoader(EFI_HANDLE *ImageHandle, struct MemoryMap *map)
+void ExitBootLoader(EFI_HANDLE *ImageHandle, struct MemoryMap *memmap)
 {
   EFI_STATUS status;
-  UINT64 map_key = map->map_key;
-  do
-  {
-    map->map_size = MEM_DESC_SIZE;
-    status = ST->BootServices->GetMemoryMap(
-        &map->map_size, (EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key,
-        &map->descriptor_size, &map->descriptor_version);
-  } while (!check_warn_error(status, L"GetMemoryMap"));
-  status = BS->ExitBootServices(ImageHandle, map_key);
-  assert(status, L"ExitBootServices");
+  if (EFI_ERROR(status)) {
+    status = init_memmap(&memmap);
+    if (EFI_ERROR(status)) {
+      puts(status);
+      Halt();
+    }
+    status = gBS->ExitBootServices(image_handle, memmap.map_key);
+    if (EFI_ERROR(status)) {
+      assert(status, L"ExitBootServices");
+      Halt();
+    }
+  }
 }
 
 /* ベンダーなどの情報を表示 */
