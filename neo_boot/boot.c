@@ -118,14 +118,14 @@ EFI_STATUS EfiMain(
   custom_printf("KernelFile\n");
   /* ブートローダーから離脱 */
   ExitBootLoader(ImageHandle, &map);
-  /* All Done ! */
-  custom_printf("All Done !\n");
-  // /* カーネルの読み出し */
-  UINT64 entry_addr = *(UINT64 *)(kernel_base_addr + 24);
-  typedef void EntryPointType(void);
-  EntryPointType *entry_point = (EntryPointType *)entry_addr;
-  entry_point();
-  while (TRUE)
-    ;
+  // /* All Done ! */
+  // custom_printf("All Done !\n");
+  // // /* カーネルの読み出し */
+  // UINT64 entry_addr = *(UINT64 *)(kernel_base_addr + 24);
+  // typedef void EntryPointType(void);
+  // EntryPointType *entry_point = (EntryPointType *)entry_addr;
+  // entry_point();
+  // while (TRUE)
+  //   ;
   return EFI_SUCCESS;
 };
