@@ -3,7 +3,7 @@
 
 #include "types.h" /* Must be First. */
 
-#define MEM_DESC_SIZE	3000
+#define MEM_DESC_SIZE	4096
 
 /* A memory map for booting */
 struct MemoryMap {
