@@ -35,6 +35,9 @@ cp ${script_dir}/boot.efi ./BOOTX64.efi
 #カーネルもコピー
 cp ${script_dir}/kernel.elf /Volumes/NEOS/kernel.elf
 
+#Oカーネルもコピー
+cp ${script_dir}/kernel.o /Volumes/NEOS/kernel.o
+
 #作業フォルダーに戻る
 cd ${script_dir}
 
