@@ -144,8 +144,6 @@ EFI_STATUS EfiMain(
   custom_printf("Now, Jump to Kernel !\n");
   /* ブートローダーから離脱 */
   ExitBootLoader(ImageHandle, &map);
-  PrintOK(SystemTable);
-  custom_printf("ExitBootServices\n");
   /* oカーネルの読み出し */
   __asm__ volatile ("jmp *0x100000");
   // /* ELFカーネルの読み出し */
