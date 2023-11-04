@@ -120,7 +120,7 @@ EFI_STATUS EfiMain(
   custom_printf("AllocatePages\n");
   status = kernel_file->Read(kernel_file, &kernel_file_size, (VOID *)kernel_base_addr);
   assert(status, L"KernelFile");
-  // /* ELFカーネルの読み込み処理 */
+  // // /* ELFカーネルの読み込み処理 */
   // EFI_FILE_PROTOCOL *kernel_file;
   // root_dir->Open(root_dir, &kernel_file, L"\\kernel.elf", EFI_FILE_MODE_READ, 0);
   // PrintOK(SystemTable);
