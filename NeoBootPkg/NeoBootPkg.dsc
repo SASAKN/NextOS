@@ -21,4 +21,4 @@
     UefiRuntimeServicesTableLib|MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib.inf
 
 [Components]
-    NeoBootPkg/bootloader.inf
+    NeoBootPkg/neoboot.inf

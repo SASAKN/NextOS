@@ -1,7 +1,7 @@
 [Defines]
     INF_VERSION = 0x00010006
     FILE_GUID = 6719d17f-d5df-4be2-bf05-067635a08157
-    BASE_NAME = Loader
+    BASE_NAME = neoboot
     MODULE_TYPE = UEFI_APPLICATION
     VERSION_STRING = 0.01
     ENTRY_POINT = EntryPoint
