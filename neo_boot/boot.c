@@ -130,14 +130,15 @@ EFI_STATUS EfiMain(
   ExitBootLoader(ImageHandle, &map);
   PrintOK(SystemTable);
   custom_printf("ExitBootServices\n");
-  /* カーネルの読み出し */
-  UINT64 entry_addr = 0x100018; //AllocateAddress
-  char buf_final[200];
-  text_gen(buf_final, sizeof(buf_final), "0x%x", entry_addr);
-  custom_printf("NEOS Kernel Entry Point Address :%s\n", buf_final);
-  typedef void EntryPointType(void);
-  EntryPointType* entry_point = (EntryPointType *)entry_addr;
-  entry_point();
+  /* oファイルを読み出す */
+  // /* ELFカーネルの読み出し */
+  // UINT64 entry_addr = 0x100018; //AllocateAddress
+  // char buf_final[200];
+  // text_gen(buf_final, sizeof(buf_final), "0x%x", entry_addr);
+  // custom_printf("NEOS Kernel Entry Point Address :%s\n", buf_final);
+  // typedef void EntryPointType(void);
+  // EntryPointType* entry_point = (EntryPointType *)entry_addr;
+  // // entry_point();
   while (1);
   return EFI_SUCCESS;
 };
