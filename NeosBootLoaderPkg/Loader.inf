@@ -6,7 +6,8 @@
     VERSION_STRING = 0.01
     ENTRY_POINT = EntryPoint
 
-    # VALID_ARCHITECTURES = X64
+[Includes]
+    include
 
 [Sources]
     neoboot.c
