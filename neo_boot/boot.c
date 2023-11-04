@@ -147,7 +147,7 @@ EFI_STATUS EfiMain(
   PrintOK(SystemTable);
   custom_printf("ExitBootServices\n");
   /* oカーネルの読み出し */
-  __asm__ ("jmp *0x100000");
+  // __asm__ volatile ("jmp *0x100000");
   // /* ELFカーネルの読み出し */
   // UINT64 entry_addr = 0x100018; //AllocateAddress
   // char buf_final[200];

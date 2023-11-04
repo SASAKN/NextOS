@@ -1,6 +1,12 @@
 section .text
-global _start
+global start
 
-_start:
+start:
     hlt
-    jmp _start
+
+section .text
+global call_kern
+
+call_kern:
+    jmp start
+    jmp call_kern
