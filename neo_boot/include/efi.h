@@ -642,8 +642,8 @@ typedef struct _EFI_FILE_PROTOCOL
     (
         IN struct _EFI_FILE_PROTOCOL *This,
         IN EFI_GUID *InformationType,
-        IN UINTN BufferSize,
-        IN VOID *Buffer);
+        IN OUT UINTN BufferSize,
+        OUT VOID *Buffer);
     EFI_STATUS(*SetInfo)
     (
         IN struct _EFI_FILE_PROTOCOL *This,
