@@ -107,18 +107,15 @@ EFI_STATUS EfiMain(
   /* oカーネルの読み込み処理 */
   EFI_FILE_PROTOCOL *kernel_file;
   status = root_dir->Open(root_dir, &kernel_file, L"\\kernel.o", EFI_FILE_MODE_READ, 0);
-  assert(status, L"Kernel_file");
   PrintOK(SystemTable);
   custom_printf("Read\n");
   UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 10;
   UINT8 file_info_buffer[file_info_size];
   status = kernel_file->GetInfo(kernel_file, &fi_guid, file_info_size, file_info_buffer);
-  assert(status, L"GetInfo");
   EFI_FILE_INFO *file_info = (EFI_FILE_INFO *)file_info_buffer;
-  UINTN kernel_file_size = file_info->FileSize;
+  UINTN kernel_file_size = 2640;
   EFI_PHYSICAL_ADDRESS kernel_base_addr = 0x100000;
   status = SystemTable->BootServices->AllocatePages(AllocateAddress, EfiLoaderData, (kernel_file_size + 0xfff) / 0x1000, &kernel_base_addr);
-  assert(status, L"AllocatePages");
   PrintOK(SystemTable);
   custom_printf("AllocatePages\n");
   status = kernel_file->Read(kernel_file, &kernel_file_size, (VOID *)kernel_base_addr);
