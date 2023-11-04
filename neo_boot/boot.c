@@ -113,7 +113,7 @@ EFI_STATUS EfiMain(
   UINT8 file_info_buffer[file_info_size];
   status = kernel_file->GetInfo(kernel_file, &fi_guid, file_info_size, file_info_buffer);
   EFI_FILE_INFO *file_info = (EFI_FILE_INFO *)file_info_buffer;
-  UINTN kernel_file_size = 10000;
+  UINTN kernel_file_size = file_info->FileSize;
   EFI_PHYSICAL_ADDRESS kernel_base_addr = 0x100000;
   status = SystemTable->BootServices->AllocatePages(AllocateAddress, EfiLoaderData, (kernel_file_size + 0xfff) / 0x1000, &kernel_base_addr);
   PrintOK(SystemTable);
