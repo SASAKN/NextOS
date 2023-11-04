@@ -110,6 +110,9 @@ EFI_STATUS EfiMain(
   PrintOK(SystemTable);
   custom_printf("Read\n");
   UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 13;
+  char buf_kern[100];
+  text_gen(buf_kern, sizeof(buf_kern), "%u\n", file_info_size);
+  custom_printf("Kernel File Info Size:%s", buf_kern);
   UINT8 file_info_buffer[(sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 13)];
   status = kernel_file->GetInfo(kernel_file, &fi_guid, file_info_size, file_info_buffer);
   assert(status, L"GetInfo");
