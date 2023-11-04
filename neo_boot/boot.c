@@ -106,14 +106,12 @@ EFI_STATUS EfiMain(
   custom_printf("Loading Kernel....\n");
   /* oカーネルの読み込み処理 */
   EFI_FILE_PROTOCOL *kernel_file;
-  root_dir->Open(root_dir, &kernel_file, L"\\kernel.o", EFI_FILE_MODE_READ, 0);
+  status = root_dir->Open(root_dir, &kernel_file, L"\\kernel.o", EFI_FILE_MODE_READ, 0);
+  assert(status, L"Kernel_file");
   PrintOK(SystemTable);
   custom_printf("Read\n");
-  UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 13;
-  char buf_kern[100];
-  text_gen(buf_kern, sizeof(buf_kern), "%u\n", file_info_size);
-  custom_printf("Kernel File Info Size:%s", buf_kern);
-  UINT8 file_info_buffer[(sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 13)];
+  UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 10;
+  UINT8 file_info_buffer[file_info_size];
   status = kernel_file->GetInfo(kernel_file, &fi_guid, file_info_size, file_info_buffer);
   assert(status, L"GetInfo");
   EFI_FILE_INFO *file_info = (EFI_FILE_INFO *)file_info_buffer;
