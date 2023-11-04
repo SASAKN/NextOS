@@ -11,3 +11,19 @@
 [Sources]
     neoboot.c
 
+[Packages]
+    MdePkg/MdePkg.dec
+
+[LibraryClasses]
+    UefiLib
+    UefiApplicationEntryPoint
+
+[Guids]
+    gEfiFileInfoGuid
+    gEfiAcpiTableGuid
+
+[Protocols]
+    gEfiLoadedImageProtocolGuid
+    gEfiLoadFileProtocolGuid
+    gEfiSimpleFileSystemProtocolGuid
+    gEfiBlockIoProtocolGuid
