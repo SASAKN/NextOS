@@ -143,6 +143,13 @@ EFI_STATUS EfiMain(
     root_dir->Open(root_dir, &kernel_file, L"\\kernel.o", EFI_FILE_MODE_READ, 0);
     UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 12;
     UINT8 file_info_buf[file_info_size];
-    kernel_file->GetInfo(kernel_file, )
+    kernel_file->GetInfo(kernel_file, &gEfiFileInfoGuid, &file_info_size, file_info_buf);
+    EFI_FILE_INFO* file_info = (EFI_FILE_INFO *)file_info_buf;
+    UINTN kernel_file_size = file_info->FileSize;
+    EFI_PHYSICAL_ADDRESS kernel_base_addr = 0x100000;
+    gBS->AllocatePages(AllocateAddress, EfiLoaderData, (kernel_file_size + 0xfff) / 0x1000, &kernel_base_addr);
+    kernel_file->Read(kernel_file, &kernel_file_size, (VOID*)kernel_base_addr);
+    char buf_kern_info[200];
+    text_gen(buf_kern_info, sizeof(buf_kern_info), "Kernel :0x%x (%u bytes)\n", kernel_base_addr)
     return EFI_SUCCESS;
 }
