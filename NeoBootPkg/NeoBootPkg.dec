@@ -1,5 +1,5 @@
 [Defines]
-    DEC_SPECIFICATION = 0x00010005
-    PLATFORM_NAME = NeosBootLoaderPkg
-    PLATFORM_GUID = baf69a22-e3f9-441c-bd65-2d38e85215da
-    PLATFORM_VERSION = 0.01
+  DEC_SPECIFICATION              = 0x00010005
+  PACKAGE_NAME                   = MikanLoaderPkg
+  PACKAGE_GUID                   = 452eae8e-71e9-11e8-a243-df3f1ffdebe1
+  PACKAGE_VERSION                = 0.1

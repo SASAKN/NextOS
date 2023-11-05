@@ -1,27 +1,27 @@
 [Defines]
-    INF_VERSION = 0x00010006
-    FILE_GUID = 6719d17f-d5df-4be2-bf05-067635a08157
-    BASE_NAME = neoboot
-    MODULE_TYPE = UEFI_APPLICATION
-    VERSION_STRING = 0.01
-    ENTRY_POINT = EntryPoint
+  INF_VERSION                    = 0x00010006
+  BASE_NAME                      = Loader
+  FILE_GUID                      = c9d0d202-71e9-11e8-9e52-cfbfd0063fbf
+  MODULE_TYPE                    = UEFI_APPLICATION
+  VERSION_STRING                 = 0.1
+  ENTRY_POINT                    = UefiMain
+
+#  VALID_ARCHITECTURES           = X64
 
 [Sources]
-    neoboot.c
+  neoboot.c
 
 [Packages]
-    MdePkg/MdePkg.dec
+  MdePkg/MdePkg.dec
 
 [LibraryClasses]
-    UefiLib
-    UefiApplicationEntryPoint
+  UefiLib
+  UefiApplicationEntryPoint
 
 [Guids]
-    gEfiFileInfoGuid
-    gEfiAcpiTableGuid
+  gEfiFileInfoGuid
 
 [Protocols]
-    gEfiLoadedImageProtocolGuid
-    gEfiLoadFileProtocolGuid
-    gEfiSimpleFileSystemProtocolGuid
-    gEfiBlockIoProtocolGuid
+  gEfiLoadedImageProtocolGuid
+  gEfiLoadFileProtocolGuid
+  gEfiSimpleFileSystemProtocolGuid
