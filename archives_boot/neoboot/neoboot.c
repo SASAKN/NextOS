@@ -58,7 +58,7 @@ EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle)
 /* ルートディレクトリーが開かれる */
 EFI_STATUS OpenRootDir(EFI_HANDLE ImageHandle, EFI_FILE_PROTOCOL **root) {
     EFI_STATUS status;
-    EFI_LOADED_IMAGE_PROTOCOL *loaded_image = NULL;
+    EFI_LOADED_IMAGE_PROTOCOL *loaded_image;
     EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *fs;
     status = gBS->OpenProtocol(ImageHandle, &gEfiLoadedProtocolGuid, (VOID**)&fs, ImageHandle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
     if (EFI_ERROR(status))
