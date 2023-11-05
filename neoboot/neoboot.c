@@ -14,6 +14,7 @@ EFI_GUID gEfiSimpleFileSystemProtocolGuid = EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID
 
 /* CPUを停止 */
 void Halt(void) {
+    custom_printf("[ INFO ] CPU HALT");
     while(1) __asm__("hlt");
 }
 
@@ -35,7 +36,7 @@ EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle)
     EFI_LOADED_IMAGE_PROTOCOL *lip;
     EFI_STATUS status;
     status = gBS->OpenProtocol(ImageHandle, &gEfiLoadedProtocolGuid, (VOID **)&lip, ImageHandle, NULL, EFI_OPEN_PROTOCOL_GET_PROTOCOL);
-    if (EFI_EROOR(status))
+    if (EFI_ERROR(status))
     {
         custom_printf("EfiFileLocation(lip->FilePath) : Unknown\n");
         custom_printf("This is not a fatal error, so proceed with the process.\n");
@@ -51,19 +52,26 @@ EFI_STATUS OpenRootDir(EFI_HANDLE ImageHandle, EFI_FILE_PROTOCOL **root) {
     EFI_LOADED_IMAGE_PROTOCOL *loaded_image;
     EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *fs;
     status = gBS->OpenProtocol(ImageHandle, &gEfiLoadedProtocolGuid, (VOID**)&fs, ImageHandle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
-    if (EFI_EROOR(status))
+    if (EFI_ERROR(status))
     {
+        PrintError(gST);
         custom_printf("Failed to open loaded image protocol\n");
         Halt();
     };
     status = gBS->OpenProtocol(loaded_image->DeviceHandle, &gEfiSimpleFileSystemProtocolGuid, (VOID **)&fs, ImageHandle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
-    if (EFI_EROOR(status))
+    if (EFI_ERROR(status))
     {
+        PrintError(gST);
         custom_printf("Failed to open simple file system protocol\n");
         Halt();
     };
     //OpenVolumeする
-    fs->OpenVolume(fs, root);
+    status = fs->OpenVolume(fs, root);
+    if (EFI_ERROR(status)) {
+        PrintError(gST);
+        custom_printf("Failed to open volume.\n");
+        Halt();
+    }
 }
 
 /* ベンダーなどの情報を表示 */
