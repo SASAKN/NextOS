@@ -135,7 +135,8 @@ EFI_STATUS EfiMain(
     map.descriptor_version = 0;
     map.map_key = 0;
     map.map_size = memmap_size;
-    //メモリーマップの取得
+    //メモリーマップの取得,表示
     GetMemoryMap(&map);
+    print_memmap(&map);
     return EFI_SUCCESS;
 }

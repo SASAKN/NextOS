@@ -49,7 +49,7 @@ UINT16 *get_memtype_name(EFI_MEMORY_TYPE type)
 	}
 };
 
-void PrintMemMap(struct MemoryMap *map)
+void print_memmap(struct MemoryMap *map)
 {
 	EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer;
 	UINT32 i;
