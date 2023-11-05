@@ -6,9 +6,6 @@
     VERSION_STRING = 0.01
     ENTRY_POINT = EntryPoint
 
-[Includes]
-    include
-
 [Sources]
     neoboot.c
 
