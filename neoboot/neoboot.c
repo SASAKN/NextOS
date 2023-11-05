@@ -17,5 +17,6 @@ EFI_STATUS EfiMain(
     gBS = gST->BootServices;
     gRT = gST->RuntimeServices;
     PrintOK(SystemTable);
+    custom_printf("Init UEFI\n");
     return EFI_SUCCESS;
 }
