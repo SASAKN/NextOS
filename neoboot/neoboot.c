@@ -11,6 +11,7 @@
 /* GUIDの定義 */
 EFI_GUID gEfiLoadedProtocolGuid = EFI_LOADED_IMAGE_PROTOCOL_GUID;
 EFI_GUID gEfiSimpleFileSystemProtocolGuid = EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID;
+EFI_GUID gEfiFileInfoGuid = EFI_FILE_INFO_ID;
 
 /* CPUを停止 */
 void Halt(void) {
@@ -122,9 +123,8 @@ EFI_STATUS EfiMain(
     // NeoBootが起動
     custom_printf("Starting NeoBoot....");
     // ボリュームを開く
-    EFI_FILE_PROTOCOOL *root_dir;
+    EFI_FILE_PROTOCOL *root_dir;
     OpenRootDir(ImageHandle, &root_dir);
-    SFSP->O
     // メモリーマップ構造体の初期化
     CHAR8 memmap_buffer[MEM_DESC_SIZE];
     UINT64 memmap_size = MEM_DESC_SIZE;
@@ -138,5 +138,11 @@ EFI_STATUS EfiMain(
     //メモリーマップの取得,表示
     GetMemoryMap(&map);
     print_memmap(&map);
+    //カーネルのロード
+    EFI_FILE_PROTOCOL *kernel_file;
+    root_dir->Open(root_dir, &kernel_file, L"\\kernel.o", EFI_FILE_MODE_READ, 0);
+    UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 12;
+    UINT8 file_info_buf[file_info_size];
+    kernel_file->GetInfo(kernel_file, )
     return EFI_SUCCESS;
 }
