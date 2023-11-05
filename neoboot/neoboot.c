@@ -17,6 +17,18 @@ void Halt(void) {
     while(1) __asm__("hlt");
 }
 
+/* メモリーマップの取得 */
+EFI_STATUS GetMemoryMap(struct MemoryMap *map) {
+    EFI_STATUS status;
+    if (map->buffer == NULL) {
+        return EFI_BUFFER_TOO_SMALL;
+    }
+
+    map->map_size = map->buffer_size;
+    status = gBS->GetMemoryMap(&map->map_size, (EFI_MEMORY_DESCRIPTOR*)map->buffer, &map->map_key, &map->descriptor_size, &map->descriptor_version);
+    return status;
+}
+
 /* EFIファイルの場所を示す */
 EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle)
 {
@@ -96,9 +108,22 @@ EFI_STATUS EfiMain(
     PrintEfiConfigurationTable();
     // 作者などの表示
     custom_printf("Copyright: SASAKEN NeoBoot");
-    // NeoBootのコンポーネントが起動
+    // NeoBootが起動
     custom_printf("Starting NeoBoot....");
     // ボリュームを開く
-    EFI_FILE_PROTOCOL *root_dir;
+    EFI_FILE_PROTOCOOL *root_dir;
+    OpenRootDir(ImageHandle, &root_dir);
+    // メモリーマップ構造体の初期化
+    CHAR8 memmap_buffer[MEM_DESC_SIZE];
+    UINT64 memmap_size = MEM_DESC_SIZE;
+    struct MemoryMap map;
+    map.buffer = memmap_buffer;
+    map.buffer_size = memmap_size;
+    map.descriptor_size = 0;
+    map.descriptor_version = 0;
+    map.map_key = 0;
+    map.map_size = memmap_size;
+    //メモリーマップの取得
+    GetMemoryMap(&map);
     return EFI_SUCCESS;
 }
