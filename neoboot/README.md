@@ -1,1 +1,3 @@
 # NEOBOOT
+
+NeoBootは、UEFIアプリケーションで、ELFをロードするためのアプリケーションです。
