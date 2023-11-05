@@ -855,10 +855,6 @@ extern EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL *DPFTP;
 extern EFI_DEVICE_PATH_UTILITIES_PROTOCOL *DPUP;
 extern EFI_MP_SERVICES_PROTOCOL *MSP;
 extern EFI_LOADED_IMAGE_PROTOCOL *LIP;
-extern EFI_GUID lip_guid;
-extern EFI_GUID dpp_guid;
-extern EFI_GUID fi_guid;
-extern EFI_GUID sfsp_guid;
 
 
 #endif
