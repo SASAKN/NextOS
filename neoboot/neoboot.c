@@ -10,6 +10,7 @@
 
 /* GUIDの定義 */
 EFI_GUID gEfiLoadedProtocolGuid = EFI_LOADED_IMAGE_PROTOCOL_GUID;
+EFI_GUID gEfiSimpleFileSystemProtocolGuid = EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID;
 
 /* CPUを停止 */
 void Halt(void) {
@@ -30,6 +31,25 @@ EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle)
     custom_printf("[ INFO ]EfiFileLocation\n");
     custom_wprintf(L"EfiFileLocation(lip->FilePath) : %s", DPTTP->ConvertDevicePathToText(lip->FilePath, FALSE, FALSE));
     return status;
+}
+
+/* ルートディレクトリーが開かれる */
+EFI_STATUS OpenRootDir(EFI_HANDLE ImageHandle, EFI_FILE_PROTOCOL **root) {
+    EFI_STATUS status;
+    EFI_LOADED_IMAGE_PROTOCOL *loaded_image;
+    EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *fs;
+    status = gBS->OpenProtocol(ImageHandle, &gEfiLoadedProtocolGuid, (VOID**)&fs, ImageHandle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+    if (EFI_EROOR(status))
+    {
+        custom_printf("Failed to open loaded image protocol\n");
+        Halt();
+    };
+    status = gBS->OpenProtocol(loaded_image->DeviceHandle, &gEfiSimpleFileSystemProtocolGuid, (VOID **)&fs, ImageHandle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+    if (EFI_EROOR(status))
+    {
+        custom_printf("Failed to open simple file system protocol\n");
+        Halt();
+    };
 }
 
 /* ベンダーなどの情報を表示 */
