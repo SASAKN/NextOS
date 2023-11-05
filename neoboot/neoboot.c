@@ -62,6 +62,8 @@ EFI_STATUS OpenRootDir(EFI_HANDLE ImageHandle, EFI_FILE_PROTOCOL **root) {
         custom_printf("Failed to open simple file system protocol\n");
         Halt();
     };
+    //OpenVolumeする
+    fs->OpenVolume(fs, root);
 }
 
 /* ベンダーなどの情報を表示 */
@@ -113,6 +115,7 @@ EFI_STATUS EfiMain(
     // ボリュームを開く
     EFI_FILE_PROTOCOOL *root_dir;
     OpenRootDir(ImageHandle, &root_dir);
+    SFSP->O
     // メモリーマップ構造体の初期化
     CHAR8 memmap_buffer[MEM_DESC_SIZE];
     UINT64 memmap_size = MEM_DESC_SIZE;
@@ -125,5 +128,6 @@ EFI_STATUS EfiMain(
     map.map_size = memmap_size;
     //メモリーマップの取得
     GetMemoryMap(&map);
+
     return EFI_SUCCESS;
 }
