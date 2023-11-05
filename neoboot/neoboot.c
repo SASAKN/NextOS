@@ -38,6 +38,7 @@ EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle)
     status = gBS->OpenProtocol(ImageHandle, &gEfiLoadedProtocolGuid, (VOID **)&lip, ImageHandle, NULL, EFI_OPEN_PROTOCOL_GET_PROTOCOL);
     if (EFI_ERROR(status))
     {
+        PrintWarn(gST);
         custom_printf("EfiFileLocation(lip->FilePath) : Unknown\n");
         custom_printf("This is not a fatal error, so proceed with the process.\n");
     };
@@ -136,6 +137,5 @@ EFI_STATUS EfiMain(
     map.map_size = memmap_size;
     //メモリーマップの取得
     GetMemoryMap(&map);
-
     return EFI_SUCCESS;
 }
