@@ -8,10 +8,15 @@
 #include "include/macros.h"
 #include "include/status.h"
 
+EFI_SYSTEM_TABLE *gST;
+EFI_RUNTIME_SERVICES *gRT;
+EFI_BOOT_SERVICES *gBS;
+
 /* GUIDの定義 */
 EFI_GUID gEfiLoadedProtocolGuid = EFI_LOADED_IMAGE_PROTOCOL_GUID;
 EFI_GUID gEfiSimpleFileSystemProtocolGuid = EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID;
 EFI_GUID gEfiFileInfoGuid = EFI_FILE_INFO_ID;
+EFI_GUID gEfiDevicePathToTextProtocolGuid = EFI_DEVICE_PATH_TO_TEXT_PROTOCOL_GUID;
 
 /* CPUを停止 */
 void Halt(void) {
@@ -35,6 +40,7 @@ EFI_STATUS GetMemoryMap(struct MemoryMap *map) {
 EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle)
 {
     EFI_LOADED_IMAGE_PROTOCOL *lip;
+    EFI_DEVICE_PATH_TO_TEXT_PROTOCOL *DPTTP;
     EFI_STATUS status;
     status = gBS->OpenProtocol(ImageHandle, &gEfiLoadedProtocolGuid, (VOID **)&lip, ImageHandle, NULL, EFI_OPEN_PROTOCOL_GET_PROTOCOL);
     if (EFI_ERROR(status))
@@ -43,6 +49,7 @@ EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle)
         custom_printf("EfiFileLocation(lip->FilePath) : Unknown\n");
         custom_printf("This is not a fatal error, so proceed with the process.\n");
     };
+    status = gBS->OpenProtocol(ImageHandle, &gEfiDevicePathToTextProtocolGuid, (VOID **)&DPTTP, ImageHandle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
     custom_printf("[ INFO ]EfiFileLocation\n");
     custom_wprintf(L"EfiFileLocation(lip->FilePath) : %s", DPTTP->ConvertDevicePathToText(lip->FilePath, FALSE, FALSE));
     return status;
@@ -51,7 +58,7 @@ EFI_STATUS PrintEfiFileLocation(IN EFI_HANDLE ImageHandle)
 /* ルートディレクトリーが開かれる */
 EFI_STATUS OpenRootDir(EFI_HANDLE ImageHandle, EFI_FILE_PROTOCOL **root) {
     EFI_STATUS status;
-    EFI_LOADED_IMAGE_PROTOCOL *loaded_image;
+    EFI_LOADED_IMAGE_PROTOCOL *loaded_image = NULL;
     EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *fs;
     status = gBS->OpenProtocol(ImageHandle, &gEfiLoadedProtocolGuid, (VOID**)&fs, ImageHandle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
     if (EFI_ERROR(status))
@@ -74,6 +81,7 @@ EFI_STATUS OpenRootDir(EFI_HANDLE ImageHandle, EFI_FILE_PROTOCOL **root) {
         custom_printf("Failed to open volume.\n");
         Halt();
     }
+    return status;
 }
 
 /* ベンダーなどの情報を表示 */
@@ -115,13 +123,13 @@ EFI_STATUS EfiMain(
     PrintOK(SystemTable);
     custom_printf("Init UEFI\n");
     //  UEFIファイルの場所を表示
-    PrintEfiFileLocation(ImageHandle);
+    // PrintEfiFileLocation(ImageHandle);
     // ベンダーの情報などを表示
     PrintEfiConfigurationTable();
     // 作者などの表示
-    custom_printf("Copyright: SASAKEN NeoBoot");
+    custom_printf("Copyright: SASAKEN NeoBoot\n");
     // NeoBootが起動
-    custom_printf("Starting NeoBoot....");
+    custom_printf("Starting NeoBoot....\n");
     // ボリュームを開く
     EFI_FILE_PROTOCOL *root_dir;
     OpenRootDir(ImageHandle, &root_dir);
@@ -143,7 +151,7 @@ EFI_STATUS EfiMain(
     root_dir->Open(root_dir, &kernel_file, L"\\kernel.o", EFI_FILE_MODE_READ, 0);
     UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 12;
     UINT8 file_info_buf[file_info_size];
-    status = kernel_file->GetInfo(kernel_file, &gEfiFileInfoGuid, &file_info_size, file_info_buf);
+    status = kernel_file->GetInfo(kernel_file, &gEfiFileInfoGuid, file_info_size, file_info_buf);
     assert(status, L"KernelFile->GetInfo");
     EFI_FILE_INFO* file_info = (EFI_FILE_INFO *)file_info_buf;
     UINTN kernel_file_size = file_info->FileSize;
