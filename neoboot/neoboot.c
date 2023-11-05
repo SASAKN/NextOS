@@ -143,13 +143,39 @@ EFI_STATUS EfiMain(
     root_dir->Open(root_dir, &kernel_file, L"\\kernel.o", EFI_FILE_MODE_READ, 0);
     UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 12;
     UINT8 file_info_buf[file_info_size];
-    kernel_file->GetInfo(kernel_file, &gEfiFileInfoGuid, &file_info_size, file_info_buf);
+    status = kernel_file->GetInfo(kernel_file, &gEfiFileInfoGuid, &file_info_size, file_info_buf);
+    assert(status, L"KernelFile->GetInfo");
     EFI_FILE_INFO* file_info = (EFI_FILE_INFO *)file_info_buf;
     UINTN kernel_file_size = file_info->FileSize;
     EFI_PHYSICAL_ADDRESS kernel_base_addr = 0x100000;
     gBS->AllocatePages(AllocateAddress, EfiLoaderData, (kernel_file_size + 0xfff) / 0x1000, &kernel_base_addr);
-    kernel_file->Read(kernel_file, &kernel_file_size, (VOID*)kernel_base_addr);
+    assert(status, L"Allocate Pages");
+    status = kernel_file->Read(kernel_file, &kernel_file_size, (VOID*)kernel_base_addr);
+    assert(status, L"KernelFile->Read");
+    //カーネルのファイルの情報を表示
     char buf_kern_info[200];
-    text_gen(buf_kern_info, sizeof(buf_kern_info), "Kernel :0x%x (%u bytes)\n", kernel_base_addr)
+    text_gen(buf_kern_info, sizeof(buf_kern_info), "Kernel :0x%x (%u bytes)\n", kernel_base_addr, kernel_file_size);
+    custom_printf("%s\n", buf_kern_info);
+    // UEFIから離脱
+    status = gBS->ExitBootServices(ImageHandle, map.map_key);
+    char buf_bs_error[200];
+    if (EFI_ERROR(status)) {
+        status = GetMemoryMap(&map);
+        if (EFI_ERROR(status)) {
+            text_gen(buf_bs_error, sizeof(buf_bs_error), "%x", status);
+            custom_printf("Failed to get memory map :%s\n", buf_bs_error);
+        }
+        // エラーメッセージをクリア
+        for (int i = 0; i < sizeof(buf_bs_error); i++) {
+            buf_bs_error[i] = '\0';
+        }
+        status = gBS->ExitBootServices(ImageHandle, map.map_key);
+        if (EFI_ERROR(status)) {
+            text_gen(buf_bs_error, sizeof(buf_bs_error), "%x", status);
+            custom_printf("Failed to exit boot services :%s\n", buf_bs_error);  
+        }
+    }
+    //ジャンプ
+    __asm__ volatile("jmp *0x100000");
     return EFI_SUCCESS;
 }
