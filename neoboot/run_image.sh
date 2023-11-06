@@ -4,6 +4,17 @@ script_dir="$(dirname "$(readlink -f "$0")")"
 
 #    -nographic -serial mon:stdio
 
+# ディスクイメージファイルのパス
+image_file="${script_dir}/neos.img"
+
+# lsofコマンドでディスクイメージファイルを開いているプロセスを取得し、PIDを抽出
+pids=$(lsof "$image_file" | awk '{if(NR>1)print $2}')
+
+# 各PIDに対してkillコマンドを実行
+for pid in $pids; do
+  kill -9 "$pid"
+done
+
 qemu-system-x86_64 \
     -nographic -serial mon:stdio \
     -m 3G \
