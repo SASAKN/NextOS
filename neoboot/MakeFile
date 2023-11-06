@@ -1,9 +1,3 @@
-ARCH = x86_64
-TARGET = neoboot.efi
-SRCS = $(wildcard *.c)
-CFLAGS = -mno-red-zone -mno-stack-arg-probe -fno-stack-protector -fshort-wchar -Wall
-OUTDIR = build/
-
-# USE_GCC
+TARGET = build/neoboot_x86_64.efi
 
 include uefi/MakeFile
