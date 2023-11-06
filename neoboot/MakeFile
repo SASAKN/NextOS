@@ -1,0 +1,2 @@
+TARGET = neoboot.efi
+include uefi/MakeFile
