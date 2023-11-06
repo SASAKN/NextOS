@@ -1,6 +1,6 @@
-#include <uefi.h>
+#include "uefi/uefi.h"
 
 int main( int argc, char **argv ) {
     printf("Hello World!\n");
-    return 0; /* return efi_successと同じ */
+    return EFI_SUCCESS;
 }
