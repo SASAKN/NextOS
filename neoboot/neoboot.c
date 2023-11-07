@@ -81,7 +81,7 @@ int main( int argc, char **argv ) {
     uint32_t i;
     efi_memory_descriptor_t *desc = (efi_memory_descriptor_t *)map.buffer;
     for (i = 0; i < map.memmap_desc_entry; i++) {
-        printf("%02x, %016x, %02x, %s, %016x, %016x, %016x, %016x \r\n", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->Attribute);
+        printf("%02d, %016x, %02x, %s, %016x, %016x, %016x, %016x \r\n", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->Attribute);
         desc = (efi_memory_descriptor_t *)((uint8_t *)desc + map.descriptor_size);
     }
 
