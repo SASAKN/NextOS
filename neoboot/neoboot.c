@@ -1,7 +1,7 @@
 #include "uefi/uefi.h"
-#include "include/mem.h"
 
 int main( int argc, char **argv ) {
+    //Init UEFI Lib.
    (void)argc;
     (void)argv;
     efi_status_t status;
@@ -47,6 +47,8 @@ err:    fprintf(stderr, "Unable to get memory map\n");
     }
 
     free(memory_map);
+    // hltする
+    while(1) __asm__ ("hlt");
     return 0;
-    
+
 }
