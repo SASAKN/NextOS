@@ -1,6 +1,8 @@
 #ifndef _BOOT_MEM_H
 #define _BOOT_MEM_H
 
+#include "uefi/uefi.h"
+
 /* A memory map for booting */
 struct MemoryMap {
     uint64_t buffer_size;
@@ -14,11 +16,11 @@ struct MemoryMap {
 
 /* EFI_MEMORY_DESCRIPTOR */
 struct MemoryDescriptor {
-    UINTN Type;
-    UINT32 PhysicalStart;
-    UINT32 VirtualStart;
-    UINT32 NumberOfPages;
-    UINT32 Attribute;
+    uintn_t Type;
+    uint32_t PhysicalStart;
+    uint32_t VirtualStart;
+    uint32_t NumberOfPages;
+    uint32_t Attribute;
 };
 
 #endif
