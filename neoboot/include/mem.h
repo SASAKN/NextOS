@@ -1,10 +1,6 @@
 #ifndef _BOOT_MEM_H
 #define _BOOT_MEM_H
 
-#include "types.h" /* Must be First. */
-
-#define MEM_DESC_SIZE	1024
-
 /* A memory map for booting */
 struct MemoryMap {
     uint64_t buffer_size;
@@ -24,6 +20,5 @@ struct MemoryDescriptor {
     UINT32 NumberOfPages;
     UINT32 Attribute;
 };
-
 
 #endif
