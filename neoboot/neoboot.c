@@ -163,7 +163,7 @@ efi_status_t test_memmap_file(void) {
         buff[size] = 0;
         fclose(f);
         // printf("[T]:\n%s\n", buff);
-        if (size == 0) {
+        if (size <= 94) {
             PrintError();
             printf("Save File\n");
         }
