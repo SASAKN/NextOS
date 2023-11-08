@@ -29,7 +29,7 @@ void PrintEfiConfigurationTable(void)
   printf("\n[ INFO ] EfiConfigurationTable\n");
   for (i = 0; i < ST->NumberOfTableEntries; i++)
   {
-    printf("%02d : %016x : %08x, %04x, %04x", i, (unsigned long long)&ST->ConfigurationTable[i], ST->ConfigurationTable[i].VendorGuid.Data1, ST->ConfigurationTable[i].VendorGuid.Data2, ST->ConfigurationTable[i].VendorGuid.Data3)
+    printf("%02d : %016x : %08x, %04x, %04x\n", i, (unsigned long long)&ST->ConfigurationTable[i], ST->ConfigurationTable[i].VendorGuid.Data1, ST->ConfigurationTable[i].VendorGuid.Data2, ST->ConfigurationTable[i].VendorGuid.Data3);
     unsigned char j;
     for (j = 0; j < 8; j++) {
       printf("%02x" , ST->ConfigurationTable[i].VendorGuid.Data4[j]);
@@ -37,7 +37,7 @@ void PrintEfiConfigurationTable(void)
     printf("%016x", (unsigned long long)ST->ConfigurationTable[i].VendorTable);
   }
   PrintOK();
-  printf("VendorTable\n")
+  printf("VendorTable\n");
 };
 
 
