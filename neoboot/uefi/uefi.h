@@ -106,6 +106,18 @@ typedef struct {
     uint8_t     Length[2];
 } efi_device_path_t;
 
+/* EFI_DEVICE_PATH_TO_TEXT_PROTOCOL */
+typedef struct {
+    __CHAR16_TYPE__ *(*ConvertDeviceNodeToText)(
+        const efi_device_path_t *DeviceNode,
+        boolean_t DisplayOnly,
+        boolean_t AllowShortcuts);
+    __CHAR16_TYPE__ *(*ConvertDevicePathToText)(
+        const efi_device_path_t *DevicePath,
+        boolean_t DisplayOnly,
+        boolean_t AllowShortcuts);
+} efi_device_path_to_text_protocol_t;
+
 typedef struct {
     uint32_t                Type;
     uint32_t                Pad;
