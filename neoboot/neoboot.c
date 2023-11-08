@@ -71,6 +71,7 @@ efi_status_t get_memory_map(struct MemoryMap *map)
     // エラー処理
     if (status != EFI_BUFFER_TOO_SMALL || !map->map_size)
     {
+        PrintError();
         fprintf(stderr, "Unable to Get Memory Map !\n");
         while (1)
             __asm__("hlt");
@@ -82,6 +83,7 @@ efi_status_t get_memory_map(struct MemoryMap *map)
     map->buffer = memmap_buf;
     if (!map->map_size)
     {
+        PrintError();
         fprintf(stderr, "unable to allocate memory. \n");
         while (1)
             __asm__("hlt");
@@ -91,12 +93,15 @@ efi_status_t get_memory_map(struct MemoryMap *map)
     status = BS->GetMemoryMap(&map->map_size, (efi_memory_descriptor_t *)map->buffer, &map->map_key, &map->descriptor_size, NULL);
     if (EFI_ERROR(status))
     {
+        PrintError();
         fprintf(stderr, "Unable to Get Memory Map !\n");
         while (1)
             __asm__("hlt");
         return 0;
     }
     map->memmap_desc_entry = map->map_size / map->descriptor_size;
+    PrintOK();
+    printf("Get Memory Map\n");
     return EFI_SUCCESS;
 }
 
@@ -112,6 +117,8 @@ efi_status_t print_memmap(struct MemoryMap *map)
         printf("%02d, %016x, %02x, %s, %016x, %016x, %016x, %016x \r\n", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->Attribute);
         desc = (efi_memory_descriptor_t *)((uint8_t *)desc + map->descriptor_size);
     }
+    PrintOK();
+    printf("Print Memory Map\n");
     return 0;
 }
 
@@ -132,6 +139,8 @@ efi_status_t save_memmap(struct MemoryMap *map)
         }
     }
     fclose(f);
+    PrintOK();
+    printf("Save Memory Map\n");
     return 0;
 }
 
@@ -146,6 +155,7 @@ efi_status_t test_memmap_file(void) {
         printf("File Size : %d bytes.\n", size);
         buff = malloc(size + 1);
         if (!buff) {
+            PrintError();
             fprintf(stderr, "unable to allocate memory.\n");
             return 1;
         }
@@ -155,9 +165,12 @@ efi_status_t test_memmap_file(void) {
         printf("[memmap file contents]:\n%s\n", buff);
         free(buff);
     } else {
+        PrintError();
         fprintf(stderr, "unable to open file\n");
         return 0;
     }
+    PrintOK();
+    printf("Read Memory Map file\n");
     return 0;
 
 }
@@ -169,6 +182,7 @@ int main(int argc, char **argv)
     (void)argv;
     efi_status_t status;
     // MemoryMap
+    PrintOK();
     printf("Welcome to Neo Boot !\n");
     struct MemoryMap map;
     map.map_size = 0;
