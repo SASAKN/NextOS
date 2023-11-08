@@ -97,7 +97,6 @@ efi_status_t print_memmap(struct MemoryMap *map)
 efi_status_t save_memmap(struct MemoryMap *map)
 {
     FILE *f;
-    char_t buf[4096 * 4];
     char *header = "Index, Buffer, Type, Type(name),PhysicalStart, VirtualStart, NumberOfPages, Size,  Attribute\n";
     size_t size;
     efi_memory_descriptor_t *desc = (efi_memory_descriptor_t *)map->buffer;
@@ -107,12 +106,39 @@ efi_status_t save_memmap(struct MemoryMap *map)
         fprintf(f, "%s", header);
         for (uint32_t i = 0; i < map->memmap_desc_entry; i++)
         {
-            fprintf(f, "%02d, %016x, %02x, %s, %016x, %016x, %016x, %8d, %016x \n", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
+            fprintf(f, "%02d, %016x, %02x, %s, %016x, %016x, %016x, %d, %016x \n", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
             desc = (efi_memory_descriptor_t *)((uint8_t *)desc + map->descriptor_size);
         }
     }
     fclose(f);
     return 0;
+}
+
+efi_status_t test_memmap_file(void) {
+    FILE *f;
+    char_t *buff;
+    size_t size;
+    if ((f = fopen("\\memmap", "r"))) {
+        fseek(f, 0, SEEK_END);
+        size = ftell(f);
+        fseek(f, 0, SEEK_SET);
+        printf("File Size : %d bytes.\n", size);
+        buff = malloc(size + 1);
+        if (!buff) {
+            fprintf(stderr, "unable to allocate memory.\n");
+            return 1;
+        }
+        fread(buff, size, 1, f);
+        buff[size] = 0;
+        fclose(f);
+        printf("[memmap file contents]:\n%s\n", buff);
+        free(buff);
+    } else {
+        fprintf(stderr, "unable to open file\n");
+        return 0;
+    }
+    return 0;
+
 }
 
 int main(int argc, char **argv)
@@ -131,6 +157,7 @@ int main(int argc, char **argv)
     get_memory_map(&map);
     print_memmap(&map);
     save_memmap(&map);
+    test_memmap_file();
     // halt cpu.
     while (1)
         __asm__("hlt");
