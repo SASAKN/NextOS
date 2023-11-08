@@ -83,7 +83,7 @@ efi_status_t print_memmap(struct MemoryMap *map)
 {
     efi_status_t status;
     printf("[ INFO ] MemoryMap\n");
-    printf("Index, Buffer, Type, Type(name),PhysicalStart, VirtualStart, NumberOfPages, Attribute\n");
+    printf("Index, Buffer, Type, Type(name),PhysicalStart, VirtualStart, NumberOfPages(Size), Attribute\n");
     uint32_t i;
     efi_memory_descriptor_t *desc = (efi_memory_descriptor_t *)map->buffer;
     for (i = 0; i < map->memmap_desc_entry; i++)
@@ -100,16 +100,18 @@ efi_status_t save_memmap(struct MemoryMap *map)
     char_t buf[4096 * 4];
     size_t size;
         efi_memory_descriptor_t *desc = (efi_memory_descriptor_t *)map->buffer;
-    if ((f = fopen("\\05_file\\file.txt", "w")))
+    if ((f = fopen("\\memmap", "w")))
     {
         for (uint32_t i = 0; i < map->memmap_desc_entry; i++)
         {
-            sprintf(buf, sizeof(buf), "%02d, %016x, %02x, %s, %016x, %016x, %016x, %016x \r\n", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->Attribute);
+            snprintf(buf, sizeof(buf), "%02d, %016x, %02x, %s, %016x, %016x, %016x, %016x \n", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->Attribute);
+            printf("[Save Memory Map]%s", buf);
             desc = (efi_memory_descriptor_t *)((uint8_t *)desc + map->descriptor_size);
         }
         size = strlen(buf);
         fwrite(buf, size, 1, f);
     }
+    return 0;
 }
 
 int main(int argc, char **argv)
