@@ -22,19 +22,24 @@ void PrintError(void)
     ST->ConOut->SetAttribute(ST->ConOut, 0x0F); /* 白に戻す */
 };
 
-void PrintEfiFileLocation(efi_handle_t ImageHandle)
+/* ベンダーなどの情報を表示 */
+void PrintEfiConfigurationTable(void)
 {
-  efi_loaded_image_protocol_t *lip;
-  efi_device_path_to_text_protocol_t *dpttp;
-  efi_guid_t dpttp_guid = EFI_DEVICE_PATH_TO_TEXT_GUID;
-  ST->BootServices->LocateProtocol(&dpttp_guid, NULL, (void **)&dpttp);
-  efi_guid_t lip_guid = EFI_LOADED_IMAGE_PROTOCOL_GUID;
-  ST->BootServices->OpenProtocol(ImageHandle, &lip_guid, (void **)&lip, ImageHandle, NULL, EFI_OPEN_PROTOCOL_GET_PROTOCOL);
-  printf("[ INFO ]EfiFileLocation\n");
-  char buf[2000];
-  wcstombs(buf, DPTTP->ConvertDevicePathToText(lip->FilePath, FALSE, FALSE));
-  printf("EfiFileLocation(lip->FilePath) : %s", buf);
+  uint32_t i;
+  printf("\n[ INFO ] EfiConfigurationTable\n");
+  for (i = 0; i < ST->NumberOfTableEntries; i++)
+  {
+    printf("%02d : %016x : %08x, %04x, %04x", i, (unsigned long long)&ST->ConfigurationTable[i], ST->ConfigurationTable[i].VendorGuid.Data1, ST->ConfigurationTable[i].VendorGuid.Data2, ST->ConfigurationTable[i].VendorGuid.Data3)
+    unsigned char j;
+    for (j = 0; j < 8; j++) {
+      printf("%02x" , ST->ConfigurationTable[i].VendorGuid.Data4[j]);
+    }
+    printf("%016x", (unsigned long long)ST->ConfigurationTable[i].VendorTable);
+  }
+  PrintOK();
+  printf("VendorTable\n")
 };
+
 
 char_t *get_memtype_name(efi_memory_type_t type)
 {
@@ -202,6 +207,7 @@ int main(int argc, char **argv)
     ST->BootServices->SetWatchdogTimer(0, 0, 0, NULL);
     PrintOK();
     printf("Welcome to Neo Boot !\n");
+    PrintEfiConfigurationTable();
     // MemoryMap
     struct MemoryMap map;
     map.map_size = 0;
