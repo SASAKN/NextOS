@@ -25,7 +25,7 @@ void PrintError(void)
 /* ベンダーなどの情報を表示 */
 void PrintEfiConfigurationTable(void)
 {
-  uint32_t i;
+  uint64_t i;
   printf("\n[ INFO ] EfiConfigurationTable\n");
   for (i = 0; i < ST->NumberOfTableEntries; i++)
   {
@@ -34,7 +34,7 @@ void PrintEfiConfigurationTable(void)
     for (j = 0; j < 8; j++) {
       printf("%02x" , ST->ConfigurationTable[i].VendorGuid.Data4[j]);
     }
-    printf("%016x", (unsigned long long)ST->ConfigurationTable[i].VendorTable);
+    printf("%016x\n", (unsigned long long)ST->ConfigurationTable[i].VendorTable);
   }
   PrintOK();
   printf("VendorTable\n");
