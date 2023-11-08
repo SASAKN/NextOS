@@ -98,19 +98,20 @@ efi_status_t save_memmap(struct MemoryMap *map)
 {
     FILE *f;
     char_t buf[4096 * 4];
+    char *header = "Index, Buffer, Type, Type(name),PhysicalStart, VirtualStart, NumberOfPages, Size,  Attribute\n";
     size_t size;
-        efi_memory_descriptor_t *desc = (efi_memory_descriptor_t *)map->buffer;
-    if ((f = fopen("\\memmap", "w")))
+    efi_memory_descriptor_t *desc = (efi_memory_descriptor_t *)map->buffer;
+    if ((f = fopen("\\memmap", "a")))
     {
+        //ヘッダーの書き込み
+        fprintf(f, "%s", header);
         for (uint32_t i = 0; i < map->memmap_desc_entry; i++)
         {
-            snprintf(buf, sizeof(buf), "%02d, %016x, %02x, %s, %016x, %016x, %016x, %016x \n", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->Attribute);
-            printf("[Save Memory Map]%s", buf);
+            fprintf(f, "%02d, %016x, %02x, %s, %016x, %016x, %016x, %8d, %016x \n", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
             desc = (efi_memory_descriptor_t *)((uint8_t *)desc + map->descriptor_size);
         }
-        size = strlen(buf);
-        fwrite(buf, size, 1, f);
     }
+    fclose(f);
     return 0;
 }
 
