@@ -152,7 +152,7 @@ efi_status_t test_memmap_file(void) {
         fseek(f, 0, SEEK_END);
         size = ftell(f);
         fseek(f, 0, SEEK_SET);
-        printf("File Size : %d bytes.\n", size);
+        printf("[ INFO ] File Size : %d bytes.\n", size);
         buff = malloc(size + 1);
         if (!buff) {
             PrintError();
