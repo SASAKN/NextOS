@@ -1,6 +1,27 @@
 #include "uefi/uefi.h"
 #include "include/mem.h"
 
+void PrintOK(void)
+{
+    ST->ConOut->SetAttribute(ST->ConOut, 0x02); /* 緑で、OKを表示 */
+    ST->ConOut->OutputString(ST->ConOut, L"[ OK ]");
+    ST->ConOut->SetAttribute(ST->ConOut, 0x0F); /* 白に戻す */
+};
+
+void PrintWarn(void)
+{
+    ST->ConOut->SetAttribute(ST->ConOut, 0x0E); /* 黄色で、Warnを表示 */
+    ST->ConOut->OutputString(ST->ConOut, L"[ Warn ]");
+    ST->ConOut->SetAttribute(ST->ConOut, 0x0F); /* 白に戻す */
+};
+
+void PrintError(void)
+{
+    ST->ConOut->SetAttribute(ST->ConOut, 0x04); /* あかで、Errorを表示 */
+    ST->ConOut->OutputString(ST->ConOut, L"[ Error ! ]");
+    ST->ConOut->SetAttribute(ST->ConOut, 0x0F); /* 白に戻す */
+};
+
 char_t *get_memtype_name(efi_memory_type_t type)
 {
     switch (type)
@@ -148,7 +169,7 @@ int main(int argc, char **argv)
     (void)argv;
     efi_status_t status;
     // MemoryMap
-    printf("Welcome to Neo Boot !");
+    printf("Welcome to Neo Boot !\n");
     struct MemoryMap map;
     map.map_size = 0;
     map.map_key = 0;
