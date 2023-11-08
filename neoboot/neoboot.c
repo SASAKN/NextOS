@@ -108,7 +108,7 @@ efi_status_t get_memory_map(struct MemoryMap *map)
 efi_status_t print_memmap(struct MemoryMap *map)
 {
     efi_status_t status;
-    printf("[ INFO ] MemoryMap\n");
+    printf("\n[ INFO ] MemoryMap\n");
     printf("Index, Buffer, Type, Type(name),PhysicalStart, VirtualStart, NumberOfPages, Size,  Attribute\n");
     uint32_t i;
     efi_memory_descriptor_t *desc = (efi_memory_descriptor_t *)map->buffer;
@@ -162,7 +162,11 @@ efi_status_t test_memmap_file(void) {
         fread(buff, size, 1, f);
         buff[size] = 0;
         fclose(f);
-        printf("[memmap file contents]:\n%s\n", buff);
+        // printf("[T]:\n%s\n", buff);
+        if (size == 0) {
+            PrintError();
+            printf("Save File\n");
+        }
         free(buff);
     } else {
         PrintError();
