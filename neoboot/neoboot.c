@@ -44,6 +44,7 @@ char_t *get_memtype_name(efi_memory_type_t type)
 
 efi_status_t get_memory_map(struct MemoryMap *map) {
     //構造体に必要なものを１回目で取得
+    efi_status_t status;
     status = BS->GetMemoryMap(&map->map_size, NULL, &map->map_key, &map->descriptor_size, NULL);
     //エラー処理
     if (status != EFI_BUFFER_TOO_SMALL || !map->map_size) {
@@ -54,6 +55,7 @@ efi_status_t get_memory_map(struct MemoryMap *map) {
     //メモリーマップのサイズの処理
     map->map_size += 4 * map->descriptor_size;
     char_t memmap_buf[map->map_size];
+    map->buffer = memmap_buf;
     if (!map->map_size) {
         fprintf(stderr, "unable to allocate memory. \n");
         while(1) __asm__ ("hlt"); 
@@ -67,9 +69,11 @@ efi_status_t get_memory_map(struct MemoryMap *map) {
         return 0;
     }
     map->memmap_desc_entry = map->map_size / map->descriptor_size;
+    return EFI_SUCCESS;
 }
 
 efi_status_t print_memmap(struct MemoryMap *map) {
+    efi_status_t status;
     printf("[ INFO ] MemoryMap\n");
     printf("Index, Buffer, Type, Type(name),PhysicalStart, VirtualStart, NumberOfPages, Attribute\n");
     uint32_t i;
@@ -78,6 +82,7 @@ efi_status_t print_memmap(struct MemoryMap *map) {
         printf("%02d, %016x, %02x, %s, %016x, %016x, %016x, %016x \r\n", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->Attribute);
         desc = (efi_memory_descriptor_t *)((uint8_t *)desc + map->descriptor_size);
     }
+    return 0;
 }
 
 int main( int argc, char **argv ) {
