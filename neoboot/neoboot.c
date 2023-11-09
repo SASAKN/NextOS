@@ -248,6 +248,7 @@ efi_status_t load_splash(int32_t w, int32_t h, int32_t l, uint32_t *data, unsign
         PrintOK();
         printf("No Splash in folder with bootloader\n");
     }
+    return EFI_SUCCESS;
 }
 
 efi_status_t show_splash(efi_gop_t *gop, efi_guid_t *gop_guid, int32_t w, int32_t h, int32_t l, uint32_t *data, unsigned char *buffer)
@@ -288,6 +289,7 @@ efi_status_t show_splash(efi_gop_t *gop, efi_guid_t *gop_guid, int32_t w, int32_
              (gop->Mode->Information->VerticalResolution - h) / 2, w, h, 0);
     free(data);
     free(buffer);
+    return EFI_SUCCESS;
 }
 
 int main(int argc, char **argv)
