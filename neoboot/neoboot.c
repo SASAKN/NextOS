@@ -1,6 +1,6 @@
 #include "uefi/uefi.h"
 #include "include/mem.h"
-#include "include/stb_image.h"
+#include "stb_image.h"
 
 void PrintOK(void)
 {
@@ -219,20 +219,20 @@ efi_status_t load_splash(int32_t w, int32_t h, int32_t l, uint32_t *data, unsign
         fseek(f, 0, SEEK_SET);
         // Allocate Buffer
         buffer = (unsigned char *)malloc(size);
-        if (!buff)
+        if (!buffer)
         {
             PrintError();
             fprintf(stderr, "Unable to allocate memory.\n");
         }
         // Read File
-        fread(buff, size, 1, f);
+        fread(buffer, size, 1, f);
         // Close File
         fclose(f);
         // Decode png image
         ri.bits_per_channel = 8;
         s.read_from_callbacks = 0;
-        s.img_buffer = s.img_buffer_original = buff;
-        s.img_buffer_end = s.img_buffer_original_end = buff + size;
+        s.img_buffer = s.img_buffer_original = buffer;
+        s.img_buffer_end = s.img_buffer_original_end = buffer + size;
         data = (uint32_t *)stbi__png_load(&s, &w, &h, &l, 4, &ri);
         if (!data)
         {
