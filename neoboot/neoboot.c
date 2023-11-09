@@ -1,5 +1,6 @@
 #include "uefi/uefi.h"
 #include "include/mem.h"
+#include "include/stb_image.h"
 
 void PrintOK(void)
 {
@@ -204,9 +205,15 @@ int main(int argc, char **argv)
     (void)argc;
     (void)argv;
     efi_status_t status;
+    // Graphics
+    efi_guid_t gop_guid = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
+    efi_gop_t *gop = NULL;
+    // Reset Watchdog Timer
     ST->BootServices->SetWatchdogTimer(0, 0, 0, NULL);
+    // Start
     PrintOK();
     printf("Welcome to Neo Boot !\n");
+    // EfiConfigurationTable
     PrintEfiConfigurationTable();
     // MemoryMap
     struct MemoryMap map;
