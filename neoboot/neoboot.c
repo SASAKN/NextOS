@@ -199,6 +199,48 @@ efi_status_t test_memmap_file(void) {
 
 }
 
+efi_status_t load_splash( efi_gop_t *gop ) {
+    FILE *f;
+    unsigned char *buffer;
+    uint32_t *data;
+    int32_t w, h, l;
+    long int size;
+    stbi__context s;
+    stbi__result_info ri;
+
+    if ((f = fopen("\\splash\\splash.png", "r"))) {
+        // Read Size.
+        fseek(f, 0, SEEK_END);
+        size = ftell(f);
+        fseek(f, 0, SEEK_SET);
+        // Allocate Buffer
+        buffer = (unsigned char *)malloc(size);
+        if (!buff) {
+            PrintError();
+            fprintf(stderr, "Unable to allocate memory.\n");
+        }
+        // Read File
+        fread(buff, size, 1, f);
+        // Close File
+        fclose(f);
+        // Decode png image
+        ri.bits_per_channel = 8;
+        s.read_from_callbacks = 0;
+        s.img_buffer = s.img_buffer_original = buff;
+        s.img_buffer_end = s.img_buffer_original_end = buff + size;
+        data = (uint32_t *)stbi__png_load(&s, &w, &h, &l, 4, &ri);
+        if (!data) {
+            PrintError();
+            fprintf(stdout, "Unable to decode png : %s\n", stbi__g_failure_reason);
+            return EFI_SUCCESS;
+        }
+    } else {
+        PrintOK();
+        printf("No Splash in folder with bootloader\n");
+    }
+
+}
+
 int main(int argc, char **argv)
 {
     // Init UEFI Lib.
