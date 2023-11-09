@@ -36,7 +36,7 @@ cp ${script_dir}/${1} ./BOOTX64.efi
 cp ${script_dir}/kernel.elf /Volumes/NEOS/kernel.elf
 
 #起動スプラッシュもコピー
-cp ${script_dir}/splash/splash.png /Volumes/NEOS/splash/splash.png
+cp ${script_dir}/splash.png /Volumes/NEOS/splash.png
 
 
 #作業フォルダーに戻る

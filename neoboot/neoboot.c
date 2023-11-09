@@ -213,7 +213,7 @@ efi_status_t load_splash(int32_t w, int32_t h, int32_t l, uint32_t *data, unsign
     stbi__context s;
     stbi__result_info ri;
 
-    if ((f = fopen("\\splash\\splash.png", "r")))
+    if ((f = fopen("\\splash.png", "r")))
     {
         // Read Size.
         fseek(f, 0, SEEK_END);
@@ -259,8 +259,8 @@ efi_status_t show_splash(efi_gop_t *gop, efi_guid_t *gop_guid, int32_t w, int32_
     if (!EFI_ERROR(status) && gop)
     {
         status = gop->SetMode(gop, 0);
-        ST->ConOut->Reset(ST->ConOut, 0);
-        ST->StdErr->Reset(ST->StdErr, 0);
+        // ST->ConOut->Reset(ST->ConOut, 0);
+        // ST->StdErr->Reset(ST->StdErr, 0);
         if (EFI_ERROR(status))
         {
             PrintError();
