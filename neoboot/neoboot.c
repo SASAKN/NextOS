@@ -294,12 +294,12 @@ int main(int argc, char **argv)
     (void)argc;
     (void)argv;
     efi_status_t status;
-    int32_t w, h, l;
-    unsigned char *buffer;
-    uint32_t data;
     // Graphics
     efi_guid_t gop_guid = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
     efi_gop_t *gop = NULL;
+    int32_t w, h, l;
+    unsigned char buffer;
+    uint32_t data;
     // Reset Watchdog Timer
     ST->BootServices->SetWatchdogTimer(0, 0, 0, NULL);
     // Start
@@ -318,9 +318,9 @@ int main(int argc, char **argv)
     save_memmap(&map);
     test_memmap_file();
     // Load Splash
-    load_splash();
+    load_splash(w, h, l, &data, &buffer);
     // Show Splash
-    show_splash();
+    show_splash(gop, &gop_guid, w, h, l, &data, &buffer);
     // halt cpu.
     while (1)
         __asm__("hlt");
