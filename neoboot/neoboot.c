@@ -1,7 +1,8 @@
 #include "uefi/uefi.h"
 #include "include/mem.h"
+// STB IMAGE LIBRARY
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "include/stb_image.h"
 
 void PrintOK(void)
 {
