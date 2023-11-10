@@ -258,7 +258,7 @@ efi_status_t OpenRootDir( char *kernel_buf, long int kernel_size, FILE *kernel, 
                 PrintError();
                 fprintf(stderr, "unable to allocate memory\n");
             }
-            if (size == 0) {
+            if (kernel_size == 0) {
                 PrintError();
                 fprintf(stderr, "Kernel File Size : 0");
             }
