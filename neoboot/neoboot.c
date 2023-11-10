@@ -210,7 +210,7 @@ efi_status_t open_disk() {
             memset(buff, 0, sizeof(buff));
             fread(buff, sizeof(buff), 1, f);
             PrintOK();
-            pritnf("open '%s'\n", fn);
+            printf("open '%s'\n", fn);
             printf("%1D", (efi_physical_address_t)buff);
             fclose(f);
         } else {
