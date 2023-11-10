@@ -143,6 +143,7 @@ efi_status_t print_memmap(struct MemoryMap *map)
         printf("%02d, %016x, %02x, %s, %016x, %016x, %016x, %d, %016x \n", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
         desc = (efi_memory_descriptor_t *)((uint8_t *)desc + map->descriptor_size);
     }
+    printf("\n");
     PrintOK();
     printf("Print Memory Map\n");
     return 0;
