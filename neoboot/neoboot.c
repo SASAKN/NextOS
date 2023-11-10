@@ -244,8 +244,9 @@ efi_status_t OpenRootFS(){
     } else {
         //失敗した時は、やることがないためシャットダウン
         PrintError();
-        printf("unable to open root directory\n");
-        printf("your computer is shutting down ...\n");
+        printf("Open root directory \n");
+        printf("Your computer is shutting down ...\n");
+        PrintGoodbye();
         RT->ResetSystem(EfiResetShutdown, EFI_SUCCESS, 0, NULL);
     }
     return EFI_SUCCESS;
