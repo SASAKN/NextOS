@@ -1,6 +1,7 @@
 #include "uefi/uefi.h"
 #include "include/mem.h"
 #include "include/elf.h"
+#include "include/kernel_param.h"
 
 void PrintOK(void)
 {
