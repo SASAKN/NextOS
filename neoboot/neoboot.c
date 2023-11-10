@@ -214,7 +214,7 @@ efi_status_t open_disk(void)
     FILE *f;
     char buff[2048], fn[16];
     int32_t i;
-
+    printf("\n [ INFO ] Block Device \n");
     for (i = 0; i < 10; i++)
     {
         sprintf(fn, "/dev/disk%d", i);
@@ -233,6 +233,7 @@ efi_status_t open_disk(void)
             printf("nothing\n");
         }
     }
+    printf("\n");
     return 0;
 }
 // ルートファイルシステムを開く
