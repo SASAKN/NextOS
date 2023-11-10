@@ -20,6 +20,9 @@ mkdir -p neos/tmp
 mkdir -p neos/command
 mkdir -p neos/device
 
+cd ${script_dir}/neos/kernel
+touch kernel.elf
+
 
 
 
