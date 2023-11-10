@@ -36,14 +36,13 @@ cp ${script_dir}/${1} ./BOOTX64.efi
 source ${script_dir}/make_root_fs.sh
 
 #それをコピー
-cp -r neos/ /Volumes/NEOS/
-
+cp -r ${script_dir}/neos/ /Volumes/NEOS/neos/
 
 #作業フォルダーに戻る
 cd ${script_dir}
 
 #アンマウント
-hdiutil unmount /Volumes/NEOS
+hdiutil unmount /Volumes/NEOS -force
 
 #QEMUの実行に移る
-source run_image.sh
+source ${script_dir}/run_image.sh
