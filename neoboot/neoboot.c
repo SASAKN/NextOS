@@ -43,6 +43,7 @@ void PrintEfiConfigurationTable(void)
         }
         printf("%016x\n", (unsigned long long)ST->ConfigurationTable[i].VendorTable);
     }
+    printf("\n");
     PrintOK();
     printf("VendorTable\n");
 };
