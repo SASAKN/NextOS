@@ -241,7 +241,7 @@ efi_status_t OpenRootFS(){
     DIR *dir;
     if ((dir = opendir("\\neos"))) {
         PrintOK();
-        printf("Exists a directory.");
+        printf("Exists a root directory.");
     } else {
         //失敗した時は、やることがないためシャットダウン
         PrintError();
