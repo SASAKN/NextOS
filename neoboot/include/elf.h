@@ -11,7 +11,22 @@ typedef int64_t Elf64_Sxword;
 typedef int32_t Elf64_Sword;
 
 /* Macros */
+#define ELFMAG "\177ELF"
+#define SELFMAG 4
 #define EI_NIDENT 16
+#define EI_CLASS 4
+#define ELFCLASS64 2
+#define EI_DATA 5
+#define ELFDATA2LSB 1
+
+#ifdef __x86_64__
+#define EM_MACH     62      /* AMD x86-64 architecture */
+#endif
+
+#ifdef __aarch64__
+#define EM_MACH     183     /* ARM aarch64 architecture */
+#endif
+
 #define ET_NONE 0
 #define ET_REL 1
 #define ET_EXEC 2

@@ -1,5 +1,6 @@
 #include "uefi/uefi.h"
 #include "include/mem.h"
+#include "include/elf.h"
 
 void PrintOK(void)
 {
