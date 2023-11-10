@@ -4,6 +4,9 @@
 
 script_dir="$(dirname "$(readlink -f "$0")")"
 
+#ルートファイルシステムを作成
+source ${script_dir}/make_root_fs.sh
+
 #DMGファイルの作成
 hdiutil create -size 1g -fs MS-DOS -volname NEOS neos.img
 
@@ -31,9 +34,6 @@ cd /Volumes/NEOS/EFI/BOOT
 
 #移動したら、ファイルを追加
 cp ${script_dir}/${1} ./BOOTX64.efi
-
-#ルートファイルシステムを作成
-source ${script_dir}/make_root_fs.sh
 
 #それをコピー
 cp -r ${script_dir}/neos/ /Volumes/NEOS/neos/
