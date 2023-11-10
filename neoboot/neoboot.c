@@ -218,6 +218,7 @@ int main(int argc, char **argv)
     print_memmap(&map);
     save_memmap(&map);
     test_memmap_file();
+    // Read Root File System.
     // halt cpu.
     while (1)
         __asm__("hlt");
