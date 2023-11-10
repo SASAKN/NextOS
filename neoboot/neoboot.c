@@ -263,16 +263,16 @@ efi_status_t OpenRootFS( char *kernel_buf, long int kernel_size, FILE *kernel, D
         } else {
             PrintError();
             printf("Open Kernel File \n");
-            printf("Your computer is shutting down ...\n");
             PrintGoodbye();
+            printf("Your computer is shutting down ...\n");
             RT->ResetSystem(EfiResetShutdown, EFI_SUCCESS, 0, NULL);
         }
     } else {
         //失敗した時は、やることがないためシャットダウン
         PrintError();
         printf("Open root directory \n");
-        printf("Your computer is shutting down ...\n");
         PrintGoodbye();
+        printf("Your computer is shutting down ...\n");
         RT->ResetSystem(EfiResetShutdown, EFI_SUCCESS, 0, NULL);
     }
     return EFI_SUCCESS;
