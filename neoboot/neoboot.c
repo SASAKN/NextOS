@@ -25,21 +25,21 @@ void PrintError(void)
 /* ベンダーなどの情報を表示 */
 void PrintEfiConfigurationTable(void)
 {
-  uint64_t i;
-  printf("\n[ INFO ] EfiConfigurationTable\n");
-  for (i = 0; i < ST->NumberOfTableEntries; i++)
-  {
-    printf("%02d : %016x : %08x, %04x, %04x\n", i, (unsigned long long)&ST->ConfigurationTable[i], ST->ConfigurationTable[i].VendorGuid.Data1, ST->ConfigurationTable[i].VendorGuid.Data2, ST->ConfigurationTable[i].VendorGuid.Data3);
-    unsigned char j;
-    for (j = 0; j < 8; j++) {
-      printf("%02x" , ST->ConfigurationTable[i].VendorGuid.Data4[j]);
+    uint64_t i;
+    printf("\n[ INFO ] EfiConfigurationTable\n");
+    for (i = 0; i < ST->NumberOfTableEntries; i++)
+    {
+        printf("%02d : %016x : %08x, %04x, %04x\n", i, (unsigned long long)&ST->ConfigurationTable[i], ST->ConfigurationTable[i].VendorGuid.Data1, ST->ConfigurationTable[i].VendorGuid.Data2, ST->ConfigurationTable[i].VendorGuid.Data3);
+        unsigned char j;
+        for (j = 0; j < 8; j++)
+        {
+            printf("%02x", ST->ConfigurationTable[i].VendorGuid.Data4[j]);
+        }
+        printf("%016x\n", (unsigned long long)ST->ConfigurationTable[i].VendorTable);
     }
-    printf("%016x\n", (unsigned long long)ST->ConfigurationTable[i].VendorTable);
-  }
-  PrintOK();
-  printf("VendorTable\n");
+    PrintOK();
+    printf("VendorTable\n");
 };
-
 
 char_t *get_memtype_name(efi_memory_type_t type)
 {
@@ -149,7 +149,7 @@ efi_status_t save_memmap(struct MemoryMap *map)
     efi_memory_descriptor_t *desc = (efi_memory_descriptor_t *)map->buffer;
     if ((f = fopen("\\memmap", "a")))
     {
-        //ヘッダーの書き込み
+        // ヘッダーの書き込み
         fprintf(f, "%s", header);
         for (uint32_t i = 0; i < map->memmap_desc_entry; i++)
         {
@@ -163,17 +163,20 @@ efi_status_t save_memmap(struct MemoryMap *map)
     return 0;
 }
 
-efi_status_t test_memmap_file(void) {
+efi_status_t test_memmap_file(void)
+{
     FILE *f;
     char_t *buff;
     size_t size;
-    if ((f = fopen("\\memmap", "r"))) {
+    if ((f = fopen("\\memmap", "r")))
+    {
         fseek(f, 0, SEEK_END);
         size = ftell(f);
         fseek(f, 0, SEEK_SET);
         printf("[ INFO ] Memory Map File Size : %d bytes.\n", size);
         buff = malloc(size + 1);
-        if (!buff) {
+        if (!buff)
+        {
             PrintError();
             fprintf(stderr, "unable to allocate memory.\n");
             return 1;
@@ -182,12 +185,15 @@ efi_status_t test_memmap_file(void) {
         buff[size] = 0;
         fclose(f);
         // printf("[T]:\n%s\n", buff);
-        if (size <= 94) {
+        if (size <= 94)
+        {
             PrintError();
             printf("Save File\n");
         }
         free(buff);
-    } else {
+    }
+    else
+    {
         PrintError();
         fprintf(stderr, "unable to open file\n");
         return 0;
@@ -195,33 +201,48 @@ efi_status_t test_memmap_file(void) {
     PrintOK();
     printf("Read Memory Map file\n");
     return 0;
-
 }
 
-efi_status_t open_disk(void) {
+efi_status_t open_disk(void)
+{
     FILE *f;
     char buff[2048], fn[16];
     int32_t i;
 
-    for(i = 0; i < 8; i++) {
+    for (i = 0; i < 8; i++)
+    {
         sprintf(fn, "/dev/disk%d", i);
-        printf("trying to open '%s' ",fn);
-        if((f = fopen(fn, "r"))) {
+        printf("trying to open '%s' ", fn);
+        if ((f = fopen(fn, "r")))
+        {
             memset(buff, 0, sizeof(buff));
             fread(buff, sizeof(buff), 1, f);
             PrintOK();
             printf("open '%s'\n", fn);
             printf("%1D", (efi_physical_address_t)buff);
             fclose(f);
-        } else {
+        }
+        else
+        {
             printf("nothing\n");
         }
     }
     return 0;
 }
+// ルートファイルシステムを開く
+efi_status_t OpenRootFS(){
+    char kernel_file_path[100]; //カーネルファイルパス
+    DIR *dir;
+    if ((dir = opendir("\\neos"))) {
 
-efi_status_t OpenRootFS() {
-
+    } else {
+        //失敗した時は、やることがないためシャットダウン
+        PrintError();
+        printf("unable to open root directory");
+        printf("your computer is shutting down");
+        RT->ResetSystem(EfiResetShutdown, EFI_SUCCESS, 0, NULL);
+    }
+    return EFI_SUCCESS;
 }
 
 int main(int argc, char **argv)
