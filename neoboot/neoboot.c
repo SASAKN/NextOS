@@ -294,6 +294,7 @@ int main(int argc, char **argv)
     OpenRootFS();
     // GoodBye
     PrintGoodbye();
+    printf("Boot Loader\n");
     // halt cpu.
     while (1)
         __asm__("hlt");
