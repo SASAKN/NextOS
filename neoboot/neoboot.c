@@ -199,9 +199,9 @@ efi_status_t test_memmap_file(void) {
 }
 
 efi_status_t open_disk() {
-        FILE *f;
+    FILE *f;
     char buff[2048], fn[16];
-    int i;
+    int32_t i;
 
     for(i = 0; i < 8; i++) {
         sprintf(fn, "/dev/disk%d", i);
@@ -240,7 +240,8 @@ int main(int argc, char **argv)
     print_memmap(&map);
     save_memmap(&map);
     test_memmap_file();
-    // Read Root File System.
+    // Open Block Device.
+    open_disk();
     // halt cpu.
     while (1)
         __asm__("hlt");
