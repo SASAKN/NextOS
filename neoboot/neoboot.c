@@ -198,6 +198,29 @@ efi_status_t test_memmap_file(void) {
 
 }
 
+efi_status_t open_disk() {
+        FILE *f;
+    char buff[2048], fn[16];
+    int i;
+
+    for(i = 0; i < 8; i++) {
+        sprintf(fn, "/dev/disk%d", i);
+        printf("trying to open '%s'... ",fn);
+        if((f = fopen(fn, "r"))) {
+            memset(buff, 0, sizeof(buff));
+            fread(buff, sizeof(buff), 1, f);
+            printf("OK!\n");
+            PrintOK();
+            pritnf("open '%s'\n", fn);
+            printf("%1D", (efi_physical_address_t)buff);
+            fclose(f);
+        } else {
+            printf("nothing\n");
+        }
+    }
+    return 0;
+}
+
 int main(int argc, char **argv)
 {
     // Init UEFI Lib.
