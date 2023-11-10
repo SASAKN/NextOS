@@ -240,7 +240,8 @@ efi_status_t OpenRootFS(){
     char kernel_file_path[100]; //カーネルファイルパス
     DIR *dir;
     if ((dir = opendir("\\neos"))) {
-
+        PrintOK();
+        printf("Exists a directory.");
     } else {
         //失敗した時は、やることがないためシャットダウン
         PrintError();
