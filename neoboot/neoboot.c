@@ -22,6 +22,12 @@ void PrintError(void)
     ST->ConOut->SetAttribute(ST->ConOut, 0x0F); /* 白に戻す */
 };
 
+void PrintGoodbye(void) {
+    ST->ConOut->SetAttribute(ST->ConOut, EFI_BLUE); /* 青で、Goodbyeを表示 */
+    ST->ConOut->OutputString(ST->ConOut, L"[ GoodBye ! ]");
+    ST->ConOut->SetAttribute(ST->ConOut, 0x0F); /* 白に戻す */
+}
+
 /* ベンダーなどの情報を表示 */
 void PrintEfiConfigurationTable(void)
 {
@@ -238,8 +244,8 @@ efi_status_t OpenRootFS(){
     } else {
         //失敗した時は、やることがないためシャットダウン
         PrintError();
-        printf("unable to open root directory");
-        printf("your computer is shutting down");
+        printf("unable to open root directory\n");
+        printf("your computer is shutting down ...\n");
         RT->ResetSystem(EfiResetShutdown, EFI_SUCCESS, 0, NULL);
     }
     return EFI_SUCCESS;
@@ -268,6 +274,7 @@ int main(int argc, char **argv)
     // Open Block Device.
     open_disk();
     // Root File System
+    OpenRootFS();
     // halt cpu.
     while (1)
         __asm__("hlt");
