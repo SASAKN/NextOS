@@ -45,4 +45,4 @@ cd ${script_dir}
 hdiutil unmount /Volumes/NEOS -force
 
 #QEMUの実行に移る
-source ${script_dir}/run_image.sh
+command ${script_dir}/run_image.sh

@@ -215,7 +215,7 @@ efi_status_t open_disk(void)
     char buff[2048], fn[16];
     int32_t i;
 
-    for (i = 0; i < 100; i++)
+    for (i = 0; i < 10; i++)
     {
         sprintf(fn, "/dev/disk%d", i);
         printf("trying to open '%s' ", fn);
