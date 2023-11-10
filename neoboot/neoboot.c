@@ -240,17 +240,26 @@ efi_status_t open_disk(void)
     return 0;
 }
 // ルートファイルシステムを開く
-efi_status_t OpenRootFS(){
-    char kernel_file_path[100]; //カーネルファイルパス
-    DIR *dir;
-    FILE *kernel;
+efi_status_t OpenRootFS( char *kernel_buf, long int kernel_size, FILE *kernel, DIR *dir ){
     if ((dir = opendir("\\neos"))) {
         PrintOK();
         printf("Exists a root directory\n");
-        //ルートディレクトリーがあったら、
+        //ルートディレクトリーがあったら、カーネルを見つける
         if ((kernel = fopen("\\neos\\kernel\\kernel.elf", "r"))) {
+            //カーネルがあったら
             PrintOK();
-            printf("Exists a kernel file. \n");
+            printf("Exists a kernel file \n");
+            //カーネルがあったら読み込み開始
+            fseek(kernel, 0, SEEK_END);
+            kernel_size = ftell(kernel);
+            fseek(kernel, 0, SEEK_SET);
+            kernel_buf = malloc(kernel_size + 1);
+            if (!kernel_buf) {
+                PrintError();
+                fprintf(stderr, "unable to allocate memory\n");
+            }
+            fread(kernel_buf, kernel_size, 1, kernel);
+            fclose(kernel);
         } else {
             PrintError();
             printf("Open Kernel File \n");
@@ -291,8 +300,12 @@ int main(int argc, char **argv)
     test_memmap_file();
     // Open Block Device.
     open_disk();
-    // Root File System
-    OpenRootFS();
+    // Open Root Directory
+    FILE *kernel;
+    DIR *dir;
+    long int kernel_size;
+    char *kernel_buf;
+    OpenRootFS(kernel_buf, kernel_size, kernel, dir);
     // GoodBye
     PrintGoodbye();
     printf("Boot Loader\n");
