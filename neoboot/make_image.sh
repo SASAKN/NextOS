@@ -32,8 +32,11 @@ cd /Volumes/NEOS/EFI/BOOT
 #移動したら、ファイルを追加
 cp ${script_dir}/${1} ./BOOTX64.efi
 
-#カーネルもコピー
-cp ${script_dir}/kernel.elf /Volumes/NEOS/kernel.elf
+#ルートファイルシステムを作成
+source ${script_dir}/make_root_fs.sh
+
+#それをコピー
+cp -r neos/ /Volumes/NEOS/
 
 
 #作業フォルダーに戻る
