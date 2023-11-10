@@ -239,9 +239,21 @@ efi_status_t open_disk(void)
 efi_status_t OpenRootFS(){
     char kernel_file_path[100]; //カーネルファイルパス
     DIR *dir;
+    FILE *kernel;
     if ((dir = opendir("\\neos"))) {
         PrintOK();
-        printf("Exists a root directory.");
+        printf("Exists a root directory\n");
+        //ルートディレクトリーがあったら、
+        if ((kernel = fopen("\\neos\\kernel\\kernel.elf", "r"))) {
+            PrintOK();
+            printf("Exists a kernel file. \n");
+        } else {
+            PrintError();
+            printf("Open Kernel File \n");
+            printf("Your computer is shutting down ...\n");
+            PrintGoodbye();
+            RT->ResetSystem(EfiResetShutdown, EFI_SUCCESS, 0, NULL);
+        }
     } else {
         //失敗した時は、やることがないためシャットダウン
         PrintError();
@@ -277,6 +289,8 @@ int main(int argc, char **argv)
     open_disk();
     // Root File System
     OpenRootFS();
+    // GoodBye
+    PrintGoodbye();
     // halt cpu.
     while (1)
         __asm__("hlt");
