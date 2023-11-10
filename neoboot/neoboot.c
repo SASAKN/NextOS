@@ -198,7 +198,7 @@ efi_status_t test_memmap_file(void) {
 
 }
 
-efi_status_t open_disk() {
+efi_status_t open_disk(void) {
     FILE *f;
     char buff[2048], fn[16];
     int32_t i;
@@ -218,6 +218,10 @@ efi_status_t open_disk() {
         }
     }
     return 0;
+}
+
+efi_status_t OpenRootFS() {
+
 }
 
 int main(int argc, char **argv)
@@ -242,6 +246,7 @@ int main(int argc, char **argv)
     test_memmap_file();
     // Open Block Device.
     open_disk();
+    // Root File System
     // halt cpu.
     while (1)
         __asm__("hlt");
