@@ -302,10 +302,10 @@ int main(int argc, char **argv)
     open_disk();
     // Open Root Directory
     FILE *kernel;
-    DIR *dir;
+    DIR *root_dir;
     long int kernel_size;
     char *kernel_buf;
-    OpenRootFS(kernel_buf, kernel_size, kernel, dir);
+    OpenRootFS(kernel_buf, kernel_size, kernel, root_dir);
     // GoodBye
     PrintGoodbye();
     printf("Boot Loader\n");
