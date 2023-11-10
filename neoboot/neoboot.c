@@ -240,7 +240,7 @@ efi_status_t open_disk(void)
     return 0;
 }
 // ルートファイルシステムを開く
-efi_status_t OpenRootFS( char *kernel_buf, long int kernel_size, FILE *kernel, DIR *dir ){
+efi_status_t OpenRootDir( char *kernel_buf, long int kernel_size, FILE *kernel, DIR *dir ){
     if ((dir = opendir("\\neos"))) {
         PrintOK();
         printf("Exists a root directory\n");
@@ -257,6 +257,10 @@ efi_status_t OpenRootFS( char *kernel_buf, long int kernel_size, FILE *kernel, D
             if (!kernel_buf) {
                 PrintError();
                 fprintf(stderr, "unable to allocate memory\n");
+            }
+            if (size == 0) {
+                PrintError();
+                fprintf(stderr, "Kernel File Size : 0");
             }
             fread(kernel_buf, kernel_size, 1, kernel);
             fclose(kernel);
@@ -305,7 +309,7 @@ int main(int argc, char **argv)
     DIR *root_dir;
     long int kernel_size;
     char *kernel_buf;
-    OpenRootFS(kernel_buf, kernel_size, kernel, root_dir);
+    OpenRootDir(kernel_buf, kernel_size, kernel, root_dir);
     // GoodBye
     PrintGoodbye();
     printf("Boot Loader\n");
