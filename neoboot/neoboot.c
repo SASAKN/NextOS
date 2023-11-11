@@ -261,7 +261,12 @@ efi_status_t OpenRootDir( char *kernel_buf, long int kernel_size, FILE *kernel, 
             }
             if (kernel_size == 0) {
                 PrintError();
-                fprintf(stderr, "Kernel File Size : 0");
+                printf("Kernel File Size : 0 byte\n");
+                PrintError();
+                printf("Open Kernel File \n");
+                PrintGoodbye();
+                printf("Your computer is shutting down ...\n");
+                RT->ResetSystem(EfiResetShutdown, EFI_SUCCESS, 0, NULL);
             }
             fread(kernel_buf, kernel_size, 1, kernel);
             fclose(kernel);
