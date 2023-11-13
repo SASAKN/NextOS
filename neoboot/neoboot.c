@@ -241,7 +241,7 @@ efi_status_t open_disk(void)
     return 0;
 }
 // ルートファイルシステムを開く
-efi_status_t OpenRootDir( char *kernel_buf, long int kernel_size, FILE *kernel, DIR *dir ){
+efi_status_t open_root_dir ( char *kernel_buf, long int kernel_size, FILE *kernel, DIR *dir ){
     if ((dir = opendir("\\neos"))) {
         PrintOK();
         printf("Exists a root directory\n");
@@ -315,7 +315,8 @@ int main(int argc, char **argv)
     DIR *root_dir;
     long int kernel_size;
     char *kernel_buf;
-    OpenRootDir(kernel_buf, kernel_size, kernel, root_dir);
+    open_root_dir(kernel_buf, kernel_size, kernel, root_dir);
+    // Open Kernel
     // GoodBye
     PrintGoodbye();
     printf("Boot Loader\n");
