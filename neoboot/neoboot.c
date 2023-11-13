@@ -31,7 +31,7 @@ void PrintGoodbye(void) {
 }
 
 /* ベンダーなどの情報を表示 */
-void PrintEfiConfigurationTable(void)
+void print_efi_configuration_table(void)
 {
     uint64_t i;
     printf("\n[ INFO ] EfiConfigurationTable\n");
@@ -241,7 +241,7 @@ efi_status_t open_disk(void)
     return 0;
 }
 // ルートファイルシステムを開く
-efi_status_t open_root_dir ( char *kernel_buf, long int kernel_size, FILE *kernel, DIR *dir ){
+efi_status_t open_root_dir( char *kernel_buf, long int kernel_size, FILE *kernel, DIR *dir ){
     if ((dir = opendir("\\neos"))) {
         PrintOK();
         printf("Exists a root directory\n");
@@ -297,7 +297,7 @@ int main(int argc, char **argv)
     ST->BootServices->SetWatchdogTimer(0, 0, 0, NULL);
     PrintOK();
     printf("Welcome to Neo Boot !\n");
-    PrintEfiConfigurationTable();
+    print_efi_configuration_table();
     // MemoryMap
     struct MemoryMap map;
     map.map_size = 0;
