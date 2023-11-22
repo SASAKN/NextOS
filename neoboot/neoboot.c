@@ -286,6 +286,7 @@ efi_status_t boot_kernel(char *kernel_buffer, elf64_ehdr *elf, elf64_phdr *phdr,
     elf->e_machine == EM_MACH &&
     elf->e_phnum > 0 ) {
         // Load Segments
+        uint32_t i;
         for (phdr = (elf64_phdr *)(kernel_buffer + elf->e_phoff), i = 0;
         i < elf->e_phnum;
         i++, phdr = (elf64_phdr *)((uint8_t *)phdr + elf->e_phentsize)) {
@@ -370,6 +371,10 @@ int main(int argc, char **argv)
         fprintf(stderr, "ExitBootServices\n");
         return EFI_SUCCESS;
     }
+    // Let's Boot !
+    typedef void EntryPoint(void);
+    EntryPoint *entry_f = (EntryPoint*)entry;
+    entry_f();
     // GoodBye
     PrintGoodbye();
     printf("Boot Loader\n");
