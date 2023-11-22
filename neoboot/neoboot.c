@@ -361,7 +361,15 @@ int main(int argc, char **argv)
     uintptr_t entry;
     open_root_dir(kernel_buf, kernel_size, kernel, root_dir);
     // Boot Kernel
-
+    boot_kernel(kernel_buf, elf, phdr, entry);
+    // Free memory
+    free(kernel_buf);
+    // Exit Boot Services
+    if(exit_bs()) {
+        PrintError();
+        fprintf(stderr, "ExitBootServices\n");
+        return EFI_SUCCESS;
+    }
     // GoodBye
     PrintGoodbye();
     printf("Boot Loader\n");
