@@ -251,7 +251,6 @@ efi_status_t load_kernel(FILE *kernel, char* kernel_buf, long int kernel_size, e
     fseek(kernel, 0, SEEK_END);
     kernel_size = ftell(kernel);
     fseek(kernel, 0, SEEK_SET);
-    kernel_base_addr = 0x10000;
     BS->AllocatePages(AllocateAddress, EfiLoaderData, (kernel_size + 0xfff) / 0x1000, &kernel_base_addr);
     if (!kernel_buf) {
         PrintError();
@@ -266,10 +265,10 @@ efi_status_t load_kernel(FILE *kernel, char* kernel_buf, long int kernel_size, e
         printf("Your computer is shutting down ...\n");
         RT->ResetSystem(EfiResetShutdown, EFI_SUCCESS, 0, NULL);
     } else {
-        printf("[ INFO ] Kernel File Info\n");
-        printf("  File Size : %ld bytes\n", kernel_size);
-        printf("  ELF Type : %ld\n", ((elf64_ehdr *)kernel_buf)->e_type);
-        printf("  ELF Entry Address : 0x%x\n", ((elf64_ehdr *)kernel_buf)->e_entry);
+        // printf("[ INFO ] Kernel File Info\n");
+        // printf("  File Size : %ld bytes\n", kernel_size);
+        // printf("  ELF Type : %ld\n", ((elf64_ehdr *)kernel_buf)->e_type);
+        // printf("  ELF Entry Address : 0x%x\n", ((elf64_ehdr *)kernel_buf)->e_entry);
     }
     fread(kernel_buf, kernel_size, 1, kernel);
     fclose(kernel);
@@ -331,7 +330,7 @@ int main(int argc, char **argv)
     DIR *root_dir;
     long int kernel_size;
     char *kernel_buf;
-    efi_physical_address_t kern_addr;
+    efi_physical_address_t kern_addr = 0x10000;
     open_root_dir(kernel_buf, kernel_size, kernel, root_dir, kern_addr);
     // Load Kernel
     // GoodBye
