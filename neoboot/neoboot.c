@@ -240,6 +240,35 @@ efi_status_t open_disk(void)
     printf("\n");
     return 0;
 }
+
+// Load Kernel
+efi_status_t load_kernel(FILE *kernel, char* kernel_buf, long int kernel_size) {
+    // Load Kernel
+    //カーネルがあったら
+    PrintOK();
+    printf("Exists a kernel file \n");
+    //カーネルがあったら読み込み開始
+    fseek(kernel, 0, SEEK_END);
+    kernel_size = ftell(kernel);
+    fseek(kernel, 0, SEEK_SET);
+    kernel_buf = malloc(kernel_size + 1);
+    if (!kernel_buf) {
+        PrintError();
+        fprintf(stderr, "Failed to allocate memory\n");
+    }
+    if (kernel_size == 0) {
+        PrintError();
+        printf("Kernel File Size : 0 byte\n");
+        PrintError();
+        printf("Open Kernel File \n");
+        PrintGoodbye();
+        printf("Your computer is shutting down ...\n");
+        RT->ResetSystem(EfiResetShutdown, EFI_SUCCESS, 0, NULL);
+    }
+    fread(kernel_buf, kernel_size, 1, kernel);
+    fclose(kernel);
+}
+
 // ルートファイルシステムを開く
 efi_status_t open_root_dir( char *kernel_buf, long int kernel_size, FILE *kernel, DIR *dir ){
     if ((dir = opendir("\\neos"))) {
@@ -247,29 +276,8 @@ efi_status_t open_root_dir( char *kernel_buf, long int kernel_size, FILE *kernel
         printf("Exists a root directory\n");
         //ルートディレクトリーがあったら、カーネルを見つける
         if ((kernel = fopen("\\neos\\kernel\\kernel.elf", "r"))) {
-            //カーネルがあったら
-            PrintOK();
-            printf("Exists a kernel file \n");
-            //カーネルがあったら読み込み開始
-            fseek(kernel, 0, SEEK_END);
-            kernel_size = ftell(kernel);
-            fseek(kernel, 0, SEEK_SET);
-            kernel_buf = malloc(kernel_size + 1);
-            if (!kernel_buf) {
-                PrintError();
-                fprintf(stderr, "unable to allocate memory\n");
-            }
-            if (kernel_size == 0) {
-                PrintError();
-                printf("Kernel File Size : 0 byte\n");
-                PrintError();
-                printf("Open Kernel File \n");
-                PrintGoodbye();
-                printf("Your computer is shutting down ...\n");
-                RT->ResetSystem(EfiResetShutdown, EFI_SUCCESS, 0, NULL);
-            }
-            fread(kernel_buf, kernel_size, 1, kernel);
-            fclose(kernel);
+            //If the kernel file has existed, this function loads the kernel.
+            load_kernel(kernel, kernel_buf, kernel_size);
         } else {
             PrintError();
             printf("Open Kernel File \n");
