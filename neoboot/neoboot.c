@@ -276,34 +276,6 @@ efi_status_t load_kernel(FILE *kernel, char* kernel_buf, long int kernel_size) {
     return EFI_SUCCESS;
 }
 
-//Boot Kernel
-efi_status_t boot_kernel(char *kernel_buffer, elf64_ehdr *elf, elf64_phdr *phdr, uintptr_t entry) {
-    elf = (elf64_ehdr *)kernel_buffer;
-    if (!memcmp(elf->e_ident, ELFMAG, SELFMAG) &&
-    elf->e_ident[EI_CLASS] == ELFCLASS64 &&
-    elf->e_ident[EI_DATA] == ELFDATA2LSB &&
-    elf->e_type == ET_EXEC &&
-    elf->e_machine == EM_MACH &&
-    elf->e_phnum > 0 ) {
-        // Load Segments
-        uint32_t i;
-        for (phdr = (elf64_phdr *)(kernel_buffer + elf->e_phoff), i = 0;
-        i < elf->e_phnum;
-        i++, phdr = (elf64_phdr *)((uint8_t *)phdr + elf->e_phentsize)) {
-            if(phdr->p_type == PT_LOAD) {
-                memcpy((void*)phdr->p_vaddr, kernel_buffer + phdr->p_offset, phdr->p_filesz);
-                memset((void*)(phdr->p_vaddr + phdr->p_filesz), 0, phdr->p_memsz - phdr->p_filesz);
-            }
-        }
-        entry = elf->e_entry;
-    } else {
-        PrintError();
-        fprintf(stderr, "Run ELF\n");
-        return EFI_SUCCESS;
-    }
-    return EFI_SUCCESS;
-}
-
 // Open Root Directory.
 efi_status_t open_root_dir( char *kernel_buf, long int kernel_size, FILE *kernel, DIR *dir ){
     if ((dir = opendir("\\neos"))) {
@@ -358,25 +330,13 @@ int main(int argc, char **argv)
     DIR *root_dir;
     long int kernel_size;
     char *kernel_buf;
-    elf64_ehdr *elf;
+    elf64_ehdr elf;
     elf64_phdr *phdr;
-    uintptr_t entry;
     open_root_dir(kernel_buf, kernel_size, kernel, root_dir);
-    // Boot Kernel
-    boot_kernel(kernel_buf, elf, phdr, entry);
-    // Free memory
-    free(kernel_buf);
-    // Exit Boot Services
-    if(exit_bs()) {
-        PrintError();
-        fprintf(stderr, "ExitBootServices\n");
-        return EFI_SUCCESS;
-    }
-    // Let's Boot !
-    // (*((int(* __attribute__((sysv_abi)))(void))(entry)))();
+    // Open Kernel
     // GoodBye
-    PrintGoodbye();
-    printf("Boot Loader\n");
+    // PrintGoodbye();
+    // printf("Boot Loader\n");
     // halt cpu.
     while (1)
         __asm__("hlt");

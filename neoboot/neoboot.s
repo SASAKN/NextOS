@@ -1039,127 +1039,6 @@ LBB11_5:
 	ret
 	.cfi_endproc
                                         ## -- End function
-	.globl	_boot_kernel                    ## -- Begin function boot_kernel
-	.p2align	4, 0x90
-_boot_kernel:                           ## @boot_kernel
-	.cfi_startproc
-## %bb.0:
-	push	rbp
-	.cfi_def_cfa_offset 16
-	.cfi_offset rbp, -16
-	mov	rbp, rsp
-	.cfi_def_cfa_register rbp
-	sub	rsp, 48
-	mov	qword ptr [rbp - 16], rdi
-	mov	qword ptr [rbp - 24], rsi
-	mov	qword ptr [rbp - 32], rdx
-	mov	qword ptr [rbp - 40], rcx
-	mov	rax, qword ptr [rbp - 16]
-	mov	qword ptr [rbp - 24], rax
-	mov	rax, qword ptr [rbp - 24]
-	mov	eax, dword ptr [rax]
-	sub	eax, 1179403647
-	setne	al
-	movzx	eax, al
-	cmp	eax, 0
-	jne	LBB12_13
-## %bb.1:
-	mov	rax, qword ptr [rbp - 24]
-	movzx	eax, byte ptr [rax + 4]
-	cmp	eax, 2
-	jne	LBB12_13
-## %bb.2:
-	mov	rax, qword ptr [rbp - 24]
-	movzx	eax, byte ptr [rax + 5]
-	cmp	eax, 1
-	jne	LBB12_13
-## %bb.3:
-	mov	rax, qword ptr [rbp - 24]
-	movzx	eax, word ptr [rax + 16]
-	cmp	eax, 2
-	jne	LBB12_13
-## %bb.4:
-	mov	rax, qword ptr [rbp - 24]
-	movzx	eax, word ptr [rax + 18]
-	cmp	eax, 62
-	jne	LBB12_13
-## %bb.5:
-	mov	rax, qword ptr [rbp - 24]
-	movzx	eax, word ptr [rax + 48]
-	cmp	eax, 0
-	jle	LBB12_13
-## %bb.6:
-	mov	rax, qword ptr [rbp - 16]
-	mov	rcx, qword ptr [rbp - 24]
-	add	rax, qword ptr [rcx + 32]
-	mov	qword ptr [rbp - 32], rax
-	mov	dword ptr [rbp - 44], 0
-LBB12_7:                                ## =>This Inner Loop Header: Depth=1
-	mov	eax, dword ptr [rbp - 44]
-	mov	rcx, qword ptr [rbp - 24]
-	movzx	ecx, word ptr [rcx + 48]
-	cmp	eax, ecx
-	jae	LBB12_12
-## %bb.8:                               ##   in Loop: Header=BB12_7 Depth=1
-	mov	rax, qword ptr [rbp - 32]
-	cmp	dword ptr [rax], 1
-	jne	LBB12_10
-## %bb.9:                               ##   in Loop: Header=BB12_7 Depth=1
-	mov	rax, qword ptr [rbp - 32]
-	mov	rdi, qword ptr [rax + 16]
-	mov	rsi, qword ptr [rbp - 16]
-	mov	rax, qword ptr [rbp - 32]
-	add	rsi, qword ptr [rax + 8]
-	mov	rax, qword ptr [rbp - 32]
-	mov	rdx, qword ptr [rax + 32]
-	call	_memcpy
-	mov	rax, qword ptr [rbp - 32]
-	mov	rdi, qword ptr [rax + 16]
-	mov	rax, qword ptr [rbp - 32]
-	add	rdi, qword ptr [rax + 32]
-	mov	rax, qword ptr [rbp - 32]
-	mov	rdx, qword ptr [rax + 40]
-	mov	rax, qword ptr [rbp - 32]
-	sub	rdx, qword ptr [rax + 32]
-	xor	esi, esi
-	call	_memset
-LBB12_10:                               ##   in Loop: Header=BB12_7 Depth=1
-	jmp	LBB12_11
-LBB12_11:                               ##   in Loop: Header=BB12_7 Depth=1
-	mov	eax, dword ptr [rbp - 44]
-	add	eax, 1
-	mov	dword ptr [rbp - 44], eax
-	mov	rax, qword ptr [rbp - 32]
-	mov	rcx, qword ptr [rbp - 24]
-	movzx	ecx, word ptr [rcx + 58]
-	movsxd	rcx, ecx
-	add	rax, rcx
-	mov	qword ptr [rbp - 32], rax
-	jmp	LBB12_7
-LBB12_12:
-	mov	rax, qword ptr [rbp - 24]
-	mov	rax, qword ptr [rax + 24]
-	mov	qword ptr [rbp - 40], rax
-	jmp	LBB12_14
-LBB12_13:
-	call	_PrintError
-	mov	rax, qword ptr [rip + _ST@GOTPCREL]
-	mov	rax, qword ptr [rax]
-	mov	rdi, qword ptr [rax + 72]
-	lea	rsi, [rip + L_.str.60]
-	mov	al, 0
-	call	_fprintf
-	mov	qword ptr [rbp - 8], 0
-	jmp	LBB12_15
-LBB12_14:
-	mov	qword ptr [rbp - 8], 0
-LBB12_15:
-	mov	rax, qword ptr [rbp - 8]
-	add	rsp, 48
-	pop	rbp
-	ret
-	.cfi_endproc
-                                        ## -- End function
 	.globl	_open_root_dir                  ## -- Begin function open_root_dir
 	.p2align	4, 0x90
 _open_root_dir:                         ## @open_root_dir
@@ -1175,29 +1054,29 @@ _open_root_dir:                         ## @open_root_dir
 	mov	qword ptr [rbp - 16], rsi
 	mov	qword ptr [rbp - 24], rdx
 	mov	qword ptr [rbp - 32], rcx
-	lea	rdi, [rip + L_.str.61]
+	lea	rdi, [rip + L_.str.59]
 	call	_opendir
 	mov	qword ptr [rbp - 32], rax
 	cmp	rax, 0
-	je	LBB13_5
+	je	LBB12_5
 ## %bb.1:
 	call	_PrintOK
-	lea	rdi, [rip + L_.str.62]
+	lea	rdi, [rip + L_.str.60]
 	mov	al, 0
 	call	_printf
-	lea	rdi, [rip + L_.str.63]
+	lea	rdi, [rip + L_.str.61]
 	lea	rsi, [rip + L_.str.38]
 	call	_fopen
 	mov	qword ptr [rbp - 24], rax
 	cmp	rax, 0
-	je	LBB13_3
+	je	LBB12_3
 ## %bb.2:
 	mov	rdi, qword ptr [rbp - 24]
 	mov	rsi, qword ptr [rbp - 8]
 	mov	rdx, qword ptr [rbp - 16]
 	call	_load_kernel
-	jmp	LBB13_4
-LBB13_3:
+	jmp	LBB12_4
+LBB12_3:
 	call	_PrintError
 	lea	rdi, [rip + L_.str.53]
 	mov	al, 0
@@ -1214,11 +1093,11 @@ LBB13_3:
 	mov	rsi, rcx
 	mov	rdx, rcx
 	call	qword ptr [rax + 104]
-LBB13_4:
-	jmp	LBB13_6
-LBB13_5:
+LBB12_4:
+	jmp	LBB12_6
+LBB12_5:
 	call	_PrintError
-	lea	rdi, [rip + L_.str.64]
+	lea	rdi, [rip + L_.str.62]
 	mov	al, 0
 	call	_printf
 	call	_PrintGoodbye
@@ -1233,7 +1112,7 @@ LBB13_5:
 	mov	rsi, rcx
 	mov	rdx, rcx
 	call	qword ptr [rax + 104]
-LBB13_6:
+LBB12_6:
 	xor	eax, eax
                                         ## kill: def $rax killed $eax
 	add	rsp, 32
@@ -1251,7 +1130,7 @@ _main:                                  ## @main
 	.cfi_offset rbp, -16
 	mov	rbp, rsp
 	.cfi_def_cfa_register rbp
-	sub	rsp, 144
+	sub	rsp, 192
 	mov	dword ptr [rbp - 4], 0
 	mov	dword ptr [rbp - 8], edi
 	mov	qword ptr [rbp - 16], rsi
@@ -1265,7 +1144,7 @@ _main:                                  ## @main
 	mov	rdx, rcx
 	call	qword ptr [rax + 256]
 	call	_PrintOK
-	lea	rdi, [rip + L_.str.65]
+	lea	rdi, [rip + L_.str.63]
 	mov	al, 0
 	call	_printf
 	call	_print_efi_configuration_table
@@ -1285,38 +1164,11 @@ _main:                                  ## @main
 	mov	rdx, qword ptr [rbp - 88]
 	mov	rcx, qword ptr [rbp - 96]
 	call	_open_root_dir
-	mov	rdi, qword ptr [rbp - 112]
-	mov	rsi, qword ptr [rbp - 120]
-	mov	rdx, qword ptr [rbp - 128]
-	mov	rcx, qword ptr [rbp - 136]
-	call	_boot_kernel
-	mov	rdi, qword ptr [rbp - 112]
-	call	_free
-	call	_exit_bs
-	cmp	eax, 0
-	je	LBB14_2
-## %bb.1:
-	call	_PrintError
-	mov	rax, qword ptr [rip + _ST@GOTPCREL]
-	mov	rax, qword ptr [rax]
-	mov	rdi, qword ptr [rax + 72]
-	lea	rsi, [rip + L_.str.66]
-	mov	al, 0
-	call	_fprintf
-	xor	eax, eax
-	add	rsp, 144
-	pop	rbp
-	ret
-LBB14_2:
-	call	_PrintGoodbye
-	lea	rdi, [rip + L_.str.67]
-	mov	al, 0
-	call	_printf
-LBB14_3:                                ## =>This Inner Loop Header: Depth=1
+LBB13_1:                                ## =>This Inner Loop Header: Depth=1
 	## InlineAsm Start
 	hlt
 	## InlineAsm End
-	jmp	LBB14_3
+	jmp	LBB13_1
 	.cfi_endproc
                                         ## -- End function
 	.section	__TEXT,__const
@@ -1541,30 +1393,18 @@ L_.str.58:                              ## @.str.58
 	.asciz	"  ELF Entry Address : 0x%x\n"
 
 L_.str.59:                              ## @.str.59
-	.asciz	"\177ELF"
-
-L_.str.60:                              ## @.str.60
-	.asciz	"Run ELF\n"
-
-L_.str.61:                              ## @.str.61
 	.asciz	"\\neos"
 
-L_.str.62:                              ## @.str.62
+L_.str.60:                              ## @.str.60
 	.asciz	"Exists a root directory\n"
 
-L_.str.63:                              ## @.str.63
+L_.str.61:                              ## @.str.61
 	.asciz	"\\neos\\kernel\\kernel.elf"
 
-L_.str.64:                              ## @.str.64
+L_.str.62:                              ## @.str.62
 	.asciz	"Open root directory \n"
 
-L_.str.65:                              ## @.str.65
+L_.str.63:                              ## @.str.63
 	.asciz	"Welcome to Neo Boot !\n"
-
-L_.str.66:                              ## @.str.66
-	.asciz	"ExitBootServices\n"
-
-L_.str.67:                              ## @.str.67
-	.asciz	"Boot Loader\n"
 
 .subsections_via_symbols
