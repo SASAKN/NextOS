@@ -267,6 +267,7 @@ efi_status_t load_kernel(FILE *kernel, char* kernel_buf, long int kernel_size) {
     }
     fread(kernel_buf, kernel_size, 1, kernel);
     fclose(kernel);
+    return EFI_SUCCESS;
 }
 
 // ルートファイルシステムを開く
