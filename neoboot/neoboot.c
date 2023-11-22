@@ -276,6 +276,17 @@ efi_status_t load_kernel(FILE *kernel, char* kernel_buf, long int kernel_size) {
     return EFI_SUCCESS;
 }
 
+//Boot Kernel
+efi_status_t boot_kernel(char *kernel_buffer, elf64_ehdr *elf, elf64_phdr *phdr) {
+    elf = (elf64_ehdr *)kernel_buffer;
+    if (!memcmp(elf->e_ident, ELFMAG, SELFMAG) &&
+    elf->e_ident[EI_CLASS] == ELFCLASS64 &&
+    elf->e_ident[EI_DATA] == ELFDATA2LSB &&
+    elf->e_type == ET_EXEC &&
+    elf->e_machine == EM_MACH &&
+    elf->e_p )
+}
+
 // Open Root Directory.
 efi_status_t open_root_dir( char *kernel_buf, long int kernel_size, FILE *kernel, DIR *dir ){
     if ((dir = opendir("\\neos"))) {
@@ -333,7 +344,8 @@ int main(int argc, char **argv)
     elf64_ehdr elf;
     elf64_phdr *phdr;
     open_root_dir(kernel_buf, kernel_size, kernel, root_dir);
-    // Open Kernel
+    // Boot Kernel
+
     // GoodBye
     PrintGoodbye();
     printf("Boot Loader\n");
