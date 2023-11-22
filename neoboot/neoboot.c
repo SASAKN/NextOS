@@ -335,8 +335,8 @@ int main(int argc, char **argv)
     open_root_dir(kernel_buf, kernel_size, kernel, root_dir);
     // Open Kernel
     // GoodBye
-    // PrintGoodbye();
-    // printf("Boot Loader\n");
+    PrintGoodbye();
+    printf("Boot Loader\n");
     // halt cpu.
     while (1)
         __asm__("hlt");
