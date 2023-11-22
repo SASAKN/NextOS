@@ -320,6 +320,7 @@ int main(int argc, char **argv)
     map.descriptor_size = 0;
     // Get,Print,Save.
     get_memory_map(&map);
+    printf("[ INFO ]map.map_key : %x", map.map_key);
     print_memmap(&map);
     save_memmap(&map);
     test_memmap_file();
@@ -334,16 +335,7 @@ int main(int argc, char **argv)
     elf64_phdr *phdr;
     open_root_dir(kernel_buf, kernel_size, kernel, root_dir);
     // Open Kernel
-    // Exit BS
-    status = BS->ExitBootServices(IM, map.map_key);
-    if (status != 0) {
-        get_memory_map(&map);
-        status = BS->ExitBootServices(IM, map.map_key);
-        if (status != 0) {
-            PrintError();
-            printf("Fatal Error!");
-        }
-    }
+    BS->ExitBootServices(IM, map.map_key);
     // GoodBye
     PrintGoodbye();
     printf("Boot Loader\n");
