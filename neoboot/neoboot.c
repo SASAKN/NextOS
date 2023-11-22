@@ -242,7 +242,7 @@ efi_status_t open_disk(void)
 }
 
 // Load Kernel
-efi_status_t load_kernel(FILE *kernel, char* kernel_buf, long int kernel_size) {
+efi_status_t load_kernel(FILE *kernel, char* kernel_buf, long int kernel_size, efi_physical_address_t kernel_base_addr) {
     // Load Kernel
     //カーネルがあったら
     PrintOK();
@@ -251,7 +251,7 @@ efi_status_t load_kernel(FILE *kernel, char* kernel_buf, long int kernel_size) {
     fseek(kernel, 0, SEEK_END);
     kernel_size = ftell(kernel);
     fseek(kernel, 0, SEEK_SET);
-    efi_physical_address_t kernel_base_addr = 0x10000;
+    kernel_base_addr = 0x10000;
     BS->AllocatePages(AllocateAddress, EfiLoaderData, (kernel_size + 0xfff) / 0x1000, &kernel_base_addr);
     if (!kernel_buf) {
         PrintError();
@@ -277,14 +277,14 @@ efi_status_t load_kernel(FILE *kernel, char* kernel_buf, long int kernel_size) {
 }
 
 // Open Root Directory.
-efi_status_t open_root_dir( char *kernel_buf, long int kernel_size, FILE *kernel, DIR *dir ){
+efi_status_t open_root_dir( char *kernel_buf, long int kernel_size, FILE *kernel, DIR *dir, efi_physical_address_t kernaddr ){
     if ((dir = opendir("\\neos"))) {
         PrintOK();
         printf("Exists a root directory\n");
         // If the root directory has existed, this function will check the kernel.
         if ((kernel = fopen("\\neos\\kernel\\kernel.elf", "r"))) {
             //If the kernel file has existed, this function loads the kernel.
-            load_kernel(kernel, kernel_buf, kernel_size);
+            load_kernel(kernel, kernel_buf, kernel_size, kernaddr);
         } else {
             PrintError();
             printf("Open Kernel File \n");
@@ -331,12 +331,19 @@ int main(int argc, char **argv)
     DIR *root_dir;
     long int kernel_size;
     char *kernel_buf;
-    elf64_ehdr elf;
-    elf64_phdr *phdr;
-    open_root_dir(kernel_buf, kernel_size, kernel, root_dir);
+    efi_physical_address_t kern_addr;
+    open_root_dir(kernel_buf, kernel_size, kernel, root_dir, kern_addr);
+    // Load Kernel
     // GoodBye
     PrintGoodbye();
     printf("Boot Loader\n");
+    status = exit_bs();
+    // Memo: Exit_BSの後は、printfを使用できない
+    // カーネルを呼び出す
+    uint64_t entry_addr = *(uint64_t *)(kern_addr + 24);
+    typedef void EntryPointType(void);
+    EntryPointType *entry_point = (EntryPointType *)entry_addr;
+    entry_point();
     // halt cpu.
     while (1)
         __asm__("hlt");
