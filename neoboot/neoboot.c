@@ -252,6 +252,8 @@ efi_status_t load_kernel(FILE *kernel, char* kernel_buf, long int kernel_size) {
     kernel_size = ftell(kernel);
     fseek(kernel, 0, SEEK_SET);
     kernel_buf = malloc(kernel_size + 1);
+    efi_physical_address_t kernel_base_addr = 0x10000;
+    BS->AllocatePages(AllocateAddress, EfiLoaderData, (kernel_size + 0xfff) / 0x1000, &kernel_base_addr);
     if (!kernel_buf) {
         PrintError();
         fprintf(stderr, "Failed to allocate memory\n");
@@ -268,6 +270,7 @@ efi_status_t load_kernel(FILE *kernel, char* kernel_buf, long int kernel_size) {
         printf("[ INFO ] Kernel File Info\n");
         printf("  File Size : %ld bytes\n", kernel_size);
         printf("  ELF Type : %ld\n", ((elf64_ehdr *)kernel_buf)->e_type);
+        printf("  ELF Entry Address : %d\n", ((elf64_ehdr *)kernel_buf)->e_entry);
         printf("  ELF Entry Address : %ld\n", ((elf64_ehdr *)kernel_buf)->e_entry);
     }
     fread(kernel_buf, kernel_size, 1, kernel);
