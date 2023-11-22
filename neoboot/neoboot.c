@@ -301,6 +301,7 @@ efi_status_t boot_kernel(char *kernel_buffer, elf64_ehdr *elf, elf64_phdr *phdr,
         fprintf(stderr, "Run ELF\n");
         return EFI_SUCCESS;
     }
+    return EFI_SUCCESS;
 }
 
 // Open Root Directory.
@@ -372,9 +373,7 @@ int main(int argc, char **argv)
         return EFI_SUCCESS;
     }
     // Let's Boot !
-    typedef void EntryPoint(void);
-    EntryPoint *entry_f = (EntryPoint*)entry;
-    entry_f();
+    // (*((int(* __attribute__((sysv_abi)))(void))(entry)))();
     // GoodBye
     PrintGoodbye();
     printf("Boot Loader\n");
