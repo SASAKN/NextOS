@@ -334,8 +334,6 @@ int main(int argc, char **argv)
     elf64_ehdr elf;
     elf64_phdr *phdr;
     open_root_dir(kernel_buf, kernel_size, kernel, root_dir);
-    // Open Kernel
-    BS->ExitBootServices(IM, map.map_key);
     // GoodBye
     PrintGoodbye();
     printf("Boot Loader\n");
