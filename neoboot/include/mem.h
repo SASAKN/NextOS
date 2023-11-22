@@ -1,7 +1,7 @@
 #ifndef _BOOT_MEM_H
 #define _BOOT_MEM_H
 
-#include "uefi/uefi.h"
+#include "../uefi/uefi.h"
 
 /* A memory map for booting */
 struct MemoryMap {
