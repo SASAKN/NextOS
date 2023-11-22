@@ -267,7 +267,7 @@ efi_status_t load_kernel(FILE *kernel, char* kernel_buf, long int kernel_size) {
     } else {
         printf("[ INFO ] Kernel File Info\n");
         printf("  File Size : %ld bytes\n", kernel_size);
-        printf("  File Buffer : %s\n", kernel_buf);
+        printf("  ELF Ehdr : %ld\n", ((elf64_ehdr *)kernel_buf)->e_type);
     }
     fread(kernel_buf, kernel_size, 1, kernel);
     fclose(kernel);
