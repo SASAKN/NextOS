@@ -1,4 +1,6 @@
-while (1) {
-    //ただHLTするだけのカーネルを作成.
-    __asm__ volatile("hlt");
+
+void KernelMain(void) {
+    while(1) {
+        __asm__ volatile("hlt");
+    }
 }
