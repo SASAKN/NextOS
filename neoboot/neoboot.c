@@ -264,6 +264,8 @@ efi_status_t load_kernel(FILE *kernel, char* kernel_buf, long int kernel_size) {
         PrintGoodbye();
         printf("Your computer is shutting down ...\n");
         RT->ResetSystem(EfiResetShutdown, EFI_SUCCESS, 0, NULL);
+    } else {
+        printf("[ INFO ] Kernel File Size : %ld", kernel_size);
     }
     fread(kernel_buf, kernel_size, 1, kernel);
     fclose(kernel);
