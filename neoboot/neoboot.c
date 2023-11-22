@@ -277,14 +277,29 @@ efi_status_t load_kernel(FILE *kernel, char* kernel_buf, long int kernel_size) {
 }
 
 //Boot Kernel
-efi_status_t boot_kernel(char *kernel_buffer, elf64_ehdr *elf, elf64_phdr *phdr) {
+efi_status_t boot_kernel(char *kernel_buffer, elf64_ehdr *elf, elf64_phdr *phdr, uintptr_t entry) {
     elf = (elf64_ehdr *)kernel_buffer;
     if (!memcmp(elf->e_ident, ELFMAG, SELFMAG) &&
     elf->e_ident[EI_CLASS] == ELFCLASS64 &&
     elf->e_ident[EI_DATA] == ELFDATA2LSB &&
     elf->e_type == ET_EXEC &&
     elf->e_machine == EM_MACH &&
-    elf->e_p )
+    elf->e_phnum > 0 ) {
+        // Load Segments
+        for (phdr = (elf64_phdr *)(kernel_buffer + elf->e_phoff), i = 0;
+        i < elf->e_phnum;
+        i++, phdr = (elf64_phdr *)((uint8_t *)phdr + elf->e_phentsize)) {
+            if(phdr->p_type == PT_LOAD) {
+                memcpy((void*)phdr->p_vaddr, buff + phdr->p_offset, phdr->p_filesz);
+                memset((void*)(phdr->p_vaddr + phdr->p_filesz), 0, phdr->p_memsz - phdr->p_filesz);
+            }
+        }
+        entry = elf->e_entry;
+    } else {
+        PrintError();
+        fprintf(stderr, "Run ELF\n");
+        return EFI_SUCCESS;
+    }
 }
 
 // Open Root Directory.
@@ -343,6 +358,7 @@ int main(int argc, char **argv)
     char *kernel_buf;
     elf64_ehdr elf;
     elf64_phdr *phdr;
+    uintptr_t entry;
     open_root_dir(kernel_buf, kernel_size, kernel, root_dir);
     // Boot Kernel
 
