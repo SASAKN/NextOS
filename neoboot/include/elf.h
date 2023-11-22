@@ -75,7 +75,7 @@ typedef struct {
     Elf64_Half e_shentsize;
     Elf64_Half e_shnum;
     Elf64_Half e_shstrndx;
-} elf64_hdr;
+} elf64_ehdr;
 
 /* ELF Section Header */
 typedef struct {

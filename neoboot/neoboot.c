@@ -324,6 +324,8 @@ int main(int argc, char **argv)
     DIR *root_dir;
     long int kernel_size;
     char *kernel_buf;
+    elf64_ehdr elf;
+    elf64_phdr *phdr;
     open_root_dir(kernel_buf, kernel_size, kernel, root_dir);
     // Open Kernel
     // GoodBye

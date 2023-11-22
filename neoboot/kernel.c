@@ -1,2 +1,4 @@
-// ちょっとしたカーネルを書いてみる
-#include "include/kernel_param.h"
+while (1) {
+    //ただHLTするだけのカーネルを作成.
+    __asm__ volatile("hlt");
+}
