@@ -1,3 +1,0 @@
-TARGET = build/neoboot_x86_64.efi
-
-include uefi/MakeFile
