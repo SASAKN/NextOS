@@ -291,7 +291,7 @@ efi_status_t boot_kernel(char *kernel_buffer, elf64_ehdr *elf, elf64_phdr *phdr,
         i < elf->e_phnum;
         i++, phdr = (elf64_phdr *)((uint8_t *)phdr + elf->e_phentsize)) {
             if(phdr->p_type == PT_LOAD) {
-                memcpy((void*)phdr->p_vaddr, buff + phdr->p_offset, phdr->p_filesz);
+                memcpy((void*)phdr->p_vaddr, kernel_buffer + phdr->p_offset, phdr->p_filesz);
                 memset((void*)(phdr->p_vaddr + phdr->p_filesz), 0, phdr->p_memsz - phdr->p_filesz);
             }
         }
@@ -357,7 +357,7 @@ int main(int argc, char **argv)
     DIR *root_dir;
     long int kernel_size;
     char *kernel_buf;
-    elf64_ehdr elf;
+    elf64_ehdr *elf;
     elf64_phdr *phdr;
     uintptr_t entry;
     open_root_dir(kernel_buf, kernel_size, kernel, root_dir);
