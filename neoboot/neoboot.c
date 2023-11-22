@@ -270,12 +270,12 @@ efi_status_t load_kernel(FILE *kernel, char* kernel_buf, long int kernel_size) {
     return EFI_SUCCESS;
 }
 
-// ルートファイルシステムを開く
+// Open Root Directory.
 efi_status_t open_root_dir( char *kernel_buf, long int kernel_size, FILE *kernel, DIR *dir ){
     if ((dir = opendir("\\neos"))) {
         PrintOK();
         printf("Exists a root directory\n");
-        //ルートディレクトリーがあったら、カーネルを見つける
+        // If the root directory has existed, this function will check the kernel.
         if ((kernel = fopen("\\neos\\kernel\\kernel.elf", "r"))) {
             //If the kernel file has existed, this function loads the kernel.
             load_kernel(kernel, kernel_buf, kernel_size);
