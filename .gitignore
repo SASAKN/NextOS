@@ -13,3 +13,4 @@ test.c
 *.cdr
 *.out
 my-operating-system.code-workspace
+*.wav
