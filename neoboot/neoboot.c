@@ -134,12 +134,15 @@ EFI_STATUS save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *file) {
     CHAR8 buf[300];
     UINTN size;
     CHAR8 *header = "Index, Buffer, Type, Type(name),PhysicalStart, VirtualStart, NumberOfPages, Size,  Attribute";
-    file->Write(file, (UINTN *)93, header);
+    size = AsciiStrLen(header);
+    file->Write(file, &size, header);
     EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer;
     for (uint32_t i = 0; i < map->memmap_desc_entry; i++){
-        AsciiSPrint(buf, sizeof(buf), "%02d, %016x, %02x, %s, %016x, %016x, %016x, %d, %016x \n", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
+        size = AsciiSPrint(buf, sizeof(buf), "%02d, %016x, %02x, %s, %016x, %016x, %016x, %d, %016x \n", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
+        file->Write(file, &size, buf);
         desc = (EFI_MEMORY_DESCRIPTOR *)((uint8_t *)desc + map->descriptor_size);
     }
+    return EFI_SUCCESS;
 }
 
 EFI_STATUS EFIAPI main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
