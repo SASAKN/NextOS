@@ -130,6 +130,19 @@ EFI_STATUS print_memmap(struct MemoryMap *map) {
     return EFI_SUCCESS;
 }
 
+// Mikanosのブートローダーから移植
+
+EFI_STATUS open_root_dir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root) {
+  EFI_LOADED_IMAGE_PROTOCOL* loaded_image;
+  EFI_SIMPLE_FILE_SYSTEM_PROTOCOL* fs;
+  uefi_call_wrapper(BS->OpenProtocol, 6, image_handle, &gEfiLoadedImageProtocolGuid, (VOID**)&loaded_image, image_handle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+  uefi_call_wrapper(BS->OpenProtocol, 6, loaded_image->DeviceHandle, &gEfiSimpleFileSystemProtocolGuid, (VOID**)&fs, image_handle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+  uefi_call_wrapper(fs->OpenVolume, 2, fs, root);
+  return EFI_SUCCESS;
+}
+
+// @End Mikanosのブートローダーから移植
+
 EFI_STATUS save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *file) {
     CHAR8 buf[300];
     UINTN size;
@@ -162,7 +175,13 @@ EFI_STATUS EFIAPI main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     Print(L"Get Memory Map");
     // Print MemoryMap
     print_memmap(&map);
+    //OpenRootDir
+    EFI_FILE_PROTOCOL *root_dir;
+    open_root_dir(ImageHandle, &root_dir);
     // Save Memory Map
+    EFI_FILE_PROTOCOL *memmap_file;
+    uefi_call_wrapper(root_dir->Open, 5, root_dir, &memmap_file, L"\\memmap", EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE);
+    save_memmap(&map, memmap_file);
     // GoodBye
     PrintGoodBye();
     Print(L"BootLoader");
