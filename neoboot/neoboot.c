@@ -151,6 +151,7 @@ EFI_STATUS open_root_dir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root) {
   return EFI_SUCCESS;
 }
 
+// Calc and Load Address range.
 void calc_load_address_range(elf64_ehdr *ehdr, UINT64 *first, UINT64 *last) {
     elf64_phdr *phdr = (elf64_phdr *)((UINT64)ehdr + ehdr->e_phoff);
     *first = UINT64_MAX;
@@ -159,6 +160,19 @@ void calc_load_address_range(elf64_ehdr *ehdr, UINT64 *first, UINT64 *last) {
         if (phdr[i].p_type != PT_LOAD) continue;
         *first = MIN(*first, phdr[i].p_addr);
         *last = MAX(*last, phdr[i].p_vaddr + phdr[i].p_memsz);
+    }
+}
+
+
+// Copy and Load segments.
+void copy_load_segments(elf64_ehdr *ehdr) {
+    elf64_phdr phdr = (elf64_phdr *) ((UINT64)ehdr + ehdr->e_phoff);
+    for (elf64_half i = 0; i < ehdr->e_phnum; ++i) {
+        if (phdr[i].p_type != PT_LOAD) continue;
+        UINT64 segment_in_file = (UINT64)ehdr + phdr[i].p_offset;
+        CopyMem((VOID**)phdr[i].p_vaddr, (VOID*)segment_in_file, phdr[i].p_filesz);
+        UINTN remain_bytes = phdr[i].p_memsz - phdr[i].p_filesz;
+        SetMem((VOID*)(phdr[i].p_vaddr + phdr[i].p_filesz), remain_bytes, 0);
     }
 }
 
