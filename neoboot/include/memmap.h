@@ -1,7 +1,7 @@
 #ifndef _NEOBOOT_MEMMAP_H
 #define _NEOBOOT_MEMMAP_H
 
-#include "efilib/inc/efi.h"
+#include "../efilib/inc/efi.h"
 
 #define MEMMAP_DESC_SIZE 4096
 
