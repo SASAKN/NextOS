@@ -87,7 +87,7 @@ void PrintWarn() {
 
 void PrintGoodBye() {
     ST->ConOut->SetAttribute(ST->ConOut, EFI_BLUE);
-    Print(L"[ OK ]");
+    Print(L"[ GoodBye ]");
     ST->ConOut->SetAttribute(ST->ConOut, EFI_WHITE);
 }
 
@@ -135,20 +135,21 @@ EFI_STATUS save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *file) {
     UINTN size;
     CHAR8 *header = "Index, Buffer, Type, Type(name),PhysicalStart, VirtualStart, NumberOfPages, Size,  Attribute";
     size = AsciiStrLen(header);
-    file->Write(file, &size, header);
+    uefi_call_wrapper(file->Write, 3, file, &size, header);
     EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer;
     for (uint32_t i = 0; i < map->memmap_desc_entry; i++){
         size = AsciiSPrint(buf, sizeof(buf), "%02d, %016x, %02x, %s, %016x, %016x, %016x, %d, %016x \n", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
-        file->Write(file, &size, buf);
+        uefi_call_wrapper(file->Write, 3, file, &size, buf);
         desc = (EFI_MEMORY_DESCRIPTOR *)((uint8_t *)desc + map->descriptor_size);
     }
+    PrintOK();
+    Print(L"Save Memory Map\n");
     return EFI_SUCCESS;
 }
 
 EFI_STATUS EFIAPI main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     InitializeLib(ImageHandle, SystemTable);
-    SIMPLE_TEXT_OUTPUT_PROTOCOL *conout = ST->ConOut;
-    ST->BootServices->SetWatchdogTimer(0,0,0,NULL);
+    uefi_call_wrapper(ST->BootServices->SetWatchdogTimer, 4, 0, 0, 0, NULL);
     //Welcome
     PrintOK();
     Print(L"Welcome to NeoBoot v.0.1");
