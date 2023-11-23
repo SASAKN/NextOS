@@ -126,7 +126,7 @@ EFI_STATUS print_memmap(struct MemoryMap *map) {
     EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer;
     for (i = 0; i < map->memmap_desc_entry; i++) {
         Print(L"%02d, %016x, %02x, %s, %016x, %016x, %016x, %d, %016x",  i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
-        desc = (efi_memory_descriptor_t *)((uint8_t *)desc + map->descriptor_size);
+        desc = (EFI_MEMORY_DESCRIPTOR *)((uint8_t *)desc + map->descriptor_size);
     }
     Print(L"\n");
     PrintOK();
@@ -139,6 +139,7 @@ EFI_STATUS print_memmap(struct MemoryMap *map) {
 EFI_STATUS open_root_dir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root) {
   EFI_LOADED_IMAGE_PROTOCOL* loaded_image;
   EFI_SIMPLE_FILE_SYSTEM_PROTOCOL* fs;
+  EFI_STATUS status = 0;
   status = uefi_call_wrapper(BS->OpenProtocol, 6, image_handle, &gEfiLoadedImageProtocolGuid, (VOID**)&loaded_image, image_handle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
   ASSERT(status != EFI_SUCCESS);
   status = uefi_call_wrapper(BS->OpenProtocol, 6, loaded_image->DeviceHandle, &gEfiSimpleFileSystemProtocolGuid, (VOID**)&fs, image_handle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
@@ -147,7 +148,7 @@ EFI_STATUS open_root_dir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root) {
   ASSERT(status != EFI_SUCCESS);
   PrintOK();
   Print(L"Open Root Directory\n");
-  return EFI_SUCCESS;
+  return status;
 }
 
 // Calc and Load Address range.
@@ -155,9 +156,9 @@ void calc_load_address_range(elf64_ehdr *ehdr, UINT64 *first, UINT64 *last) {
     elf64_phdr *phdr = (elf64_phdr *)((UINT64)ehdr + ehdr->e_phoff);
     *first = UINT64_MAX;
     *last = 0;
-    for (Elf64_half i = 0; i < ehdr->p_phnum; ++i) {
+    for (Elf64_Half i = 0; i < ehdr->e_phnum; ++i) {
         if (phdr[i].p_type != PT_LOAD) continue;
-        *first = MIN(*first, phdr[i].p_addr);
+        *first = MIN(*first, phdr[i].p_paddr);
         *last = MAX(*last, phdr[i].p_vaddr + phdr[i].p_memsz);
     }
 }
@@ -165,8 +166,8 @@ void calc_load_address_range(elf64_ehdr *ehdr, UINT64 *first, UINT64 *last) {
 
 // Copy and Load segments.
 void copy_load_segments(elf64_ehdr *ehdr) {
-    elf64_phdr phdr = (elf64_phdr *) ((UINT64)ehdr + ehdr->e_phoff);
-    for (Elf64_half i = 0; i < ehdr->e_phnum; ++i) {
+    elf64_phdr *phdr = (elf64_phdr *)((UINT64)ehdr + ehdr->e_phoff);
+    for (Elf64_Half i = 0; i < ehdr->e_phnum; ++i) {
         if (phdr[i].p_type != PT_LOAD) continue;
         UINT64 segment_in_file = (UINT64)ehdr + phdr[i].p_offset;
         CopyMem((VOID**)phdr[i].p_vaddr, (VOID*)segment_in_file, phdr[i].p_filesz);
@@ -224,7 +225,7 @@ EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root_dir, EFI_FILE_PROTOCOL *kernel_fi
         PrintError();
         Print(L"allocate pool : %r\n", status);
     }
-    status = uefi_call_wrapper(kernel_file->Read, 3, kernel, &kernel_file_size, kernel_buffer);
+    status = uefi_call_wrapper(kernel_file->Read, 3, kernel_file, &kernel_file_size, kernel_buffer);
     if (EFI_ERROR(status)) {
         PrintError();
         Print(L"read kernel file : %r\n", status);
