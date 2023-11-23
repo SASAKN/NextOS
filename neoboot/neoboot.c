@@ -135,6 +135,17 @@ EFI_STATUS print_memmap(struct MemoryMap *map) {
     return EFI_SUCCESS;
 }
 
+void calc_load_address_range(elf64_ehdr *ehdr, UINT64 *first, UINT64 *last) {
+    elf64_phdr *phdr = (elf64_phdr *)((UINT64)ehdr + ehdr->e_phoff);
+    *first = UINT64_MAX;
+    *last = 0;
+    for (elf64_half i = 0; i < ehdr->p_phnum; ++i) {
+        if (phdr[i].p_type != PT_LOAD) continue;
+        *first = MIN(*first, phdr[i].p_addr);
+        *last = MAX(*last, phdr[i].p_vaddr + phdr[i].p_memsz);
+    }
+}
+
 // Mikanosのブートローダーから移植
 
 EFI_STATUS open_root_dir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root) {
@@ -174,12 +185,40 @@ EFI_STATUS save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *file) {
 }
 
 EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root_dir, EFI_FILE_PROTOCOL *kernel_file) {
-    status = uefi_call_wrapper(root_dir->Open, 5, root_dir, &kernel_file, L"\\kernel.elf", EFI_FILE_MODE_READ, 0);
+    //Load File
+    CHAR16 *file_name = L"\\kernel.elf";
+    status = uefi_call_wrapper(root_dir->Open, 5, root_dir, &kernel_file, file_name, EFI_FILE_MODE_READ, 0);
     if (EFI_ERROR(status)) {
         PrintError();
         Print(L"Open file '\\kernel.elf' : %r\n", status);
-        hlt();
     }
+    // Get File Info
+    UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * (StrLen(file_name));
+    UINT8 file_info_buffer[file_info_size];
+    status = uefi_call_wrapper(kernel_file->GetInfo, 4, kernel_file, &gEfiFileInfoGuid, &file_info_size, file_info_buffer);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Get file info '\\kernel.elf' : %r\n", status);
+    }
+    EFI_FILE_INFO *file_info = (EFI_FILE_INFO *)file_info_buffer;
+    UINTN kernel_file_size = file_info->FileSize;
+    Print(L"[ INFO ] Kernel File Size : %ld", kernel_file_size);
+    // Allocate (tmp)
+    VOID *kernel_buffer;
+    status = uefi_call_wrapper(BS->AllocatePool, 3, EfiLoaderData, kernel_file_size, &kernel_buffer);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"allocate pool : %r\n", status);
+    }
+    status = uefi_call_wrapper(kernel_file->Read, 3, kernel, &kernel_file_size, kernel_buffer);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"read kernel file : %r\n", status);
+    }
+    // Allocate Pages
+    elf64_ehdr* kernel_ehdr;
+    kernel_ehdr = (elf64_ehdr *)kernel_buffer;
+    UINT64 kernel_first_addr , kernel_last_addr;
 }
 
 EFI_STATUS EFIAPI main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
