@@ -1,18 +1,18 @@
 #ifndef _NEOBOOT_MEMMAP_H
 #define _NEOBOOT_MEMMAP_H
 
-#include "types.h"
+#include "efilib/inc/efi.h"
 
 #define MEMMAP_DESC_SIZE 4096
 
 struct MemoryMap {
-    uint64_t buffer_size;
+    UINT64 buffer_size;
     void* buffer;
-    uint64_t map_size;
-    uint64_t map_key;
-    uint64_t descriptor_size;
-    uint32_t descriptor_version;
-    uint64_t memmap_desc_entry;
+    UINT64 map_size;
+    UINT64 map_key;
+    UINT64 descriptor_size;
+    UINT32 descriptor_version;
+    UINT64 memmap_desc_entry;
 };
 
 struct MemoryDescriptor {

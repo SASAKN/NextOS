@@ -255,7 +255,7 @@ EFI_STATUS exit_bs(struct MemoryMap *map, EFI_HANDLE ImageHandle){
     EFI_STATUS status;
     status = uefi_call_wrapper(BS->ExitBootServices, 2, ImageHandle, map->map_key);
     if (EFI_ERROR(status)) {
-        status = LibMemoryMap(map->memmap_desc_entry, map->map_key, map->descriptor_size, map->descriptor_version);
+        status = LibMemoryMap((UINTN *)map->memmap_desc_entry, (UINTN *)map->map_key, (UINTN *)map->descriptor_size, (UINT32 *)map->descriptor_version);
         if (EFI_ERROR(status)) {
             PrintError();
             Print(L"Get Memory Map Key : %r\n", status);
@@ -278,7 +278,7 @@ EFI_STATUS EFIAPI main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     Print(L"Welcome to NeoBoot v.0.1");
     //Get MemoryMap
     struct MemoryMap map;
-    EFI_MEMORY_DESCRIPTOR *efi_map = LibMemoryMap(map.memmap_desc_entry, map.map_key, map.descriptor_size, map.descriptor_version);
+    EFI_MEMORY_DESCRIPTOR *efi_map = LibMemoryMap((UINTN *)map.memmap_desc_entry, (UINTN *)map.map_key, (UINTN *)map.descriptor_size, (UINT32 *)map.descriptor_version);
     map.memmap_desc_entry = map.map_size / map.descriptor_size;
     ASSERT(map != NULL);
     PrintOK();
