@@ -7,6 +7,66 @@
 #define MAX(a, b) (a < b ? b : a)
 #define MIN(a, b) (a < b ? a : b)
 
+void print_efi_configuration_table(void)
+{
+    uint64_t i;
+    Print(L"\n[ INFO ] EfiConfigurationTable\n");
+    for (i = 0; i < ST->NumberOfTableEntries; i++)
+    {
+        Print(L"%02d : %016x : %08x, %04x, %04x\n", i, (unsigned long long)&ST->ConfigurationTable[i], ST->ConfigurationTable[i].VendorGuid.Data1, ST->ConfigurationTable[i].VendorGuid.Data2, ST->ConfigurationTable[i].VendorGuid.Data3);
+        unsigned char j;
+        for (j = 0; j < 8; j++)
+        {
+            Print(L"%02x", ST->ConfigurationTable[i].VendorGuid.Data4[j]);
+        }
+        Print(L"%016x\n", (unsigned long long)ST->ConfigurationTable[i].VendorTable);
+    }
+    Print(L"\n");
+    PrintOK();
+    Print(L"VendorTable\n");
+};
+
+CHAR16 *get_memtype_name(EFI_MEMORY_TYPE type)
+{
+    switch (type)
+    {
+    case EfiReservedMemoryType:
+        return L"EfiReservedMemoryType";
+    case EfiLoaderCode:
+        return L"EfiLoaderCode";
+    case EfiLoaderData:
+        return L"EfiLoaderData";
+    case EfiBootServicesCode:
+        return L"EfiBootServicesCode";
+    case EfiBootServicesData:
+        return L"EfiBootServicesData";
+    case EfiRuntimeServicesCode:
+        return L"EfiRuntimeServicesCode";
+    case EfiRuntimeServicesData:
+        return L"EfiRuntimeServicesData";
+    case EfiConventionalMemory:
+        return L"EfiConventionalMemory";
+    case EfiUnusableMemory:
+        return L"EfiUnusableMemory";
+    case EfiACPIReclaimMemory:
+        return L"EfiACPIReclaimMemory";
+    case EfiACPIMemoryNVS:
+        return L"EfiACPIMemoryNVS";
+    case EfiMemoryMappedIO:
+        return L"EfiMemoryMappedIO";
+    case EfiMemoryMappedIOPortSpace:
+        return L"EfiMemoryMappedIOPortSpace";
+    case EfiPalCode:
+        return L"EfiPalCode";
+    case EfiPersistentMemory:
+        return L"EfiPersistentMemory";
+    case EfiMaxMemoryType:
+        return L"EfiMaxMemoryType";
+    default:
+        return L"InvalidMemoryType";
+    }
+};
+
 void PrintOK() {
     ST->ConOut->SetAttribute(ST->ConOut, EFI_GREEN);
     Print(L"[ OK ]");
@@ -44,8 +104,8 @@ EFI_STATUS EFIAPI main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     ASSERT(map != NULL);
     PrintOK();
     Print(L"Get Memory Map");
-    // Save MemoryMap
-    
+    // Print MemoryMap
+
     // GoodBye
     PrintGoodBye();
     Print(L"BootLoader");
