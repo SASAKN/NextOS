@@ -14,3 +14,4 @@ test.c
 *.out
 my-operating-system.code-workspace
 *.wav
+efilib/
