@@ -91,6 +91,23 @@ void PrintGoodBye() {
     ST->ConOut->SetAttribute(ST->ConOut, EFI_WHITE);
 }
 
+EFI_STATUS print_memmap(struct MemoryMap *map) {
+    EFI_STATUS status;
+    Print(L"\n[ INFO ] MemoryMap\n");
+    CHAR16 *header = L"Index, Buffer, Type, Type(name),PhysicalStart, VirtualStart, NumberOfPages, Size,  Attribute";
+    Print(L"%s\n", header);
+    uint32_t i;
+    EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer;
+    for (i = 0; i < map->memmap_desc_entry; i++) {
+        Print(L"%02d, %016x, %02x, %s, %016x, %016x, %016x, %d, %016x",  i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
+        desc = (efi_memory_descriptor_t *)((uint8_t *)desc + map->descriptor_size);
+    }
+    Print(L"\n");
+    PrintOK();
+    Print(L"Print Memory Map\n");
+    return EFI_SUCCESS;
+}
+
 EFI_STATUS EFIAPI main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     InitializeLib(ImageHandle, SystemTable);
     SIMPLE_TEXT_OUTPUT_PROTOCOL *conout = ST->ConOut;
@@ -105,7 +122,7 @@ EFI_STATUS EFIAPI main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     PrintOK();
     Print(L"Get Memory Map");
     // Print MemoryMap
-
+    print_memmap(&map);
     // GoodBye
     PrintGoodBye();
     Print(L"BootLoader");
