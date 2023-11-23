@@ -135,17 +135,6 @@ EFI_STATUS print_memmap(struct MemoryMap *map) {
     return EFI_SUCCESS;
 }
 
-void calc_load_address_range(elf64_ehdr *ehdr, UINT64 *first, UINT64 *last) {
-    elf64_phdr *phdr = (elf64_phdr *)((UINT64)ehdr + ehdr->e_phoff);
-    *first = UINT64_MAX;
-    *last = 0;
-    for (elf64_half i = 0; i < ehdr->p_phnum; ++i) {
-        if (phdr[i].p_type != PT_LOAD) continue;
-        *first = MIN(*first, phdr[i].p_addr);
-        *last = MAX(*last, phdr[i].p_vaddr + phdr[i].p_memsz);
-    }
-}
-
 // Mikanosのブートローダーから移植
 
 EFI_STATUS open_root_dir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root) {
@@ -160,6 +149,17 @@ EFI_STATUS open_root_dir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root) {
   PrintOK();
   Print(L"Open Root Directory\n");
   return EFI_SUCCESS;
+}
+
+void calc_load_address_range(elf64_ehdr *ehdr, UINT64 *first, UINT64 *last) {
+    elf64_phdr *phdr = (elf64_phdr *)((UINT64)ehdr + ehdr->e_phoff);
+    *first = UINT64_MAX;
+    *last = 0;
+    for (elf64_half i = 0; i < ehdr->p_phnum; ++i) {
+        if (phdr[i].p_type != PT_LOAD) continue;
+        *first = MIN(*first, phdr[i].p_addr);
+        *last = MAX(*last, phdr[i].p_vaddr + phdr[i].p_memsz);
+    }
 }
 
 // @End Mikanosのブートローダーから移植
@@ -219,6 +219,14 @@ EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root_dir, EFI_FILE_PROTOCOL *kernel_fi
     elf64_ehdr* kernel_ehdr;
     kernel_ehdr = (elf64_ehdr *)kernel_buffer;
     UINT64 kernel_first_addr , kernel_last_addr;
+    calc_load_address_range(kernel_ehdr, &kernel_first_addr, &kernel_last_addr);
+    UINTN num_pages = (kernel_last_addr - kernel_first_addr + 0xfff) / 0x1000;  //4kibのUEFIが読み取れるメモリーのブロックを作成
+    status = uefi_call_wrapper(BS->AllocatePages, 4, AllocateAddress, EfiLoaderData, num_pages, &kernel_first_addr);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Allocate Pages : %r", status);
+    }
+    // Copy Segments
 }
 
 EFI_STATUS EFIAPI main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
