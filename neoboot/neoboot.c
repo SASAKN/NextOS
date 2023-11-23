@@ -198,7 +198,7 @@ EFI_STATUS save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *file) {
     return EFI_SUCCESS;
 }
 
-EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root_dir, EFI_FILE_PROTOCOL *kernel_file) {
+EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root_dir, EFI_FILE_PROTOCOL *kernel_file, UINT64 kernel_first_addr, UINT64 kernel_last_addr) {
     //Load File
     CHAR16 *file_name = L"\\kernel.elf";
     status = uefi_call_wrapper(root_dir->Open, 5, root_dir, &kernel_file, file_name, EFI_FILE_MODE_READ, 0);
@@ -232,7 +232,6 @@ EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root_dir, EFI_FILE_PROTOCOL *kernel_fi
     // Allocate Pages
     elf64_ehdr* kernel_ehdr;
     kernel_ehdr = (elf64_ehdr *)kernel_buffer;
-    UINT64 kernel_first_addr , kernel_last_addr;
     calc_load_address_range(kernel_ehdr, &kernel_first_addr, &kernel_last_addr);
     UINTN num_pages = (kernel_last_addr - kernel_first_addr + 0xfff) / 0x1000;  //4kibのUEFIが読み取れるメモリーのブロックを作成
     status = uefi_call_wrapper(BS->AllocatePages, 4, AllocateAddress, EfiLoaderData, num_pages, &kernel_first_addr);
@@ -295,7 +294,8 @@ EFI_STATUS EFIAPI main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     // Prepare Kernel Paramater
     // Load Kernel
     EFI_FILE_PROTOCOL *kernel_file;
-    load_kernel(root_dir, kernel_file);
+    UINT64 kernel_first_addr , kernel_last_addr;
+    load_kernel(root_dir, kernel_file, kernel_first_addr, kernel_last_addr);
     // GoodBye
     PrintGoodBye();
     Print(L"BootLoader\n");
@@ -305,4 +305,8 @@ EFI_STATUS EFIAPI main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     //つまり開発者は、これ以降に、ジャンプなどの関数以外は、入れては、いけないということです。
     //入れると一般保護例外や、ページフォルトなどの例外が起きプログラムが正常に動作しなくなります。
     // 注意してください。
+    UINT64 e_addr = *(UINT64)(kernel_first_addr + 24);
+    typedef void e_point_type_t(void);
+    e_point_type_t *entry_point = (e_point_type_t*)e_addr;
+    entry_point();
 }
