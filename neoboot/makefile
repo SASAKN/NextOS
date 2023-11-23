@@ -1,6 +1,6 @@
 MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 # General
-ENTRYMAIN	=main
+ENTRYMAIN	=efimain
 PROGRAM		=neoboot
 SRCS		=neoboot.c
 OBJS		=$(SRCS:%.c=%.o)
@@ -12,7 +12,7 @@ CC			=/opt/local/bin/x86_64-elf-gcc
 LD			=/opt/local/bin/x86_64-elf-ld
 OBJCOPY     =/opt/local/bin/x86_64-elf-objcopy
 
-CFLAGS		=-fpic -ffreestanding -fno-stack-protector -fno-stack-check -fshort-wchar -mno-red-zone -maccumulate-outgoing-args
+CFLAGS		=-fpic -ffreestanding -fno-stack-protector -fno-stack-check -fshort-wchar -mno-red-zone -maccumulate-outgoing-args -e $(ENTRYMAIN) 
 LDFLAGS     =-shared -Bsymbolic -L$(EFILIB_DIR)/x86_64/lib -L$(EFILIB_DIR)/x86_64/gnuefi -T$(EFILIB_DIR)/gnuefi/elf_x86_64_efi.lds
 OBJCOPYFLAGS = -j .text -j .sdata -j .data -j .dynamic -j .dynsym  -j .rel -j .rela -j .rel.* -j .rela.* -j .reloc --target efi-app-x86_64 --subsystem=10
 

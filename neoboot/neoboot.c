@@ -269,9 +269,10 @@ EFI_STATUS exit_bs(struct MemoryMap *map, EFI_HANDLE ImageHandle){
     return status;
 }
 
-EFI_STATUS EFIAPI main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
+EFI_STATUS EFIAPI efimain (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     EFI_STATUS status = 0;
     InitializeLib(ImageHandle, SystemTable);
+    Print(L"OK!");
     uefi_call_wrapper(ST->BootServices->SetWatchdogTimer, 4, 0, 0, 0, NULL);
     //Welcome
     PrintOK();
