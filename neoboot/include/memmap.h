@@ -3,7 +3,8 @@
 
 #include "types.h"
 
-/* A memory map for booting */
+#define MEMMAP_DESC_SIZE 4096
+
 struct MemoryMap {
     uint64_t buffer_size;
     void* buffer;
@@ -14,7 +15,6 @@ struct MemoryMap {
     uint64_t memmap_desc_entry;
 };
 
-/* EFI_MEMORY_DESCRIPTOR */
 struct MemoryDescriptor {
     uint64_t Type;
     uint32_t PhysicalStart;
