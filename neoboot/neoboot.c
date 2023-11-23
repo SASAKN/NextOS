@@ -241,6 +241,13 @@ EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root_dir, EFI_FILE_PROTOCOL *kernel_fi
         Print(L"Allocate Pages : %r", status);
     }
     // Copy Segments
+    copy_load_segments(kernel_ehdr);
+    Print(L"Kernel: 0x%0lx - 0x%0lx\n", kernel_first_addr, kernel_last_addr);
+    status = uefi_call_wrapper(BS->FreePool, 1, kernel_buffer);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Free Pool");
+    }
 }
 
 EFI_STATUS EFIAPI main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
