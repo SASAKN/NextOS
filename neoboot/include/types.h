@@ -19,5 +19,13 @@ typedef char int8_t;
 typedef uint64_t size_t;
 typedef uint16_t wchar_t;
 
+// ELF Types
+typedef unsigned long long Elf64_Addr;
+typedef unsigned long long Elf64_Xword;
+typedef unsigned long long Elf64_Off;
+typedef unsigned int Elf64_Word;
+typedef unsigned short Elf64_Half;
+typedef long long Elf64_Sxword;
+typedef int Elf64_Sword;
 
 #endif
