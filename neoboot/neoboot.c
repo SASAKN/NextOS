@@ -92,13 +92,13 @@ void PrintGoodBye() {
 }
 
 //EDK2から移植
-UINTN EFIAPI AsciiSPrint (OUT CHAR8 *StartOfBuffer,IN  UINTN BufferSize,IN CONST CHAR8  *FormatString, ...){
+UINTN EFIAPI AsciiSPrint( OUT CHAR8 *StartOfBuffer,IN  UINTN BufferSize,IN CONST CHAR8  *FormatString, ...){
   va_list  Marker;
-  UINTN    NumberOfPrinted;
+  UINTN    size;
   va_start (Marker, FormatString);
-  NumberOfPrinted = AsciiVSPrint(StartOfBuffer, BufferSize, FormatString, Marker);
+  size = AsciiVSPrint(StartOfBuffer, BufferSize, FormatString, Marker);
   va_end (Marker);
-  return NumberOfPrinted;
+  return size;
 }
 
 UINTN EFIAPI AsciiStrLen ( IN CONST CHAR8 *String )
