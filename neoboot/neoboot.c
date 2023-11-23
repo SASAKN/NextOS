@@ -251,6 +251,7 @@ EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root_dir, EFI_FILE_PROTOCOL *kernel_fi
 }
 
 EFI_STATUS EFIAPI main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
+    EFI_STATUS status = NULL;
     InitializeLib(ImageHandle, SystemTable);
     uefi_call_wrapper(ST->BootServices->SetWatchdogTimer, 4, 0, 0, 0, NULL);
     //Welcome
@@ -279,5 +280,23 @@ EFI_STATUS EFIAPI main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     load_kernel(root_dir, kernel_file);
     // GoodBye
     PrintGoodBye();
-    Print(L"BootLoader");
+    Print(L"BootLoader\n");
+    // Exit Boot Loader
+    status = uefi_call_wrapper(BS->ExitBootServices, 2, ImageHandle, map.map_key);
+    if (EFI_ERROR(status)) {
+        status = LibMemoryMap(map.memmap_desc_entry, map.map_key, map.descriptor_size, map.descriptor_version);
+        if (EFI_ERROR(status)) {
+            PrintError();
+            Print(L"Get Memory Map Key : %r\n", status);
+        }
+        status = uefi_call_wrapper(BS->ExitBootServices, 2, ImageHandle, map.map_key);
+        if (EFI_ERROR(status)) {
+            PrintError();
+            Print(L"Exit Boot Services : %r\n", status);
+        }
+    }
+    //注意:これ以降Printなどが呼べなくなります。
+    //つまり開発者は、これ以降に、ジャンプなどの関数以外は、入れては、いけないということです。
+    //入れると一般保護例外や、ページフォルトなどの例外が起きプログラムが正常に動作しなくなります。
+    // 注意してください。
 }
