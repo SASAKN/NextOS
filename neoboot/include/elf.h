@@ -1,6 +1,8 @@
 #ifndef _BOOT_ELF_H
 #define _BOOT_ELF_H
 
+#include "types.h"
+
 // Macros
 #define EI_MAG0 0
 #define EI_MAG1 1
