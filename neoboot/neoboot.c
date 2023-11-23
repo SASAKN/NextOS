@@ -1,4 +1,3 @@
-#define EFI_DEBUG
 #include "efilib/inc/efi.h"
 #include "efilib/inc/efilib.h"
 #include "include/elf.h"
@@ -14,7 +13,7 @@ void hlt(void) {
 
 void print_efi_configuration_table(void)
 {
-    uint64_t i;
+    UINT64 i;
     Print(L"\n[ INFO ] EfiConfigurationTable\n");
     for (i = 0; i < ST->NumberOfTableEntries; i++)
     {
@@ -72,25 +71,25 @@ CHAR16 *get_memtype_name(EFI_MEMORY_TYPE type)
     }
 };
 
-void PrintOK() {
+void PrintOK(void) {
     ST->ConOut->SetAttribute(ST->ConOut, EFI_GREEN);
     Print(L"[ OK ]");
     ST->ConOut->SetAttribute(ST->ConOut, EFI_WHITE);
 }
 
-void PrintError() {
+void PrintError(void) {
     ST->ConOut->SetAttribute(ST->ConOut, EFI_RED);
     Print(L"[ Error ]");
     ST->ConOut->SetAttribute(ST->ConOut, EFI_WHITE);
 }
 
-void PrintWarn() {
+void PrintWarn(void) {
     ST->ConOut->SetAttribute(ST->ConOut, EFI_YELLOW);
     Print(L"[ Warn ]");
     ST->ConOut->SetAttribute(ST->ConOut, EFI_WHITE);
 }
 
-void PrintGoodBye() {
+void PrintGoodBye(void) {
     ST->ConOut->SetAttribute(ST->ConOut, EFI_BLUE);
     Print(L"[ GoodBye ]");
     ST->ConOut->SetAttribute(ST->ConOut, EFI_WHITE);
@@ -156,7 +155,7 @@ void calc_load_address_range(elf64_ehdr *ehdr, UINT64 *first, UINT64 *last) {
     elf64_phdr *phdr = (elf64_phdr *)((UINT64)ehdr + ehdr->e_phoff);
     *first = UINT64_MAX;
     *last = 0;
-    for (elf64_half i = 0; i < ehdr->p_phnum; ++i) {
+    for (Elf64_half i = 0; i < ehdr->p_phnum; ++i) {
         if (phdr[i].p_type != PT_LOAD) continue;
         *first = MIN(*first, phdr[i].p_addr);
         *last = MAX(*last, phdr[i].p_vaddr + phdr[i].p_memsz);
@@ -167,7 +166,7 @@ void calc_load_address_range(elf64_ehdr *ehdr, UINT64 *first, UINT64 *last) {
 // Copy and Load segments.
 void copy_load_segments(elf64_ehdr *ehdr) {
     elf64_phdr phdr = (elf64_phdr *) ((UINT64)ehdr + ehdr->e_phoff);
-    for (elf64_half i = 0; i < ehdr->e_phnum; ++i) {
+    for (Elf64_half i = 0; i < ehdr->e_phnum; ++i) {
         if (phdr[i].p_type != PT_LOAD) continue;
         UINT64 segment_in_file = (UINT64)ehdr + phdr[i].p_offset;
         CopyMem((VOID**)phdr[i].p_vaddr, (VOID*)segment_in_file, phdr[i].p_filesz);
@@ -200,6 +199,7 @@ EFI_STATUS save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *file) {
 
 EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root_dir, EFI_FILE_PROTOCOL *kernel_file, UINT64 kernel_first_addr, UINT64 kernel_last_addr) {
     //Load File
+    EFI_STATUS status = 0;
     CHAR16 *file_name = L"\\kernel.elf";
     status = uefi_call_wrapper(root_dir->Open, 5, root_dir, &kernel_file, file_name, EFI_FILE_MODE_READ, 0);
     if (EFI_ERROR(status)) {
@@ -247,6 +247,7 @@ EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root_dir, EFI_FILE_PROTOCOL *kernel_fi
         PrintError();
         Print(L"Free Pool");
     }
+    return status;
 }
 
 EFI_STATUS exit_bs(struct MemoryMap *map, EFI_HANDLE ImageHandle){
@@ -305,7 +306,7 @@ EFI_STATUS EFIAPI main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     //つまり開発者は、これ以降に、ジャンプなどの関数以外は、入れては、いけないということです。
     //入れると一般保護例外や、ページフォルトなどの例外が起きプログラムが正常に動作しなくなります。
     // 注意してください。
-    UINT64 e_addr = *(UINT64)(kernel_first_addr + 24);
+    UINT64 e_addr = *(UINT64 *)(kernel_first_addr + 24);
     typedef void e_point_type_t(void);
     e_point_type_t *entry_point = (e_point_type_t*)e_addr;
     entry_point();
