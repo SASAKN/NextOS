@@ -248,7 +248,10 @@ void copy_load_segments(elf64_ehdr *ehdr) {
 }
 
 //カーネルの読み込み
-EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *kernel_f, EFI_FILE_PROTOCOL *root_dir) {
+// Defines Of Entry Point
+typedef void entry_t(void);
+
+EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *kernel_f, EFI_FILE_PROTOCOL *root_dir, UINT64 entry_addr, entry_t e_entry) {
     EFI_STATUS status;
     // Create Kernel File Handle
     status = root_dir->Open(root_dir, &kernel_f, L"\\kernel.elf", EFI_FILE_MODE_READ, 0);
@@ -298,6 +301,10 @@ EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *kernel_f, EFI_FILE_PROTOCOL *root_dir)
         PrintError();
         Print(L"Free Pool\n");
     }
+    // Get Entry Address
+    entry_addr = *(UINT64 *)(kernel_start_addr + 24);
+    e_entry = (entry_t *)kernel_ehdr->e_entry;
+    return EFI_SUCCESS;
 }
 
 
@@ -355,5 +362,16 @@ EFI_STATUS EFIAPI main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     save_memmap(&map, memmap_f);
     // Get Info Kernel
     EFI_FILE_PROTOCOL *kernel_f;
-    load_kernel(kernel_f, root_dir);
+    UINT64 entry_addr;
+    entry_t *e_entry;
+    load_kernel(kernel_f, root_dir, entry_addr);
+    // Print Entry Point Address
+    Print(L"entry = %x\n", e_entry);
+    // Exit Boot Services
+    exit_bs(IM, &map);
+    //これ以降にprintを呼び出しては、いけない
+    //カーネルにジャンプ
+    __asm__ volatile("jmp *%0" :: "r"(e_entry));
+    // Never Reach here
+    while(1);
 }
