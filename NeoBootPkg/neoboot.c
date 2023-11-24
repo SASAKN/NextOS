@@ -247,6 +247,59 @@ void copy_load_segments(elf64_ehdr *ehdr) {
     }
 }
 
+//カーネルの読み込み
+EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *kernel_f, EFI_FILE_PROTOCOL *root_dir) {
+    EFI_STATUS status;
+    // Create Kernel File Handle
+    status = root_dir->Open(root_dir, &kernel_f, L"\\kernel.elf", EFI_FILE_MODE_READ, 0);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Open 'kernel.elf'\n ");
+        return status
+    }
+    // Get Info Kernel File
+    UINTN kernel_f_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) *12;
+    UINT8 kernel_f_info_buffer[kernel_f_info_size];
+    status = kernel_f->GetInfo(kernel_f, &gEfiFileInfoGuid, &kernel_f_info_size, kernel_f_info_buffer);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Get Info Kernel File 'kernel.elf'\n ");
+    }
+    // Read Kernel File Info
+    EFI_FILE_INFO *kernel_f_info = (EFI_FILE_INFO *)kernel_f_info_buffer;
+    UINTN kernel_f_size = kernel_f_info->FileSize;
+    VOID *kernel_buffer;
+    // Allocate Pool
+    status = gBS->AllocatePool(EfiLoaderData, kernel_f_size, &kernel_buffer);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Allocate Pool\n");
+    }
+    // Read Kernel
+    status = kernel_f->Read(kernel_f, &kernel_f_size, kernel_buffer);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Read Kernel File\n");
+    }
+    // Allocate Pages
+    elf64_ehdr *kernel_ehdr = (elf64_ehdr *)kernel_buffer;
+    UINT64 kernel_start_addr, kernel_end_addr;
+    calc_address_range(kernel_ehdr, &kernel_start_addr, &kernel_end_addr);
+    UINTN num_pages = (kernel_end_addr - kernel_start_addr + 0xfff) / 0x1000;
+    status = gBS->AllocatePages(AllocateAddress, EfiLoaderData, num_pages, &kernel_start_addr);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Allocate Pool\n")
+    }
+    // Copy Segments
+    copy_load_segments(kernel_ehdr);
+    status = gBS->FreePool(kernel_buffer);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Free Pool\n");
+    }
+}
+
 
 //カーネルパラメーター用意系
 
@@ -300,6 +353,7 @@ EFI_STATUS EFIAPI main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     print_memmap(&map);
     // Save Memory Map
     save_memmap(&map, memmap_f);
-    // Load Kernel.elf
+    // Get Info Kernel
     EFI_FILE_PROTOCOL *kernel_f;
+    load_kernel(kernel_f, root_dir);
 }
