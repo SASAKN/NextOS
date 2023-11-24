@@ -1,7 +1,14 @@
 #ifndef _BOOT_ELF_H
 #define _BOOT_ELF_H
 
-#include "types.h"
+// ELF Types
+typedef unsigned long long Elf64_Addr;
+typedef unsigned long long Elf64_Xword;
+typedef unsigned long long Elf64_Off;
+typedef unsigned int Elf64_Word;
+typedef unsigned short Elf64_Half;
+typedef long long Elf64_Sxword;
+typedef int Elf64_Sword;
 
 // Macros
 #define EI_MAG0 0

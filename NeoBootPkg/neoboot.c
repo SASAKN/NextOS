@@ -204,6 +204,19 @@ EFI_STATUS save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *f) {
     }
 }
 
+//ELF解析系
+
+//メモリアドレスの計算
+void calc_address_range(elf64_ehdr *ehdr, UINT64 *start, UINT64 *end) {
+    //初期値の設定
+    start = 0;
+    end = 0;
+    for (Elf64_Half)
+}
+
+
+//カーネルパラメーター用意系
+
 //ラッパー関数系
 
 //ExitBootServices
