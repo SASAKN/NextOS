@@ -20,6 +20,16 @@
 #include "uefilib/inc/efi.h"
 #include "uefilib/inc/efilib.h"
 
+//EDK2から正しく読み込まれなかったら
+#ifndef MAX_UINT64
+#define MAX_UINT64 18446744073709551615
+#endif
+
+#ifndef MIN
+#define MAX(a, b) (a < b ? b : a)
+#define MIN(a, b) (a < b ? a : b)
+#endif
+
 // 文字を表示する関係
 
 void PrintOK(void)
@@ -211,7 +221,27 @@ void calc_address_range(elf64_ehdr *ehdr, UINT64 *start, UINT64 *end) {
     //初期値の設定
     start = 0;
     end = 0;
-    for (Elf64_Half)
+    Elf64_Half i = 0;
+    //ループでアドレスの計算
+    for (i < ehdr->e_phnum; i++) {
+        elf64_phdr* phdr = (elf64_phdr *)((UINT64)ehdr + ehdr->e_phoff + ehdr->e_phentsize * i);
+        if (phdr[i].p_type != PT_LOAD) continue;
+        if (!start) {
+            start = phdr->p_paddr;
+            end = phdr->p_paddr +phdr->p_memsz;
+        }
+        start = MIN(start, phdr->p_paddr);
+        end = MAX(end, phdr->p_paddr + phdr->p_memsz);
+    };
+};
+
+//セグメントのコピーとロード
+void copy_load_segments(elf64_ehdr *ehdr) {
+    for (Elf64_Half i = 0; i < ehdr->e_phnum; i++) {
+        elf64_phdr* phdr = (elf64_phdr *)((UINT64)ehdr + ehdr->e_phoff + ehdr->e_phentsize * i);
+        if (phdr->p_type != PT_LOAD) continue;
+        CopyMem((VOID *)phdr->p_paddr, (char *)ehdr + phdr->p_offset, phdr->p_filesz);
+    }
 }
 
 
