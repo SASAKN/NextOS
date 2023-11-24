@@ -1,28 +1,26 @@
 #ifndef _BOOT_MEM_H
 #define _BOOT_MEM_H
 
-#include "../../include/neos/types.h"
-
 #define MEM_DESC_SIZE	4096
 
 /* A memory map for booting */
 struct MemoryMap {
-    uint64_t buffer_size;
-    void* buffer;
-    uint64_t map_size;
-    uint64_t map_key;
-    uint64_t descriptor_size;
-    uint32_t descriptor_version;
-    uint64_t memmap_desc_entry;
+    UINT64 buffer_size;
+    VOID* buffer;
+    UINT64 map_size;
+    UINT64 map_key;
+    UINT64 descriptor_size;
+    UINT32 descriptor_version;
+    UINT64 memmap_desc_entry;
 };
 
 /* EFI_MEMORY_DESCRIPTOR */
 struct MemoryDescriptor {
-    uint64_t Type;
-    uint32_t PhysicalStart;
-    uint32_t VirtualStart;
-    uint32_t NumberOfPages;
-    uint32_t Attribute;
+    UINT64 Type;
+    UINT32 PhysicalStart;
+    UINT32 VirtualStart;
+    UINT32 NumberOfPages;
+    UINT32 Attribute;
 };
 
 

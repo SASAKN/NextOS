@@ -16,9 +16,9 @@
 #include "include/mem.h"
 #include "include/elf.h"
 
-// For Debug
-#include "uefilib/inc/efi.h"
-#include "uefilib/inc/efilib.h"
+// // For Debug
+// #include "uefilib/inc/efi.h"
+// #include "uefilib/inc/efilib.h"
 
 //EDK2から正しく読み込まれなかったら
 #ifndef MAX_UINT64
@@ -34,30 +34,30 @@
 
 void PrintOK(void)
 {
-    gST->ConOut->SetAttribute(ST->ConOut, 0x02); /* 緑で、OKを表示 */
-    gST->ConOut->OutputString(ST->ConOut, L"[ OK ]");
-    gST->ConOut->SetAttribute(ST->ConOut, 0x0F); /* 白に戻す */
+    gST->ConOut->SetAttribute(gST->ConOut, 0x02); /* 緑で、OKを表示 */
+    gST->ConOut->OutputString(gST->ConOut, L"[ OK ]");
+    gST->ConOut->SetAttribute(gST->ConOut, 0x0F); /* 白に戻す */
 };
 
 void PrintWarn(void)
 {
-    gST->ConOut->SetAttribute(ST->ConOut, 0x0E); /* 黄色で、Warnを表示 */
-    gST->ConOut->OutputString(ST->ConOut, L"[ Warn ]");
-    gST->ConOut->SetAttribute(ST->ConOut, 0x0F); /* 白に戻す */
+    gST->ConOut->SetAttribute(gST->ConOut, 0x0E); /* 黄色で、Warnを表示 */
+    gST->ConOut->OutputString(gST->ConOut, L"[ Warn ]");
+    gST->ConOut->SetAttribute(gST->ConOut, 0x0F); /* 白に戻す */
 };
 
 void PrintError(void)
 {
-    gST->ConOut->SetAttribute(ST->ConOut, 0x04); /* あかで、Errorを表示 */
-    gST->ConOut->OutputString(ST->ConOut, L"[ Error ! ]");
-    gST->ConOut->SetAttribute(ST->ConOut, 0x0F); /* 白に戻す */
+    gST->ConOut->SetAttribute(gST->ConOut, 0x04); /* あかで、Errorを表示 */
+    gST->ConOut->OutputString(gST->ConOut, L"[ Error ! ]");
+    gST->ConOut->SetAttribute(gST->ConOut, 0x0F); /* 白に戻す */
 };
 
 void PrintGoodBye(void)
 {
-    gST->ConOut->SetAttribute(ST->ConOut, EFI_BLUE); /* あかで、Errorを表示 */
-    gST->ConOut->OutputString(ST->ConOut, L"[ GoodBye ]");
-    gST->ConOut->SetAttribute(ST->ConOut, 0x0F); /* 白に戻す */
+    gST->ConOut->SetAttribute(gST->ConOut, EFI_BLUE); /* あかで、Errorを表示 */
+    gST->ConOut->OutputString(gST->ConOut, L"[ GoodBye ]");
+    gST->ConOut->SetAttribute(gST->ConOut, 0x0F); /* 白に戻す */
 };
 
 //ファイル関係
@@ -134,6 +134,7 @@ EFI_STATUS open_disk(EFI_BLOCK_IO_PROTOCOL *block_io, UINT32 media_id, UINTN rea
     //デバッグ情報を表示
     Print(L"[ DEBUG ] LBA 0 Media ID %x, Read_Bytes %x, Buffer %x\n",media_id, read_bytes, buffer);
     //実は、OSには、ドライバーがしっかりあるためこれ以降は、BLOCK_IOを使わない
+    return EFI_SUCCESS;
 }
 
 
@@ -168,15 +169,55 @@ EFI_STATUS get_memmap(struct MemoryMap *map) {
     return EFI_SUCCESS;
 };
 
+//種類を特定
+char *get_memtype_name(EFI_MEMORY_TYPE type)
+{
+    switch (type)
+    {
+    case EfiReservedMemoryType:
+        return "EfiReservedMemoryType";
+    case EfiLoaderCode:
+        return "EfiLoaderCode";
+    case EfiLoaderData:
+        return "EfiLoaderData";
+    case EfiBootServicesCode:
+        return "EfiBootServicesCode";
+    case EfiBootServicesData:
+        return "EfiBootServicesData";
+    case EfiRuntimeServicesCode:
+        return "EfiRuntimeServicesCode";
+    case EfiRuntimeServicesData:
+        return "EfiRuntimeServicesData";
+    case EfiConventionalMemory:
+        return "EfiConventionalMemory";
+    case EfiUnusableMemory:
+        return "EfiUnusableMemory";
+    case EfiACPIReclaimMemory:
+        return "EfiACPIReclaimMemory";
+    case EfiACPIMemoryNVS:
+        return "EfiACPIMemoryNVS";
+    case EfiMemoryMappedIO:
+        return "EfiMemoryMappedIO";
+    case EfiMemoryMappedIOPortSpace:
+        return "EfiMemoryMappedIOPortSpace";
+    case EfiPalCode:
+        return "EfiPalCode";
+    case EfiPersistentMemory:
+        return "EfiPersistentMemory";
+    case EfiMaxMemoryType:
+        return "EfiMaxMemoryType";
+    default:
+        return "InvalidMemoryType";
+    }
+};
+
 //メモリーマップを画面に表示
 EFI_STATUS print_memmap(struct MemoryMap *map) {
-    EFI_STATUS status;
     Print(L"\n [ INFO ] MemoryMap \n");
-    CHAR8 *header = "Index, Buffer, Type, Type(name), PhysicalStart, VirtualStart, NumberOfPages, Size, Attribute";
-    Print("%s", )
-    UINT32 i;
+    char *header = L"Index, Buffer, Type, Type(name), PhysicalStart, VirtualStart, NumberOfPages, Size, Attribute";
+    Print("%s", header);
     EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer;
-    for (i = 0; i < map->memmap_desc_entry; i++) {
+    for (UINT32 i = 0; i < map->memmap_desc_entry; i++) {
         Print(L"%02d, %016x, %02x, %s, %016x, %016x, %016x, %d, %016x \n", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
         desc = (EFI_MEMORY_DESCRIPTOR *)((UINT8 *)desc + map->descriptor_size);
     }
@@ -192,7 +233,7 @@ EFI_STATUS save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *f) {
     CHAR8 memmap_buffer[1024];
     UINTN size;
     char *header = "Index, Buffer, Type, Type(name), PhysicalStart, VirtualStart, NumberOfPages, Size, Attribute";
-    size = AsciiStrlen(header);
+    size = AsciiStrLen(header);
     //ヘッダーの書き込み
     status = f->Write(f, &size, header);
     if(EFI_ERROR(status)) {
@@ -333,7 +374,7 @@ EFI_STATUS exit_bs(EFI_HANDLE IM, struct MemoryMap *map) {
     }
 }
 
-EFI_STATUS EFIAPI main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
+EFI_STATUS EFIAPI uefi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     EFI_STATUS status;
     //Welcome
     gBS->SetWatchdogTimer(0, 0 ,0, NULL);

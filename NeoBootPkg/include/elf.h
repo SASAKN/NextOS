@@ -80,7 +80,7 @@ typedef struct {
 
 /* ELF Header */
 typedef struct {
-    uint8_t e_ident[16];
+    unsigned char e_ident[16];
     Elf64_Half e_type;
     Elf64_Half e_machine;
     Elf64_Word e_version;

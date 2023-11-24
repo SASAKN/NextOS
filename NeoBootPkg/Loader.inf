@@ -4,7 +4,7 @@
     FILE_GUID       = 24ac3555-4278-41fe-bdb5-21753860627e
     MODULE_TYPE     = UEFI_APPLICATION
     VERSION_STRING  = 0.1
-    ENTRY_POINT     = main
+    ENTRY_POINT     = uefi_main
     
 [Sources]
     neoboot.c
