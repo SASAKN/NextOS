@@ -20,7 +20,7 @@
 #include "uefilib/inc/efi.h"
 #include "uefilib/inc/efilib.h"
 
-// 色付きの特殊文字の関数
+// 文字を表示する関係
 
 void PrintOK(void)
 {
@@ -42,6 +42,34 @@ void PrintError(void)
     gST->ConOut->OutputString(ST->ConOut, L"[ Error ! ]");
     gST->ConOut->SetAttribute(ST->ConOut, 0x0F); /* 白に戻す */
 };
+
+//ファイル関係
+
+//ルートディレクトリーを開くための関数
+EFI_STATUS open_root_dir(EFI_HANDLE IM, EFI_FILE_PROTOCOL** root) {
+    EFI_STATUS status;
+    EFI_LOADED_IMAGE_PROTOCOL *lip;
+    EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *sfsp;
+    // Loaded Image Protocol
+    status = gBS->OpenProtocol(IM, &gEfiLoadedImageProtocolGuid, (VOID **)&lip, IM, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Open LIP Protocol");
+        return status;
+    };
+    // Simple File System Protocol
+    status = gBS->OpenProtocol(lip->DeviceHandle, &gEfiSimpleFileSystemProtocolGuid, (VOID **)&sfsp, IM, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Open SFSP Protocol");
+        return status;
+    };
+    //記憶装置について取得
+    sfsp->OpenVolume(sfsp, root);
+}
+
+
+//メモリーマップ関係
 
 //メモリーマップを取得
 EFI_STATUS get_memmap(struct MemoryMap *map) {
@@ -68,7 +96,7 @@ EFI_STATUS get_memmap(struct MemoryMap *map) {
     //これを計算することによって、Printなどで呼び出すときに呼び出しやすくなる
     map->memmap_desc_entry = map->map_size / map->descriptor_size;
     PrintOK();
-    Print(L"Get Memory Map");
+    Print(L"Get Memory Map\n");
     return EFI_SUCCESS;
 };
 
@@ -86,7 +114,7 @@ EFI_STATUS print_memmap(struct MemoryMap *map) {
     }
     Print(L"\n");
     PrintOK();
-    Print(L"Print Memory Map");
+    Print(L"Print Memory Map\n");
     return EFI_SUCCESS;
 };
 
@@ -101,7 +129,7 @@ EFI_STATUS save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *f) {
     status = f->Write(f, &size, header);
     if(EFI_ERROR(status)) {
         PrintError();
-        Print(L"Open File");
+        Print(L"Open File\n");
         return status;
     }
     Print(L"[ DEBUG ] map->buffer = %08lx, map->map_size = %08lx\n", map->buffer, map->map_size);
@@ -112,7 +140,7 @@ EFI_STATUS save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *f) {
         status = f->Write(f, &size, memmap_buffer);
         if(EFI_ERROR(status)) {
             PrintError();
-            Print(L"Save Memory Map");
+            Print(L"Save Memory Map\n");
             return status;
         }
     }
