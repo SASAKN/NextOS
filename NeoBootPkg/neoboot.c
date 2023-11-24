@@ -212,6 +212,9 @@ EFI_STATUS save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *f) {
             return status;
         }
     }
+    // Close File Handle
+    f->Close(f);
+    return EFI_SUCCESS;
 }
 
 //ELF解析系
@@ -268,4 +271,35 @@ EFI_STATUS exit_bs(EFI_HANDLE IM, struct MemoryMap *map) {
             gBS->Exit(IM, EFI_SUCCESS, 0, NULL);
         }
     }
+}
+
+EFI_STATUS EFIAPI main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
+    EFI_STATUS status;
+    //Welcome
+    gBS->SetWatchdogTimer(0, 0 ,0, NULL);
+    PrintOK();
+    Print(L"Welcome to NeoBoot !");
+    // MemoryMap
+    struct MemoryMap map;
+    map.map_size = 0;
+    map.map_key = 0;
+    map.descriptor_size = 0;
+    // Get Memory Map
+    get_memmap(&map);
+    // Open Volume
+    EFI_FILE_PROTOCOL *root_dir;
+    open_root_dir(IM, &root_dir);
+    // Create "memmap.blmm" BLMM = Boot Loader Memory Map
+    EFI_FILE_PROTOCOL *memmap_f;
+    status = root_dir->Open(root_dir, &memmap_f, L"\\memmap.blmm", EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE, 0);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Create a memory map file 'memmap.blmm'");
+    }
+    // Print Memory Map
+    print_memmap(&map);
+    // Save Memory Map
+    save_memmap(&map, memmap_f);
+    // Load Kernel.elf
+    EFI_FILE_PROTOCOL *kernel_f;
 }
