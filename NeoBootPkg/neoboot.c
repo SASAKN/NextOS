@@ -43,6 +43,13 @@ void PrintError(void)
     gST->ConOut->SetAttribute(ST->ConOut, 0x0F); /* 白に戻す */
 };
 
+void PrintGoodBye(void)
+{
+    gST->ConOut->SetAttribute(ST->ConOut, EFI_BLUE); /* あかで、Errorを表示 */
+    gST->ConOut->OutputString(ST->ConOut, L"[ GoodBye ]");
+    gST->ConOut->SetAttribute(ST->ConOut, 0x0F); /* 白に戻す */
+};
+
 //ファイル関係
 
 //ルートディレクトリーを開くための関数
@@ -193,6 +200,29 @@ EFI_STATUS save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *f) {
             PrintError();
             Print(L"Save Memory Map\n");
             return status;
+        }
+    }
+}
+
+//ラッパー関数系
+
+//ExitBootServices
+EFI_STATUS exit_bs(EFI_HANDLE IM, struct MemoryMap *map) {
+    EFI_STATUS status;
+    PrintGoodBye();
+    status = gBS->ExitBootServices(IM, map->map_key);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Exit Boot Services\n");
+        //メモリーマップを取得して再度試す
+        Print(L"trying again ...\n");
+        get_memmap(map);
+        status = gBS->ExitBootServices(IM, map->map_key);
+        if (EFI_ERROR(status)) {
+            //どうしても無理なら終了
+            PrintError();
+            Print(L"Fatal Error :Exit Boot Services\n");
+            gBS->Exit(IM, EFI_SUCCESS, 0, NULL);
         }
     }
 }
