@@ -54,18 +54,47 @@ EFI_STATUS open_root_dir(EFI_HANDLE IM, EFI_FILE_PROTOCOL** root) {
     status = gBS->OpenProtocol(IM, &gEfiLoadedImageProtocolGuid, (VOID **)&lip, IM, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
     if (EFI_ERROR(status)) {
         PrintError();
-        Print(L"Open LIP Protocol");
+        Print(L"Open LIP Protocol\n");
         return status;
     };
     // Simple File System Protocol
     status = gBS->OpenProtocol(lip->DeviceHandle, &gEfiSimpleFileSystemProtocolGuid, (VOID **)&sfsp, IM, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
     if (EFI_ERROR(status)) {
         PrintError();
-        Print(L"Open SFSP Protocol");
+        Print(L"Open SFSP Protocol\n");
         return status;
     };
     //記憶装置について取得
-    sfsp->OpenVolume(sfsp, root);
+    status = sfsp->OpenVolume(sfsp, root);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Open Volume\n");
+        return status;
+    };
+    return EFI_SUCCESS;
+}
+
+//ブロックデバイス関係
+
+//ブロックデバイスについての情報を表示
+EFI_STATUS open_block_io_protocol(EFI_HANDLE IM, EFI_BLOCK_IO_PROTOCOL **block_io) {
+    EFI_STATUS status;
+    EFI_LOADED_IMAGE_PROTOCOL *lip;
+    // Loaded Image Protocol
+    status = gBS->OpenProtocol(IM, &gEfiLoadedImageProtocolGuid, (VOID **)&lip, IM, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Open LIP Protocol");
+        return status;
+    };
+    // Block IO Protocol
+    status = gBS->OpenProtocol(lip->DeviceHandle, &gEfiBlockIoProtocolGuid, (VOID **)block_io, IM, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+        if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Open Block IO Protocol");
+        return status;
+    };
+    return EFI_SUCCESS;
 }
 
 
