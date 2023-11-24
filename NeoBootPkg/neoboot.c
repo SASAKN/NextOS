@@ -97,6 +97,28 @@ EFI_STATUS open_block_io_protocol(EFI_HANDLE IM, EFI_BLOCK_IO_PROTOCOL **block_i
     return EFI_SUCCESS;
 }
 
+//ディスク情報を表示
+EFI_STATUS open_disk(EFI_BLOCK_IO_PROTOCOL *block_io, UINT32 media_id, UINTN read_bytes, VOID** buffer) {
+    EFI_STATUS status;
+    //一時的なメモリーを確保
+    status = gBS->AllocatePool(EfiLoaderData, read_bytes, buffer);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Allocate Pool\n");
+        return status;
+    }
+    //ブロックデバイスを読む
+    status = block_io->ReadBlocks(block_io, media_id, 0, read_bytes, *buffer);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Read Blocks\n");
+        return status;
+    }
+    //デバッグ情報を表示
+    Print(L"[ DEBUG ] LBA 0 Media ID %x, Read_Bytes %x, Buffer %x\n",media_id, read_bytes, buffer);
+    //実は、OSには、ドライバーがしっかりあるためこれ以降は、BLOCK_IOを使わない
+}
+
 
 //メモリーマップ関係
 
