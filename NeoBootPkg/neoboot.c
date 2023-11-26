@@ -20,16 +20,6 @@
 // #include "uefilib/inc/efi.h"
 // #include "uefilib/inc/efilib.h"
 
-//EDK2から正しく読み込まれなかったら
-#ifndef MAX_UINT64
-#define MAX_UINT64 18446744073709551615
-#endif
-
-#ifndef MIN
-#define MAX(a, b) (a < b ? b : a)
-#define MIN(a, b) (a < b ? a : b)
-#endif
-
 // 文字を表示する関係
 
 void PrintOK(void)
@@ -101,39 +91,16 @@ EFI_STATUS open_block_io_protocol(EFI_HANDLE IM, EFI_BLOCK_IO_PROTOCOL **block_i
     status = gBS->OpenProtocol(IM, &gEfiLoadedImageProtocolGuid, (VOID **)&lip, IM, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
     if (EFI_ERROR(status)) {
         PrintError();
-        Print(L"Open LIP Protocol");
+        Print(L"Open LIP Protocol\n");
         return status;
     };
     // Block IO Protocol
     status = gBS->OpenProtocol(lip->DeviceHandle, &gEfiBlockIoProtocolGuid, (VOID **)block_io, IM, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
         if (EFI_ERROR(status)) {
         PrintError();
-        Print(L"Open Block IO Protocol");
+        Print(L"Open Block IO Protocol\n");
         return status;
     };
-    return EFI_SUCCESS;
-}
-
-//ディスク情報を表示
-EFI_STATUS open_disk(EFI_BLOCK_IO_PROTOCOL *block_io, UINT32 media_id, UINTN read_bytes, VOID** buffer) {
-    EFI_STATUS status;
-    //一時的なメモリーを確保
-    status = gBS->AllocatePool(EfiLoaderData, read_bytes, buffer);
-    if (EFI_ERROR(status)) {
-        PrintError();
-        Print(L"Allocate Pool\n");
-        return status;
-    }
-    //ブロックデバイスを読む
-    status = block_io->ReadBlocks(block_io, media_id, 0, read_bytes, *buffer);
-    if (EFI_ERROR(status)) {
-        PrintError();
-        Print(L"Read Blocks\n");
-        return status;
-    }
-    //デバッグ情報を表示
-    Print(L"[ DEBUG ] LBA 0 Media ID %x, Read_Bytes %x, Buffer %x\n",media_id, read_bytes, buffer);
-    //実は、OSには、ドライバーがしっかりあるためこれ以降は、BLOCK_IOを使わない
     return EFI_SUCCESS;
 }
 
@@ -379,7 +346,7 @@ EFI_STATUS EFIAPI uefi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     //Welcome
     gBS->SetWatchdogTimer(0, 0 ,0, NULL);
     PrintOK();
-    Print(L"Welcome to NeoBoot !");
+    Print(L"Welcome to NeoBoot !\n");
     // MemoryMap
     struct MemoryMap map;
     map.map_size = 0;
@@ -395,7 +362,7 @@ EFI_STATUS EFIAPI uefi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     status = root_dir->Open(root_dir, &memmap_f, L"\\memmap.blmm", EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE, 0);
     if (EFI_ERROR(status)) {
         PrintError();
-        Print(L"Create a memory map file 'memmap.blmm'");
+        Print(L"Create a memory map file 'memmap.blmm'\n");
     }
     // Print Memory Map
     print_memmap(&map);
