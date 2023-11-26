@@ -181,8 +181,8 @@ char *get_memtype_name(EFI_MEMORY_TYPE type)
 //メモリーマップを画面に表示
 EFI_STATUS print_memmap(struct MemoryMap *map) {
     Print(L"\n [ INFO ] MemoryMap \n");
-    char *header = "Index, Buffer, Type, Type(name), PhysicalStart, VirtualStart, NumberOfPages, Size, Attribute";
-    Print(L"%s", header);
+    UINT16 *header = L"Index, Buffer, Type, Type(name), PhysicalStart, VirtualStart, NumberOfPages, Size, Attribute";
+    Print(L"%-ls\n", header);
     EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer;
     for (UINT32 i = 0; i < map->memmap_desc_entry; i++) {
         Print(L"%02d, %016x, %02x, %s, %016x, %016x, %016x, %d, %016x \n", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
