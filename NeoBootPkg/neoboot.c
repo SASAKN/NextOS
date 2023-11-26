@@ -413,6 +413,6 @@ EFI_STATUS EFIAPI uefi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     //これ以降にprintを呼び出しては、いけない
     //カーネルにジャンプ
     __asm__ volatile("jmp *%0" :: "r"(e_entry));
-    // Never Reach here
-    while(1);
+    //無限ループしないとログとか見れない
+    while(1) __asm__ ("hlt");
 }
