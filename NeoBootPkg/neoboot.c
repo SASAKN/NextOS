@@ -81,36 +81,54 @@ EFI_STATUS open_root_dir(EFI_HANDLE IM, EFI_FILE_PROTOCOL** root) {
     return EFI_SUCCESS;
 }
 
-//メモリーマップ関係
+//メモリー関係
 
-//メモリーマップを取得
-EFI_MEMORY_DESCRIPTOR *get_memmap (UINTN *NoEntries, UINTN *MapKey, UINTN *DescriptorSize,UINT32 *DescriptorVersion) {
+VOID FreePool(VOID *Buffer) {
+    gBS->FreePool(Buffer);
+}
+
+VOID *AllocatePool(UINTN Size) {
+    EFI_STATUS Status;
+    VOID *p;
+    Status = gBS->AllocatePool(PoolAllocationType, Size, &p);
+    if (EFI_ERROR(Status)) {
+        p = NULL;
+    }
+    return p;
+}
+
+EFI_MEMORY_DESCRIPTOR *get_memmap ( UINTN *NoEntries, UINTN *MapKey,UINTN *DescriptorSize,UINT32 *DescriptorVersion ) {
     EFI_STATUS              Status;
-    EFI_MEMORY_DESCRIPTOR   *Buffer;
-    UINTN                   BufferSize;
+    EFI_MEMORY_DESCRIPTOR   *Buffer = NULL;
+    UINTN                   BufferSize = sizeof(EFI_MEMORY_DESCRIPTOR) * INITIAL_BUFFER_SIZE;
+    UINTN                   NoEntriesTemp;
 
-    BOOLEAN TryAgain;
+    // Allocate initial buffer
+    Buffer = AllocatePool(BufferSize);
 
-    // GrowBuffer ループの初期化
-    Status = EFI_SUCCESS;
-    Buffer = NULL;
-    BufferSize = sizeof(EFI_MEMORY_DESCRIPTOR);
+    if (Buffer == NULL) {
+        return NULL; // Failed to allocate memory
+    }
 
-    // GrowBuffer のロジックを使用して実際の関数を呼び出す
     do {
-        TryAgain = GrowBuffer(&Status, (VOID **)&Buffer, BufferSize);
-
-        if (TryAgain) {
-            Status = uefi_call_wrapper(BS->GetMemoryMap, 5, &BufferSize, Buffer, MapKey, DescriptorSize, DescriptorVersion);
-            Status = gBS->GetMemoryMap(&BufferSize, Buffer, MapKey, DescriptorSize, DescriptorVersion);
+        Status = gBS->GetMemoryMap(&BufferSize, Buffer, MapKey,DescriptorSize, DescriptorVersion);
+        if (EFI_ERROR(Status)) {
+            FreePool(Buffer);
+            return NULL; // Failed to get memory map
         }
 
-    } while (TryAgain);
+        // Check if buffer was too small
+        NoEntriesTemp = BufferSize / sizeof(EFI_MEMORY_DESCRIPTOR);
+        if (NoEntriesTemp > 0 && NoEntriesTemp < INITIAL_BUFFER_SIZE) {
+            // Resize buffer if needed
+            FreePool(Buffer);
+            BufferSize = sizeof(EFI_MEMORY_DESCRIPTOR) * NoEntriesTemp * 2; // Double the size
+            Buffer = AllocatePool(BufferSize);
+        } else {
+            *NoEntries = NoEntriesTemp;
+        }
 
-    // バッファーサイズを NoEntries に変換
-    if (!EFI_ERROR(Status)) {
-        *NoEntries = BufferSize / *DescriptorSize;
-    }
+    } while (Buffer == NULL);
 
     return Buffer;
 }
