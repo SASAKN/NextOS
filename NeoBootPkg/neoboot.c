@@ -83,11 +83,13 @@ EFI_STATUS open_root_dir(EFI_HANDLE IM, EFI_FILE_PROTOCOL** root) {
 
 //メモリー関係
 
-VOID FreePool(VOID *Buffer) {
+//GNU_EFIから少し移植
+
+VOID free_pool(VOID *Buffer) {
     gBS->FreePool(Buffer);
 }
 
-VOID *AllocatePool(UINTN Size) {
+VOID *allocate_pool(UINTN Size) {
     EFI_STATUS Status;
     VOID *p;
     Status = gBS->AllocatePool(PoolAllocationType, Size, &p);
@@ -97,40 +99,47 @@ VOID *AllocatePool(UINTN Size) {
     return p;
 }
 
-EFI_MEMORY_DESCRIPTOR *get_memmap ( UINTN *NoEntries, UINTN *MapKey,UINTN *DescriptorSize,UINT32 *DescriptorVersion ) {
-    EFI_STATUS              Status;
-    EFI_MEMORY_DESCRIPTOR   *Buffer = NULL;
-    UINTN                   BufferSize = sizeof(EFI_MEMORY_DESCRIPTOR) * INITIAL_BUFFER_SIZE;
-    UINTN                   NoEntriesTemp;
-
-    // Allocate initial buffer
-    Buffer = AllocatePool(BufferSize);
-
-    if (Buffer == NULL) {
-        return NULL; // Failed to allocate memory
+//メモリーマップを取得するときのループ回数の取得や、エラーハンドリング
+BOOLEAN grow_buffer (EFI_STATUS status, VOID **buffer, UINTN buffer_size) {
+    BOOLEAN TryAgain;
+    if (!buffer && buffer_size) {
+        status = EFI_BUFFER_TOO_SMALL;
     }
-
-    do {
-        Status = gBS->GetMemoryMap(&BufferSize, Buffer, MapKey,DescriptorSize, DescriptorVersion);
-        if (EFI_ERROR(Status)) {
-            FreePool(Buffer);
-            return NULL; // Failed to get memory map
+    TryAgain = 0;
+    if (status == EFI_BUFFER_TOO_SMALL) {
+        if (buffer) {
+            free_pool(buffer);
         }
-
-        // Check if buffer was too small
-        NoEntriesTemp = BufferSize / sizeof(EFI_MEMORY_DESCRIPTOR);
-        if (NoEntriesTemp > 0 && NoEntriesTemp < INITIAL_BUFFER_SIZE) {
-            // Resize buffer if needed
-            FreePool(Buffer);
-            BufferSize = sizeof(EFI_MEMORY_DESCRIPTOR) * NoEntriesTemp * 2; // Double the size
-            Buffer = AllocatePool(BufferSize);
+        buffer = allocate_pool(buffer_size);
+        if (buffer) {
+            TryAgain = 1;
         } else {
-            *NoEntries = NoEntriesTemp;
+            status = EFI_OUT_OF_RESOURCES;
         }
+    }
+    if (!TryAgain &&EFI_ERROR(status) && buffer) {
+        free_pool(buffer);
+        buffer = NULL;
+    }
+    return TryAgain;
+}
 
-    } while (Buffer == NULL);
-
-    return Buffer;
+// MemoryMapを取得
+EFI_MEMORY_DESCRIPTOR *get_memmap(UINTN *no_entries, UINTN *map_key, UINTN *descriptor_size, UINTN *descriptor_version) {
+    EFI_STATUS status;
+    EFI_MEMORY_DESCRIPTOR *buffer;
+    UINTN buffer_size;
+    //Initialize
+    status = EFI_SUCCESS;
+    buffer = NULL;
+    buffer_size = sizeof(EFI_MEMORY_DESCRIPTOR);
+    while(grow_buffer(&status, (VOID **)&buffer, buffer_size)) {
+        status = gBS->GetMemoryMap(&buffer_size, buffer, map_key, descriptor_size, descriptor_version);
+    }
+    if (!EFI_ERROR (status)) {
+        no_entries = buffer_size / descriptor_size;
+    }
+    return buffer;
 }
 
 
