@@ -61,21 +61,21 @@ EFI_STATUS open_root_dir(EFI_HANDLE IM, EFI_FILE_PROTOCOL** root) {
     status = gBS->OpenProtocol(IM, &gEfiLoadedImageProtocolGuid, (VOID **)&lip, IM, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
     if (EFI_ERROR(status)) {
         PrintError();
-        Print(L"Open LIP Protocol\n");
+        Print(L"Open LIP Protocol : %r\n", status);
         return status;
     };
     // Simple File System Protocol
     status = gBS->OpenProtocol(lip->DeviceHandle, &gEfiSimpleFileSystemProtocolGuid, (VOID **)&sfsp, IM, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
     if (EFI_ERROR(status)) {
         PrintError();
-        Print(L"Open SFSP Protocol\n");
+        Print(L"Open SFSP Protocol : %r\n", status);
         return status;
     };
     //記憶装置について取得
     status = sfsp->OpenVolume(sfsp, root);
     if (EFI_ERROR(status)) {
         PrintError();
-        Print(L"Open Volume\n");
+        Print(L"Open Volume : %r\n", status);
         return status;
     };
     return EFI_SUCCESS;
