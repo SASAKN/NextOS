@@ -214,8 +214,8 @@ char *get_memtype_name(EFI_MEMORY_TYPE type)
 //メモリーマップを画面に表示
 EFI_STATUS print_memmap(struct MemoryMap *map) {
     Print(L"\n [ INFO ] MemoryMap \n");
-    char *header = L"Index, Buffer, Type, Type(name), PhysicalStart, VirtualStart, NumberOfPages, Size, Attribute";
-    Print("%s", header);
+    char *header = "Index, Buffer, Type, Type(name), PhysicalStart, VirtualStart, NumberOfPages, Size, Attribute";
+    Print(L"%s", header);
     EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer;
     for (UINT32 i = 0; i < map->memmap_desc_entry; i++) {
         Print(L"%02d, %016x, %02x, %s, %016x, %016x, %016x, %d, %016x \n", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
@@ -261,18 +261,17 @@ EFI_STATUS save_memmap(struct MemoryMap *map, EFI_FILE_PROTOCOL *f) {
 //ELF解析系
 
 //メモリアドレスの計算
-void calc_address_range(elf64_ehdr *ehdr, UINT64 *start, UINT64 *end) {
+void calc_address_range(elf64_ehdr *ehdr, UINT64 start, UINT64 end) {
     //初期値の設定
     start = 0;
     end = 0;
-    Elf64_Half i = 0;
     //ループでアドレスの計算
-    for (i < ehdr->e_phnum; i++) {
+    for ( Elf64_Half i = 0; i < ehdr->e_phnum; i++) {
         elf64_phdr* phdr = (elf64_phdr *)((UINT64)ehdr + ehdr->e_phoff + ehdr->e_phentsize * i);
         if (phdr[i].p_type != PT_LOAD) continue;
         if (!start) {
             start = phdr->p_paddr;
-            end = phdr->p_paddr +phdr->p_memsz;
+            end = phdr->p_paddr + phdr->p_memsz;
         }
         start = MIN(start, phdr->p_paddr);
         end = MAX(end, phdr->p_paddr + phdr->p_memsz);
@@ -299,7 +298,7 @@ EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *kernel_f, EFI_FILE_PROTOCOL *root_dir,
     if (EFI_ERROR(status)) {
         PrintError();
         Print(L"Open 'kernel.elf'\n ");
-        return status
+        return status;
     }
     // Get Info Kernel File
     UINTN kernel_f_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) *12;
@@ -327,13 +326,13 @@ EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *kernel_f, EFI_FILE_PROTOCOL *root_dir,
     }
     // Allocate Pages
     elf64_ehdr *kernel_ehdr = (elf64_ehdr *)kernel_buffer;
-    UINT64 kernel_start_addr, kernel_end_addr;
-    calc_address_range(kernel_ehdr, &kernel_start_addr, &kernel_end_addr);
+    UINT64 kernel_start_addr = 0, kernel_end_addr = 0;
+    calc_address_range(kernel_ehdr, kernel_start_addr, kernel_end_addr);
     UINTN num_pages = (kernel_end_addr - kernel_start_addr + 0xfff) / 0x1000;
     status = gBS->AllocatePages(AllocateAddress, EfiLoaderData, num_pages, &kernel_start_addr);
     if (EFI_ERROR(status)) {
         PrintError();
-        Print(L"Allocate Pool\n")
+        Print(L"Allocate Pool\n");
     }
     // Copy Segments
     copy_load_segments(kernel_ehdr);
@@ -372,6 +371,7 @@ EFI_STATUS exit_bs(EFI_HANDLE IM, struct MemoryMap *map) {
             gBS->Exit(IM, EFI_SUCCESS, 0, NULL);
         }
     }
+    return EFI_SUCCESS;
 }
 
 EFI_STATUS EFIAPI uefi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
@@ -402,10 +402,10 @@ EFI_STATUS EFIAPI uefi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // Save Memory Map
     save_memmap(&map, memmap_f);
     // Get Info Kernel
-    EFI_FILE_PROTOCOL *kernel_f;
-    UINT64 entry_addr;
-    entry_t *e_entry;
-    load_kernel(kernel_f, root_dir, entry_addr);
+    EFI_FILE_PROTOCOL *kernel_f = NULL;
+    UINT64 entry_addr = 0;
+    entry_t *e_entry = NULL;
+    load_kernel(kernel_f, root_dir, entry_addr, e_entry);
     // Print Entry Point Address
     Print(L"entry = %x\n", e_entry);
     // Exit Boot Services
