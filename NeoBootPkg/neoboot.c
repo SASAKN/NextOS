@@ -120,7 +120,7 @@ EFI_STATUS get_memmap(struct MemoryMap *map) {
     map->buffer = memmap_buf;
     if (!map->map_size) {
         PrintError();
-        Print(L"Allocate Memory : %r\n",. status);
+        Print(L"Allocate Memory : %r\n", status);
         return 1;
     }
     //2回目の実行で確実に取得できる
