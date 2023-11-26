@@ -197,10 +197,10 @@ EFI_STATUS print_memmap(struct MemoryMap *map) {
     Print(L"\n [ INFO ] MemoryMap \n");
     UINT16 *header = L"Index, Buffer, Type, Type(name), PhysicalStart, VirtualStart, NumberOfPages, Size, Attribute";
     Print(L"%-ls\n", header);
-    EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer;
+    EFI_MEMORY_DESCRIPTOR *desc = map->buffer;
     for (UINT32 i = 0; i < map->memmap_desc_entry; i++) {
         Print(L"%02d, %016x, %02x, %-ls, %016x, %016x, %016x, %d, %016x \n", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
-        desc = (EFI_MEMORY_DESCRIPTOR *)((UINT8 *)desc + map->descriptor_size);
+        desc = ((UINT8 *)desc + map->descriptor_size);
     }
     Print(L"\n");
     PrintOK();
