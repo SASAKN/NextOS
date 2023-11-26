@@ -84,14 +84,7 @@ EFI_STATUS open_root_dir(EFI_HANDLE IM, EFI_FILE_PROTOCOL** root) {
 //メモリーマップ関係
 
 //メモリーマップを取得
-EFI_MEMORY_DESCRIPTOR *
-AllocateAndRetrieveMemoryMap (
-    OUT UINTN               *NoEntries,
-    OUT UINTN               *MapKey,
-    OUT UINTN               *DescriptorSize,
-    OUT UINT32              *DescriptorVersion
-    )
-{
+EFI_MEMORY_DESCRIPTOR *get_memmap (UINTN *NoEntries, UINTN *MapKey, UINTN *DescriptorSize,UINT32 *DescriptorVersion) {
     EFI_STATUS              Status;
     EFI_MEMORY_DESCRIPTOR   *Buffer;
     UINTN                   BufferSize;
