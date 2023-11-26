@@ -16,9 +16,9 @@
 #include "include/mem.h"
 #include "include/elf.h"
 
-// // For Debug
-// #include "uefilib/inc/efi.h"
-// #include "uefilib/inc/efilib.h"
+// For Debug
+#include "uefilib/inc/efi.h"
+#include "uefilib/inc/efilib.h"
 
 // 文字を表示する関係
 
@@ -84,26 +84,44 @@ EFI_STATUS open_root_dir(EFI_HANDLE IM, EFI_FILE_PROTOCOL** root) {
 //メモリーマップ関係
 
 //メモリーマップを取得
-EFI_STATUS get_memmap(struct MemoryMap *map) {
-    EFI_STATUS status;
-    //マップのサイズのベース
-    map->map_size = 1024;
-    char memmap_buf[map->map_size];
-    map->buffer = memmap_buf;
-    //とりあえず取得
-    status = gBS->GetMemoryMap(&map->map_size, (EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key, &map->descriptor_size, &map->descriptor_version);
-    //サイズ足りない?
-    if (status == EFI_BUFFER_TOO_SMALL) {
-        //２回目の取得
-        char memmap_buf2[map->map_size];
-        map->buffer = memmap_buf2;
-        status = gBS->GetMemoryMap(&map->map_size, (EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key, &map->descriptor_size, &map->descriptor_version);
-    } else if (status != EFI_BUFFER_TOO_SMALL && EFI_ERROR(status)) {
-        PrintError();
-        Print(L"Get Memory Map\n");
-    };
-    return EFI_SUCCESS;
-};
+EFI_MEMORY_DESCRIPTOR *
+AllocateAndRetrieveMemoryMap (
+    OUT UINTN               *NoEntries,
+    OUT UINTN               *MapKey,
+    OUT UINTN               *DescriptorSize,
+    OUT UINT32              *DescriptorVersion
+    )
+{
+    EFI_STATUS              Status;
+    EFI_MEMORY_DESCRIPTOR   *Buffer;
+    UINTN                   BufferSize;
+
+    BOOLEAN TryAgain;
+
+    // GrowBuffer ループの初期化
+    Status = EFI_SUCCESS;
+    Buffer = NULL;
+    BufferSize = sizeof(EFI_MEMORY_DESCRIPTOR);
+
+    // GrowBuffer のロジックを使用して実際の関数を呼び出す
+    do {
+        TryAgain = GrowBuffer(&Status, (VOID **)&Buffer, BufferSize);
+
+        if (TryAgain) {
+            Status = uefi_call_wrapper(BS->GetMemoryMap, 5, &BufferSize, Buffer, MapKey, DescriptorSize, DescriptorVersion);
+            Status = gBS->GetMemoryMap(&BufferSize, Buffer, MapKey, DescriptorSize, DescriptorVersion);
+        }
+
+    } while (TryAgain);
+
+    // バッファーサイズを NoEntries に変換
+    if (!EFI_ERROR(Status)) {
+        *NoEntries = BufferSize / *DescriptorSize;
+    }
+
+    return Buffer;
+}
+
 
 //種類を特定
 UINT16 *get_memtype_name(EFI_MEMORY_TYPE type)
