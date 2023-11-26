@@ -16,9 +16,9 @@
 #include "include/mem.h"
 #include "include/elf.h"
 
-// // For Debug
-// #include "uefilib/inc/efi.h"
-// #include "uefilib/inc/efilib.h"
+// For Debug
+#include "uefilib/inc/efi.h"
+#include "uefilib/inc/efilib.h"
 
 // 文字を表示する関係
 
