@@ -81,30 +81,6 @@ EFI_STATUS open_root_dir(EFI_HANDLE IM, EFI_FILE_PROTOCOL** root) {
     return EFI_SUCCESS;
 }
 
-//ブロックデバイス関係
-
-//ブロックデバイスについての情報を表示
-EFI_STATUS open_block_io_protocol(EFI_HANDLE IM, EFI_BLOCK_IO_PROTOCOL **block_io) {
-    EFI_STATUS status;
-    EFI_LOADED_IMAGE_PROTOCOL *lip;
-    // Loaded Image Protocol
-    status = gBS->OpenProtocol(IM, &gEfiLoadedImageProtocolGuid, (VOID **)&lip, IM, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
-    if (EFI_ERROR(status)) {
-        PrintError();
-        Print(L"Open LIP Protocol : %r\n", status);
-        return status;
-    };
-    // Block IO Protocol
-    status = gBS->OpenProtocol(lip->DeviceHandle, &gEfiBlockIoProtocolGuid, (VOID **)block_io, IM, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
-        if (EFI_ERROR(status)) {
-        PrintError();
-        Print(L"Open Block IO Protocol : %r\n", status);
-        return status;
-    };
-    return EFI_SUCCESS;
-}
-
-
 //メモリーマップ関係
 
 //メモリーマップを取得
@@ -127,7 +103,7 @@ EFI_STATUS get_memmap(struct MemoryMap *map) {
     status = gBS->GetMemoryMap(&map->map_size, (EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key, &map->descriptor_size, NULL);
     if (EFI_ERROR(status)) {
         PrintError();
-        Print(L"Get Memory Map\n");
+        Print(L"Get Memory Map : %r\n", status);
     }
     //これを計算することによって、Printなどで呼び出すときに呼び出しやすくなる
     map->memmap_desc_entry = map->map_size / map->descriptor_size;
@@ -137,44 +113,44 @@ EFI_STATUS get_memmap(struct MemoryMap *map) {
 };
 
 //種類を特定
-char *get_memtype_name(EFI_MEMORY_TYPE type)
+UINT16 *get_memtype_name(EFI_MEMORY_TYPE type)
 {
     switch (type)
     {
     case EfiReservedMemoryType:
-        return "EfiReservedMemoryType";
+        return L"EfiReservedMemoryType";
     case EfiLoaderCode:
-        return "EfiLoaderCode";
+        return L"EfiLoaderCode";
     case EfiLoaderData:
-        return "EfiLoaderData";
+        return L"EfiLoaderData";
     case EfiBootServicesCode:
-        return "EfiBootServicesCode";
+        return L"EfiBootServicesCode";
     case EfiBootServicesData:
-        return "EfiBootServicesData";
+        return L"EfiBootServicesData";
     case EfiRuntimeServicesCode:
-        return "EfiRuntimeServicesCode";
+        return L"EfiRuntimeServicesCode";
     case EfiRuntimeServicesData:
-        return "EfiRuntimeServicesData";
+        return L"EfiRuntimeServicesData";
     case EfiConventionalMemory:
-        return "EfiConventionalMemory";
+        return L"EfiConventionalMemory";
     case EfiUnusableMemory:
-        return "EfiUnusableMemory";
+        return L"EfiUnusableMemory";
     case EfiACPIReclaimMemory:
-        return "EfiACPIReclaimMemory";
+        return L"EfiACPIReclaimMemory";
     case EfiACPIMemoryNVS:
-        return "EfiACPIMemoryNVS";
+        return L"EfiACPIMemoryNVS";
     case EfiMemoryMappedIO:
-        return "EfiMemoryMappedIO";
+        return L"EfiMemoryMappedIO";
     case EfiMemoryMappedIOPortSpace:
-        return "EfiMemoryMappedIOPortSpace";
+        return L"EfiMemoryMappedIOPortSpace";
     case EfiPalCode:
-        return "EfiPalCode";
+        return L"EfiPalCode";
     case EfiPersistentMemory:
-        return "EfiPersistentMemory";
+        return L"EfiPersistentMemory";
     case EfiMaxMemoryType:
-        return "EfiMaxMemoryType";
+        return L"EfiMaxMemoryType";
     default:
-        return "InvalidMemoryType";
+        return L"InvalidMemoryType";
     }
 };
 
@@ -185,7 +161,7 @@ EFI_STATUS print_memmap(struct MemoryMap *map) {
     Print(L"%-ls\n", header);
     EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer;
     for (UINT32 i = 0; i < map->memmap_desc_entry; i++) {
-        Print(L"%02d, %016x, %02x, %s, %016x, %016x, %016x, %d, %016x \n", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
+        Print(L"%02d, %016x, %02x, %-ls, %016x, %016x, %016x, %d, %016x \n", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
         desc = (EFI_MEMORY_DESCRIPTOR *)((UINT8 *)desc + map->descriptor_size);
     }
     Print(L"\n");
