@@ -240,7 +240,7 @@ EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *kernel_f, EFI_FILE_PROTOCOL *root_dir,
     status = root_dir->Open(root_dir, &kernel_f, L"\\kernel.elf", EFI_FILE_MODE_READ, 0);
     if (EFI_ERROR(status)) {
         PrintError();
-        Print(L"Open 'kernel.elf'\n ");
+        Print(L"Open 'kernel.elf' : %r\n ", status);
         return status;
     }
     // Get Info Kernel File
@@ -249,7 +249,7 @@ EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *kernel_f, EFI_FILE_PROTOCOL *root_dir,
     status = kernel_f->GetInfo(kernel_f, &gEfiFileInfoGuid, &kernel_f_info_size, kernel_f_info_buffer);
     if (EFI_ERROR(status)) {
         PrintError();
-        Print(L"Get Info Kernel File 'kernel.elf'\n ");
+        Print(L"Get Info Kernel File 'kernel.elf' %r\n ", status);
     }
     // Read Kernel File Info
     EFI_FILE_INFO *kernel_f_info = (EFI_FILE_INFO *)kernel_f_info_buffer;
@@ -259,13 +259,13 @@ EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *kernel_f, EFI_FILE_PROTOCOL *root_dir,
     status = gBS->AllocatePool(EfiLoaderData, kernel_f_size, &kernel_buffer);
     if (EFI_ERROR(status)) {
         PrintError();
-        Print(L"Allocate Pool\n");
+        Print(L"Allocate Pool : %r\n", status);
     }
     // Read Kernel
     status = kernel_f->Read(kernel_f, &kernel_f_size, kernel_buffer);
     if (EFI_ERROR(status)) {
         PrintError();
-        Print(L"Read Kernel File\n");
+        Print(L"Read Kernel File : %r\n", status);
     }
     // Allocate Pages
     elf64_ehdr *kernel_ehdr = (elf64_ehdr *)kernel_buffer;
@@ -275,14 +275,14 @@ EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *kernel_f, EFI_FILE_PROTOCOL *root_dir,
     status = gBS->AllocatePages(AllocateAddress, EfiLoaderData, num_pages, &kernel_start_addr);
     if (EFI_ERROR(status)) {
         PrintError();
-        Print(L"Allocate Pool\n");
+        Print(L"Allocate Pool : %r\n", status);
     }
     // Copy Segments
     copy_load_segments(kernel_ehdr);
     status = gBS->FreePool(kernel_buffer);
     if (EFI_ERROR(status)) {
         PrintError();
-        Print(L"Free Pool\n");
+        Print(L"Free Pool : %r\n", status);
     }
     // Get Entry Address
     entry_addr = *(UINT64 *)(kernel_start_addr + 24);
