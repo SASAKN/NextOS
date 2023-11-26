@@ -332,10 +332,10 @@ EFI_STATUS exit_bs(EFI_HANDLE IM, struct MemoryMap *map) {
         get_memmap(map);
         status = gBS->ExitBootServices(IM, map->map_key);
         if (EFI_ERROR(status)) {
-            //どうしても無理なら終了
+            //どうしても無理なら止まってPCの起動を阻止する
             PrintError();
-            Print(L"Fatal Error :Exit Boot Services\n");
-            gBS->Exit(IM, EFI_SUCCESS, 0, NULL);
+            Print(L"Fatal Error :Exit Boot Services, %r\n", status);
+            while(1);
         }
     }
     return EFI_SUCCESS;
