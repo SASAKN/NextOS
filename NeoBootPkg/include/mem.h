@@ -6,7 +6,7 @@
 /* A memory map for booting */
 struct MemoryMap {
     UINT64 buffer_size;
-    VOID* buffer;
+    EFI_MEMORY_DESCRIPTOR* buffer;
     UINT64 map_size;
     UINT64 map_key;
     UINT64 descriptor_size;

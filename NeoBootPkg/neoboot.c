@@ -125,7 +125,7 @@ BOOLEAN grow_buffer (EFI_STATUS status, VOID **buffer, UINTN buffer_size) {
 }
 
 // MemoryMapを取得
-EFI_MEMORY_DESCRIPTOR *get_memmap(UINTN *no_entries, UINTN *map_key, UINTN *descriptor_size, UINTN *descriptor_version) {
+EFI_MEMORY_DESCRIPTOR *get_memmap(UINTN *no_entries, UINTN *map_key, UINTN *descriptor_size, UINTN *descriptor_version, struct MemoryMap *map) {
     EFI_STATUS status;
     EFI_MEMORY_DESCRIPTOR *buffer;
     UINTN buffer_size;
@@ -139,6 +139,13 @@ EFI_MEMORY_DESCRIPTOR *get_memmap(UINTN *no_entries, UINTN *map_key, UINTN *desc
     if (!EFI_ERROR (status)) {
         no_entries = buffer_size / descriptor_size;
     }
+    //最後に全てを構造体に入れ込む
+    map->buffer = buffer;
+    map->memmap_desc_entry = no_entries;
+    map->buffer_size = buffer_size;
+    map->descriptor_size = descriptor_size;
+    map->descriptor_version = descriptor_version;
+    map->map_key = map_key;
     return buffer;
 }
 
