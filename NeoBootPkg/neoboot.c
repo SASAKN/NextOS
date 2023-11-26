@@ -16,9 +16,9 @@
 #include "include/mem.h"
 #include "include/elf.h"
 
-// For Debug
-#include "uefilib/inc/efi.h"
-#include "uefilib/inc/efilib.h"
+// // For Debug
+// #include "uefilib/inc/efi.h"
+// #include "uefilib/inc/efilib.h"
 
 // 文字を表示する関係
 
@@ -96,12 +96,13 @@ EFI_STATUS get_memmap(struct MemoryMap *map) {
     if (status == EFI_BUFFER_TOO_SMALL) {
         //２回目の取得
         char memmap_buf2[map->map_size];
-        map->buffer = memmap_buf;
+        map->buffer = memmap_buf2;
         status = gBS->GetMemoryMap(&map->map_size, (EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key, &map->descriptor_size, &map->descriptor_version);
     } else if (status != EFI_BUFFER_TOO_SMALL && EFI_ERROR(status)) {
         PrintError();
         Print(L"Get Memory Map\n");
     };
+    return EFI_SUCCESS;
 };
 
 //種類を特定
