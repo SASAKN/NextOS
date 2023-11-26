@@ -16,9 +16,9 @@
 #include "include/mem.h"
 #include "include/elf.h"
 
-// For Debug
-#include "uefilib/inc/efi.h"
-#include "uefilib/inc/efilib.h"
+// // For Debug
+// #include "uefilib/inc/efi.h"
+// #include "uefilib/inc/efilib.h"
 
 // 文字を表示する関係
 
@@ -92,7 +92,7 @@ VOID free_pool(VOID *Buffer) {
 VOID *allocate_pool(UINTN Size) {
     EFI_STATUS Status;
     VOID *p;
-    Status = gBS->AllocatePool(PoolAllocationType, Size, &p);
+    Status = gBS->AllocatePool(EfiConventionalMemory, Size, &p);
     if (EFI_ERROR(Status)) {
         p = NULL;
     }
@@ -125,7 +125,7 @@ BOOLEAN grow_buffer (EFI_STATUS status, VOID **buffer, UINTN buffer_size) {
 }
 
 // MemoryMapを取得
-EFI_MEMORY_DESCRIPTOR *get_memmap(UINTN *no_entries, UINTN *map_key, UINTN *descriptor_size, UINTN *descriptor_version, struct MemoryMap *map) {
+EFI_MEMORY_DESCRIPTOR *get_memmap(UINTN no_entries, UINTN *map_key, UINTN descriptor_size, UINT32 *descriptor_version) {
     EFI_STATUS status;
     EFI_MEMORY_DESCRIPTOR *buffer;
     UINTN buffer_size;
@@ -133,19 +133,12 @@ EFI_MEMORY_DESCRIPTOR *get_memmap(UINTN *no_entries, UINTN *map_key, UINTN *desc
     status = EFI_SUCCESS;
     buffer = NULL;
     buffer_size = sizeof(EFI_MEMORY_DESCRIPTOR);
-    while(grow_buffer(&status, (VOID **)&buffer, buffer_size)) {
-        status = gBS->GetMemoryMap(&buffer_size, buffer, map_key, descriptor_size, descriptor_version);
+    while(grow_buffer(status, (VOID **)&buffer, buffer_size)) {
+        status = gBS->GetMemoryMap(&buffer_size, buffer, map_key, &descriptor_size, descriptor_version);
     }
     if (!EFI_ERROR (status)) {
         no_entries = buffer_size / descriptor_size;
     }
-    //最後に全てを構造体に入れ込む
-    map->buffer = buffer;
-    map->memmap_desc_entry = no_entries;
-    map->buffer_size = buffer_size;
-    map->descriptor_size = descriptor_size;
-    map->descriptor_version = descriptor_version;
-    map->map_key = map_key;
     return buffer;
 }
 
@@ -200,7 +193,7 @@ EFI_STATUS print_memmap(struct MemoryMap *map) {
     EFI_MEMORY_DESCRIPTOR *desc = map->buffer;
     for (UINT32 i = 0; i < map->memmap_desc_entry; i++) {
         Print(L"%02d, %016x, %02x, %-ls, %016x, %016x, %016x, %d, %016x \n", i, desc, desc->Type, get_memtype_name(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
-        desc = ((UINT8 *)desc + map->descriptor_size);
+        desc = (EFI_MEMORY_DESCRIPTOR *)((UINT8 *)desc + map->descriptor_size);
     }
     Print(L"\n");
     PrintOK();
@@ -343,7 +336,7 @@ EFI_STATUS exit_bs(EFI_HANDLE IM, struct MemoryMap *map) {
         Print(L"Exit Boot Services\n");
         //メモリーマップを取得して再度試す
         Print(L"trying again ...\n");
-        get_memmap(map);
+        get_memmap(map->memmap_desc_entry, &map->map_key, map->descriptor_size, &map->descriptor_version);
         status = gBS->ExitBootServices(IM, map->map_key);
         if (EFI_ERROR(status)) {
             //どうしても無理なら止まってPCの起動を阻止する
@@ -363,11 +356,10 @@ EFI_STATUS EFIAPI uefi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     Print(L"Welcome to NeoBoot !\n");
     // MemoryMap
     struct MemoryMap map;
-    map.map_size = 0;
-    map.map_key = 0;
-    map.descriptor_size = 0;
     // Get Memory Map
-    EFI_MEMORY_DESCRIPTOR *desc =  get_memmap(map.memmap_desc_entry, map.map_key, map.descriptor_size, map.descriptor_version, &map);
+    EFI_MEMORY_DESCRIPTOR *buffer;
+    buffer = get_memmap(map.memmap_desc_entry, &map.map_key, map.descriptor_size, &map.descriptor_version);
+    map.buffer = buffer;
     //Print
     Print(L"%x, %d", map.map_key, map.map_key);
     // Open Volume
