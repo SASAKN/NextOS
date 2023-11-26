@@ -91,14 +91,14 @@ EFI_STATUS open_block_io_protocol(EFI_HANDLE IM, EFI_BLOCK_IO_PROTOCOL **block_i
     status = gBS->OpenProtocol(IM, &gEfiLoadedImageProtocolGuid, (VOID **)&lip, IM, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
     if (EFI_ERROR(status)) {
         PrintError();
-        Print(L"Open LIP Protocol\n");
+        Print(L"Open LIP Protocol : %r\n", status);
         return status;
     };
     // Block IO Protocol
     status = gBS->OpenProtocol(lip->DeviceHandle, &gEfiBlockIoProtocolGuid, (VOID **)block_io, IM, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
         if (EFI_ERROR(status)) {
         PrintError();
-        Print(L"Open Block IO Protocol\n");
+        Print(L"Open Block IO Protocol : %r\n", status);
         return status;
     };
     return EFI_SUCCESS;
@@ -113,14 +113,14 @@ EFI_STATUS get_memmap(struct MemoryMap *map) {
     status = gBS->GetMemoryMap(&map->map_size, NULL, &map->map_key, &map->descriptor_size, NULL);
     if (status != EFI_BUFFER_TOO_SMALL || !map->map_size) {
         PrintError();
-        Print(L"Get Memory Map\n");
+        Print(L"Get Memory Map : %r\n", status);
     }
     map->map_size += 4 * map->descriptor_size;
     char memmap_buf[map->map_size];
     map->buffer = memmap_buf;
     if (!map->map_size) {
         PrintError();
-        Print(L"Allocate Memory\n");
+        Print(L"Allocate Memory : %r\n",. status);
         return 1;
     }
     //2回目の実行で確実に取得できる
