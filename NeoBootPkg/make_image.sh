@@ -38,6 +38,9 @@ cp ${script_dir}/${1} ./BOOTX64.efi
 #それをコピー
 cp -r ${script_dir}/neos/ /Volumes/NEOS/neos/
 
+#ルートフォルダーよりもカーネル
+cp ${script_dir}/kernel.elf /Volumes/NEOS/kernel.elf
+
 #作業フォルダーに戻る
 cd ${script_dir}
 
