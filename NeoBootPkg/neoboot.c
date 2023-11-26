@@ -367,7 +367,7 @@ EFI_STATUS EFIAPI uefi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     map.map_key = 0;
     map.descriptor_size = 0;
     // Get Memory Map
-    get_memmap(&map);
+    EFI_MEMORY_DESCRIPTOR *desc =  get_memmap(map.memmap_desc_entry, map.map_key, map.descriptor_size, map.descriptor_version, &map);
     //Print
     Print(L"%x, %d", map.map_key, map.map_key);
     // Open Volume
