@@ -3,8 +3,6 @@
 
 #include <Uefi.h>
 
-#define MEM_DESC_SIZE	4096
-
 /* A memory map for booting */
 struct MemoryMap {
     UINT64 buffer_size;
@@ -24,6 +22,5 @@ struct MemoryDescriptor {
     UINT32 NumberOfPages;
     UINT32 Attribute;
 };
-
 
 #endif
