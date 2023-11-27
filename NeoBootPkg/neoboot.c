@@ -83,71 +83,47 @@ EFI_STATUS open_root_dir(EFI_HANDLE IM, EFI_FILE_PROTOCOL** root) {
 
 //メモリー関係
 
-//GNU_EFIから少し移植
-
-VOID free_pool(VOID *Buffer) {
-    gBS->FreePool(Buffer);
+void free_pool(void* src) {
+    gBS->FreePool()
 }
 
-VOID *allocate_pool(UINTN Size) {
-    EFI_STATUS Status;
-    VOID *p;
-    Status = gBS->AllocatePool(EfiConventionalMemory, Size, &p);
-    if (EFI_ERROR(Status)) {
-        p = NULL;
-    }
-    return p;
-}
+#define INITIAL_MAP_SIZE 1024
 
-//メモリーマップを取得するときのループ回数の取得や、エラーハンドリング
-BOOLEAN grow_buffer(EFI_STATUS status, VOID **buffer, UINTN buffer_size) {
-    BOOLEAN TryAgain;
-    if (!buffer && buffer_size) {
-        status = EFI_BUFFER_TOO_SMALL;
+EFI_STATUS get_memory_map(MEMORY_MAP *map) {
+    if (map->buffer == NULL) {
+        // バッファが確保されていない場合は、バッファが小さすぎると見なして EFI_BUFFER_TOO_SMALL を返す
+        return EFI_BUFFER_TOO_SMALL;
     }
-    TryAgain = FALSE;
-    if (status == EFI_BUFFER_TOO_SMALL) {
-        if (buffer) {
-            free_pool(*buffer); // 修正: バッファのアドレスを渡す
-        }
-        *buffer = allocate_pool(buffer_size); // 修正: 割り当てたバッファを返す
-        if (*buffer) {
-            TryAgain = TRUE; // 修正: TRUE に設定
-        } else {
-            status = EFI_OUT_OF_RESOURCES;
-        }
-    }
-    if (!TryAgain && EFI_ERROR(status) && *buffer) { // 修正: バッファのアドレスを渡す
-        free_pool(*buffer); // 修正: バッファのアドレスを渡す
-        *buffer = NULL;
-    }
-    return TryAgain;
-}
 
-
-// MemoryMapを取得
-EFI_MEMORY_DESCRIPTOR *get_memmap(UINTN *no_entries, UINTN *map_key, UINTN descriptor_size, UINT32 *descriptor_version) {
     EFI_STATUS status;
-    EFI_MEMORY_DESCRIPTOR *buffer;
-    UINTN buffer_size;
+    map->map_size = INITIAL_MAP_SIZE; // 初期サイズを設定
 
-    // 初期化
-    status = EFI_SUCCESS;
-    buffer = NULL;
-    buffer_size = sizeof(EFI_MEMORY_DESCRIPTOR);
+    do {
+        // メモリマップのサイズを map 構造体に格納
+        map->map_size = INITIAL_MAP_SIZE;
 
-    while (grow_buffer(status, (VOID **)&buffer, buffer_size)) {
-        status = gBS->GetMemoryMap(&buffer_size, buffer, map_key, &descriptor_size, descriptor_version);
-    }
+        // gBS->GetMemoryMap を呼び出してメモリマップを取得
+        status = gBS->GetMemoryMap(
+            &map->map_size,
+            (EFI_MEMORY_DESCRIPTOR *)map->buffer,
+            &map->map_key,
+            &map->descriptor_size,
+            &map->descriptor_version);
 
-    if (!EFI_ERROR(status)) {
-        PrintOK();
-        Print(L"Get Memory Map\n");
-        *no_entries = buffer_size / descriptor_size; // エントリ数を更新
-    }
+        if (status == EFI_BUFFER_TOO_SMALL) {
+            // バッファが小さすぎる場合は、必要なサイズに再設定して再試行
+            FreePool(map->buffer);
+            map->buffer = AllocatePool(map->map_size);
+            if (map->buffer == NULL) {
+                // メモリが確保できない場合はエラーを返す
+                return EFI_OUT_OF_RESOURCES;
+            }
+        }
+    } while (status == EFI_BUFFER_TOO_SMALL);
 
-    return buffer;
+    return status;
 }
+
 
 
 
@@ -344,7 +320,7 @@ EFI_STATUS exit_bs(EFI_HANDLE IM, struct MemoryMap *map) {
         Print(L"Exit Boot Services\n");
         //メモリーマップを取得して再度試す
         Print(L"trying again ...\n");
-        get_memmap(&map->memmap_desc_entry, &map->map_key, map->descriptor_size, &map->descriptor_version);
+        get_memmap(map->memmap_desc_entry, &map->map_key, map->descriptor_size, &map->descriptor_version);
         status = gBS->ExitBootServices(IM, map->map_key);
         if (EFI_ERROR(status)) {
             //どうしても無理なら止まってPCの起動を阻止する
@@ -366,7 +342,7 @@ EFI_STATUS EFIAPI uefi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     struct MemoryMap map;
     // Get Memory Map
     EFI_MEMORY_DESCRIPTOR *buffer;
-    buffer = get_memmap(&map.memmap_desc_entry, &map.map_key, map.descriptor_size, &map.descriptor_version);
+    buffer = get_memmap(map.memmap_desc_entry, &map.map_key, map.descriptor_size, &map.descriptor_version);
     map.buffer = buffer;
     //Print
     Print(L"%x, %d", map.map_key, map.map_key);
