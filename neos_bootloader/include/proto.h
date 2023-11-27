@@ -3,4 +3,11 @@
 
 //Print
 void PrintError(void); 
+void PrintWarn(void); 
+void PrintGoodBye(void);
+void PrintOK(void);  
+
+//MemoryMap
+
+
 #endif
