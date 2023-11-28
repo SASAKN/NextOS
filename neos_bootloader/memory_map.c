@@ -3,7 +3,7 @@
 
 // Allocate Pool
 // Mallocの実装
-void *malloc(size_t size) {
+void *malloc(UINTN size) {
     void *src;
     EFI_STATUS status;
     src = NULL;
@@ -33,6 +33,7 @@ void init_memmap(struct MemoryMap *map, void* buffer) {
     //値を格納
     map->buffer = buffer;
     map->map_size = 0;
+    map->buffer_size = 0;
     map->descriptor_size = 0;
     map->descriptor_version = 0;
     map->map_key = 0;
@@ -66,19 +67,22 @@ const CHAR16 *get_memtype(EFI_MEMORY_TYPE type) {
 // メモリーマップの取得
 EFI_STATUS get_memmap(struct MemoryMap *map) {
     EFI_STATUS status;
-    // 割り当てる
-    map->buffer = malloc(map->map_size);
-    status = gBS->GetMemoryMap(&map->map_size, (EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key, &map->descriptor_size, &map->descriptor_version);
-    if (status == EFI_BUFFER_TOO_SMALL) {
-        //もう一度割り当てる
-        free(map->buffer);
-        map->buffer = malloc(map->map_size);
-        status = gBS->GetMemoryMap(&map->map_size, (EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key, &map->descriptor_size, &map->descriptor_version);
-        //エラーハンドリング
-        if (EFI_ERROR(status)) {
-            PrintError();
-            Print(L"Get Memory Map : %r\n", status);
+    UINTN buffer_size;
+    // 512 Bytes
+    if (map->buffer == NULL) {
+        map->buffer = malloc(512);
+    }
+    // Main Loop
+    for (;;) {
+        map->map_size = map->buffer_size;
+        status = gBS->GetMemoryMap(&map->map_size, (EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key, &map->descriptor_size, &map->descriptor_version); 
+        // reallocate
+        if (status == EFI_BUFFER_TOO_SMALL) {
+            buffer_size = (map->map_size + 4095) & ~(UINTN)4095;
+            free(map->buffer);
+            map->buffer = malloc(map->map_size);
         }
+        continue;       
     }
     PrintOK();
     Print(L"Get Memory Map\n");
@@ -102,3 +106,4 @@ EFI_STATUS print_memmap(struct MemoryMap *map) {
 }
 
 //メモリーマップをファイルに保存
+

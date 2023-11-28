@@ -1,8 +1,6 @@
 #ifndef _BOOT_MEM_H
 #define _BOOT_MEM_H
 
-#include <Uefi.h>
-
 /* A memory map for booting */
 struct MemoryMap {
     UINT64 buffer_size;
