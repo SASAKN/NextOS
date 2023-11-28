@@ -1,0 +1,38 @@
+// For using UEFI Library
+#include  <Uefi.h>
+#include  <Library/UefiLib.h>
+#include  <Library/UefiBootServicesTableLib.h>
+#include  <Library/UefiRuntimeServicesTableLib.h>
+#include  <Library/PrintLib.h>
+#include  <Library/MemoryAllocationLib.h>
+#include  <Library/BaseMemoryLib.h>
+#include  <Protocol/LoadedImage.h>
+#include  <Protocol/SimpleFileSystem.h>
+#include  <Guid/FileInfo.h>
+
+#include "include/memory_map.h"
+#include "include/proto.h"
+
+void init_uefi(void) {
+    gBS->SetWatchdogTimer(0, 0 ,0, NULL);
+    PrintOK();
+    Print(L"Welcome to NextOS \n");
+}
+
+
+EFI_STATUS EFIAPI uefi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
+    EFI_STATUS status;
+    // Welcome
+    init_uefi();
+    // MemoryMap
+    struct MemoryMap map;
+    init_memmap(&map);
+    // Open Root Directory
+    
+    // Get,Print and Save
+    get_memmap(&map);
+    print_memmap(&map);
+    save_memmap(&map, );
+} 
+
+

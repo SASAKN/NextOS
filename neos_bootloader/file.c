@@ -1,17 +1,36 @@
 #include "include/proto.h"
 #include "include/elf.h"
 #include "include/file.h"
-#include <Uefi.h>
+// For using UEFI Library
+#include  <Uefi.h>
+#include  <Library/UefiLib.h>
+#include  <Library/UefiBootServicesTableLib.h>
+#include  <Library/UefiRuntimeServicesTableLib.h>
+#include  <Library/PrintLib.h>
+#include  <Library/MemoryAllocationLib.h>
+#include  <Library/BaseMemoryLib.h>
+#include  <Protocol/LoadedImage.h>
+#include  <Protocol/SimpleFileSystem.h>
+#include  <Guid/FileInfo.h>
 
-// SimpleFileSystemプロトコルを開く
-EFI_STATUS open_sfsp(void) {
-
+// ルートディレクトリーを開く
+EFI_STATUS open_root_dir(EFI_HANDLE IM, DIR **root) {
+    EFI_LOADED_IMAGE_PROTOCOL *lip;
+    EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *fs;
+    // Loaded Image Protocol
+    gBS->OpenProtocol(IM, &gEfiLoadedImageProtocolGuid, (VOID**)&lip, IM, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+    // Simple File System Protocol
+    gBS->OpenProtocol(lip->DeviceHandle, &gEfiSimpleFileSystemProtocolGuid, (VOID**)&fs, IM, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+    // Open Volume
+    fs->OpenVolume(fs, root);
+    PrintOK();
+    Print(L"Open Volume\n");
 }
 
 //ファイルを作る
 FILE *create_file(DIR *root, CHAR16 file_path) {
     FILE *file;
-    status = root->Open(root, &file, file_path, EFI_FILE_MODE_READ | EFI_FILE_MODE_CREATE | EFI_FILE_MODE_WRITE);
+    status = root->Open(root, &file, file_path, EFI_FILE_MODE_READ | EFI_FILE_MODE_CREATE | EFI_FILE_MODE_WRITE, 0);
     if (EFI_ERROR(status)) {
         PrintError();
         Print(L"Create File : %r\n", status);
