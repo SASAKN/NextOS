@@ -14,5 +14,6 @@ void init_memmap(struct MemoryMap *map, void* buffer);
 const CHAR16 *get_memtype(EFI_MEMORY_TYPE type);
 EFI_STATUS get_memmap(struct MemoryMap *map);
 EFI_STATUS print_memmap(struct MemoryMap *map);
+EFI_STATUS save_memmap(struct MemoryMap *map, DIR *root)
 
 #endif

@@ -18,3 +18,5 @@ FILE **create_file(DIR *root, CHAR16 file_path) {
     }
     return file;
 }
+
+//ファイルを読み込む
