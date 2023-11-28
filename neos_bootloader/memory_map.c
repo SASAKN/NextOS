@@ -115,11 +115,27 @@ EFI_STATUS save_memmap(struct MemoryMap *map, DIR *root) {
     FILE *memmap_file;
     // MemoryMap Header
     CHAR8 *header = "Index, Buffer, Type, Type(name), PhysicalStart, VirtualStart, NumberOfPages, Size, Attribute";
+    size = AsciiStrLen(header);
     // Create Memory Map file
     memmap_file = create_file(root, L"\\EFI\\neos\\memmap.blmm");
     // Write Header
-    memmap_file->Write()
-    
+    status = memmap_file->Write(memmap_file, &size, header);
+    if (EFI_ERROR (status)) {
+        PrintError();
+        Print(L"Write Header : %r\n", status);
+    };
+    // Write Memory Map
+    EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer;
+    for (UINT32 i = 0; i < map->memmap_desc_entry; i++) {
+        size = AsciiSPrint(buffer, sizeof(buffer), "%02u, %016x, %02x, %-ls, %016x, %016x, %016x, %d, %016x \n", i, desc, desc->Type, get_memtype(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
+        status = memmap_file->Write(memmap_file, &size, header);
+        if (EFI_ERROR(status)) {
+            PrintError();
+            Print(L"Write Memory Map\n : %r", status);
+        }
+        desc = (EFI_MEMORY_DESCRIPTOR *)((UINT8 *)desc + map->descriptor_size);
+    }
+    return EFI_SUCCESS;
 }
 
 
