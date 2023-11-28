@@ -108,5 +108,9 @@ EFI_STATUS print_memmap(struct MemoryMap *map) {
 }
 
 //メモリーマップをファイルに保存
+EFI_STATUS save_memmap(struct MemoryMap *map, DIR *root) {
+    EFI_STATUS status;
+    return status;
+}
 
 
