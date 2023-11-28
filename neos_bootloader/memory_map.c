@@ -78,7 +78,9 @@ EFI_STATUS get_memmap(struct MemoryMap *map) {
         status = gBS->GetMemoryMap(&map->map_size, (EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key, &map->descriptor_size, &map->descriptor_version); 
         // reallocate
         if (status == EFI_BUFFER_TOO_SMALL) {
-            buffer_size = (map->map_size + 4095) & ~(UINTN)4095;
+            // どうだろうどっちが適しているかな
+            // buffer_size = (map->map_size + 4095) & ~(UINTN)4095;
+            buffer_size = map->map_size + (4 * map->descriptor_size);
             free(map->buffer);
             map->buffer = malloc(map->map_size);
         }
