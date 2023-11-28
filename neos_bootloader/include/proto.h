@@ -17,6 +17,6 @@ EFI_STATUS print_memmap(struct MemoryMap *map);
 EFI_STATUS save_memmap(struct MemoryMap *map, DIR *root);
 
 // File
-FILE **create_file(DIR *root, CHAR16 file_path);
+FILE *create_file(DIR *root, CHAR16 file_path);
 
 #endif

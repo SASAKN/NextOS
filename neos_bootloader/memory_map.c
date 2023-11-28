@@ -110,7 +110,16 @@ EFI_STATUS print_memmap(struct MemoryMap *map) {
 //メモリーマップをファイルに保存
 EFI_STATUS save_memmap(struct MemoryMap *map, DIR *root) {
     EFI_STATUS status;
-    return status;
+    CHAR8 buffer[512];
+    UINTN size;
+    FILE *memmap_file;
+    // MemoryMap Header
+    CHAR8 *header = "Index, Buffer, Type, Type(name), PhysicalStart, VirtualStart, NumberOfPages, Size, Attribute";
+    // Create Memory Map file
+    memmap_file = create_file(root, L"\\EFI\\neos\\memmap.blmm");
+    // Write Header
+    memmap_file->Write()
+    
 }
 
 
