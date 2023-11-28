@@ -23,4 +23,4 @@
   UefiRuntimeServicesTableLib|MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib.inf
 
 [Components]
-    neoboot/Loader.inf
+    neoboot/loader.inf

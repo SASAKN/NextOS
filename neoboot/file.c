@@ -1,6 +1,3 @@
-#include "include/proto.h"
-#include "include/elf.h"
-#include "include/file.h"
 // For using UEFI Library
 #include  <Uefi.h>
 #include  <Library/UefiLib.h>
@@ -12,6 +9,11 @@
 #include  <Protocol/LoadedImage.h>
 #include  <Protocol/SimpleFileSystem.h>
 #include  <Guid/FileInfo.h>
+
+#include "include/memory_map.h"
+#include "include/file.h"
+#include "include/proto.h"
+#include "include/elf.h"
 
 // ルートディレクトリーを開く
 EFI_STATUS open_root_dir(EFI_HANDLE IM, DIR **root) {
@@ -25,10 +27,12 @@ EFI_STATUS open_root_dir(EFI_HANDLE IM, DIR **root) {
     fs->OpenVolume(fs, root);
     PrintOK();
     Print(L"Open Volume\n");
+    return EFI_SUCCESS;
 }
 
 //ファイルを作る
-FILE *create_file(DIR *root, CHAR16 file_path) {
+FILE *create_file(DIR *root, CHAR16 *file_path) {
+    EFI_STATUS status;
     FILE *file;
     status = root->Open(root, &file, file_path, EFI_FILE_MODE_READ | EFI_FILE_MODE_CREATE | EFI_FILE_MODE_WRITE, 0);
     if (EFI_ERROR(status)) {

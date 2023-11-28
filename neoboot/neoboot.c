@@ -13,6 +13,7 @@
 #include "include/memory_map.h"
 #include "include/file.h"
 #include "include/proto.h"
+#include "include/elf.h"
 
 void init_uefi(void) {
     gBS->SetWatchdogTimer(0, 0 ,0, NULL);
@@ -22,12 +23,12 @@ void init_uefi(void) {
 
 
 EFI_STATUS EFIAPI uefi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
-    EFI_STATUS status;
     // Welcome
     init_uefi();
     // Init MemoryMap
     struct MemoryMap map;
-    init_memmap(&map);
+    char *buffer = NULL;
+    init_memmap(&map, buffer);
     // Open Root Directory
     DIR *root;
     open_root_dir(IM, &root);
@@ -35,6 +36,7 @@ EFI_STATUS EFIAPI uefi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     get_memmap(&map);
     print_memmap(&map);
     save_memmap(&map, root);
+    return EFI_SUCCESS;
 } 
 
 
