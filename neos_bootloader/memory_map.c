@@ -135,6 +135,7 @@ EFI_STATUS save_memmap(struct MemoryMap *map, DIR *root) {
         }
         desc = (EFI_MEMORY_DESCRIPTOR *)((UINT8 *)desc + map->descriptor_size);
     }
+    memmap_file->Close(memmap_file);
     return EFI_SUCCESS;
 }
 

@@ -11,6 +11,7 @@
 #include  <Guid/FileInfo.h>
 
 #include "include/memory_map.h"
+#include "include/file.h"
 #include "include/proto.h"
 
 void init_uefi(void) {
@@ -24,15 +25,16 @@ EFI_STATUS EFIAPI uefi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     EFI_STATUS status;
     // Welcome
     init_uefi();
-    // MemoryMap
+    // Init MemoryMap
     struct MemoryMap map;
     init_memmap(&map);
     // Open Root Directory
-    
-    // Get,Print and Save
+    DIR *root;
+    open_root_dir(IM, &root);
+    // Get it, Print it and Save it
     get_memmap(&map);
     print_memmap(&map);
-    save_memmap(&map, );
+    save_memmap(&map, root);
 } 
 
 
