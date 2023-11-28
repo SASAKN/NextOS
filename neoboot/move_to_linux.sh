@@ -4,4 +4,4 @@
 
 script_dir="$(dirname "$(readlink -f "$0")")"
 
-cp -r ${script_dir}/ /Users/kenta/edk2/NeoBootPkg
+cp -r ${script_dir}/ /Users/kenta/edk2/neoboot
