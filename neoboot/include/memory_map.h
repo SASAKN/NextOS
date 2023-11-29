@@ -13,7 +13,6 @@
 #include  <Protocol/SimpleFileSystem.h>
 #include  <Guid/FileInfo.h>
 
-#include "memory_map.h"
 #include "file.h"
 #include "proto.h"
 #include "elf.h"
@@ -38,4 +37,4 @@ struct MemoryDescriptor {
     UINT32 Attribute;
 };
 
-#endif
+#endif // _BOOT_MEM_H

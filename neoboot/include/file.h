@@ -14,7 +14,6 @@
 #include  <Guid/FileInfo.h>
 
 #include "memory_map.h"
-#include "file.h"
 #include "proto.h"
 #include "elf.h"
 
