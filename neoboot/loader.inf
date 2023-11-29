@@ -9,6 +9,7 @@
 [Sources]
   mem.c
   neoboot.c
+  file.c
 
 [Packages]
     MdePkg/MdePkg.dec
