@@ -16,6 +16,13 @@ struct mem_map {
 };
 
 // ProtoType
+void *malloc(UINTN size);
+void free(void *ptr);
+void init_memmap(struct mem_map *map, void *buffer);
+const CHAR16 *get_memtype(EFI_MEMORY_TYPE type);
+EFI_STATUS get_memmap(struct mem_map *map);
+EFI_STATUS print_memmap(struct mem_map *map);
+EFI_STATUS save_memmap(struct mem_map *map, EFI_FILE_PROTOCOL *root);
 
 
 #endif //_NEOBOOT_MEM_H
