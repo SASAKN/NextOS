@@ -31,9 +31,9 @@ EFI_STATUS open_root_dir(EFI_HANDLE IM, DIR **root) {
 }
 
 //ファイルを作る
-FILE *create_file(DIR *root, CHAR16 *file_path) {
+EFI_FILE_PROTOCOL *create_file(EFI_FILE_PROTOCOL *root, CHAR16 *file_path) {
     EFI_STATUS status;
-    FILE *file;
+    EFI_FILE_PROTOCOL *file;
     status = root->Open(root, &file, file_path, EFI_FILE_MODE_READ | EFI_FILE_MODE_CREATE | EFI_FILE_MODE_WRITE, 0);
     if (EFI_ERROR(status)) {
         PrintError();

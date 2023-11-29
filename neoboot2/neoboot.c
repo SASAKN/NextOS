@@ -30,7 +30,7 @@ EFI_STATUS EFIAPI uefi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     char *buffer = NULL;
     init_memmap(&map, buffer);
     // Open Root Directory
-    DIR *root;
+    EFI_FILE_PROTOCOL *root;
     open_root_dir(IM, &root);
     // Get it, Print it and Save it
     get_memmap(&map);
