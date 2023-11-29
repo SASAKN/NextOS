@@ -1,0 +1,30 @@
+[Defines]
+    INF_VERSION     = 0x00010006
+    BASE_NAME       = loader
+    FILE_GUID       = 7C52DE1C-D6AC-4E50-952B-6C34C4D09F02
+    MODULE_TYPE     = UEFI_APPLICATION
+    VERSION_STRING  = 0.1
+    ENTRY_POINT     = uefi_main
+    
+[Sources]
+    neoboot.c
+    file.c
+    memory_map.c
+
+[Packages]
+    MdePkg/MdePkg.dec
+
+[LibraryClasses]
+    UefiLib
+    UefiApplicationEntryPoint
+
+[Guids]
+  gEfiFileInfoGuid
+  gEfiAcpiTableGuid
+
+[Protocols]
+  gEfiLoadedImageProtocolGuid
+  gEfiLoadFileProtocolGuid
+  gEfiSimpleFileSystemProtocolGuid
+
+#   gEfiBlockIoProtocolGuid
