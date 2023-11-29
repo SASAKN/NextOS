@@ -10,6 +10,7 @@
 #include  <Guid/FileInfo.h>
 
 #include "file.h"
+#include "common.h"
 
 // Open Root Directory
 EFI_STATUS open_root_dir(EFI_HANDLE IM, EFI_FILE_PROTOCOL **root) {

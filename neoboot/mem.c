@@ -11,6 +11,7 @@
 
 // Memory Map
 #include "mem.h"
+#include "common.h"
 
 // Allocate Pool
 void *malloc(UINTN size) {
