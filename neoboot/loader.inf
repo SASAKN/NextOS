@@ -7,9 +7,8 @@
     ENTRY_POINT     = uefi_main
     
 [Sources]
-    neoboot.c
-    file.c
-    memory_map.c
+  mem.c
+  neoboot.c
 
 [Packages]
     MdePkg/MdePkg.dec
