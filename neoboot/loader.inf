@@ -8,8 +8,8 @@
     
 [Sources]
   mem.c
-  neoboot.c
   file.c
+  neoboot.c
 
 [Packages]
     MdePkg/MdePkg.dec
