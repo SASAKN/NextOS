@@ -1,0 +1,28 @@
+[Defines]
+    INF_VERSION = 0x00010006
+    BASE_NAME   = loader
+    FILE_GUID   = C22CBB18-E430-4A1F-AE68-A0578DEB6A02
+    MODULE_TYPE = UEFI_APPLICATION
+    VERSION_STRING = 0.01
+    ENTRY_POINT = main
+
+[Sources]
+    main.c
+    memory.c
+    elf_loader.c
+# その他追加
+
+[Packages]
+    MdePkg/MdePkg.dec
+
+[LibraryClasses]
+    UefiLib
+    UefiApplicationEntryPoint
+
+[Guids]
+    gEfiFileInfoGuid
+
+[Protocols]
+    gEfiLoadedImageProtocolGuid
+    gEfiLoadFileProtocolGuid
+    gEfiSimpleFileSystemProtocolGuid
