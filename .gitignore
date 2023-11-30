@@ -16,3 +16,4 @@ my-operating-system.code-workspace
 *.wav
 *.so
 uefilib/
+MyBootLoader/
