@@ -55,7 +55,7 @@ EFI_STATUS EFIAPI uefi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // Welcome
     init_uefi();
     // Init MemoryMap
-    struct MemoryMap map;
+    struct mem_map map;
     char *buffer = NULL;
     init_memmap(&map, buffer);
     // Open Root Directory

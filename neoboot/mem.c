@@ -11,6 +11,7 @@
 
 // Memory Map
 #include "mem.h"
+#include "file.h"
 #include "common.h"
 
 // Allocate Pool
@@ -83,7 +84,6 @@ EFI_STATUS get_memmap(struct mem_map *map) {
         map->buffer = malloc(512);
     }
     // Main Loop
-    for (;;) {
         map->map_size = map->buffer_size;
         status = gBS->GetMemoryMap(&map->map_size, (EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key, &map->descriptor_size, &map->descriptor_version); 
         // reallocate
@@ -92,10 +92,10 @@ EFI_STATUS get_memmap(struct mem_map *map) {
             buffer_size = (map->map_size + 4095) & ~(UINTN)4095;
             // buffer_size = map->map_size + (4 * map->descriptor_size);
             free(map->buffer);
-            map->buffer = malloc(map->map_size);
+            map->buffer = malloc(buffer_size);
+            status = gBS->GetMemoryMap(&buffer_size, (EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key, &map->descriptor_size, &map->descriptor_version); 
+            return EFI_SUCCESS;
         }
-        continue;       
-    }
     PrintOK();
     Print(L"Get Memory Map\n");
     return EFI_SUCCESS;
