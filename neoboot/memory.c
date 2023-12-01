@@ -2,9 +2,6 @@
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiLib.h>
 #include <Library/PrintLib.h>
-#include  <Protocol/LoadedImage.h>
-#include  <Protocol/SimpleFileSystem.h>
-#include  <Guid/FileInfo.h>
 #include "efiio.h"
 
 const CHAR16 *get_memtype(EFI_MEMORY_TYPE type) {
