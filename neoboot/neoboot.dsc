@@ -28,7 +28,7 @@
     MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
     UefiRuntimeServicesTableLib|MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib.inf
     DevicePathLib|MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib.inf
-    # edk2のいろいろなバージョンに対応
+    # edk2の最新にも対応
     RegisterFilterLib|MdePkg/Library/RegisterFilterLibNull/RegisterFilterLibNull.inf
 
 [Components]
