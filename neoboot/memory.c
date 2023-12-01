@@ -1,8 +1,8 @@
 #include "memory.h"
-
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiLib.h>
 #include <Library/PrintLib.h>
+#include "efiio.h"
 
 const CHAR16 *get_memtype(EFI_MEMORY_TYPE type) {
     switch (type) {
@@ -32,10 +32,12 @@ EFI_STATUS allocate_memmap(memmap *map, UINTN buffer_size) {
 }
 
 EFI_STATUS get_memmap(memmap *map) {
-    EFI_STATUS status;
+    EFI_STATUS status = EFI_SUCCESS;
     if (map->buffer_size == 0 && map->buffer == NULL) {
         status = allocate_memmap(map, INIT_MAP_SIZE);
         if (EFI_ERROR(status)) {
+            PrintError();
+            Print(L"Allocate Pool");
             return status;
         }
     }
@@ -43,9 +45,28 @@ EFI_STATUS get_memmap(memmap *map) {
         map->map_size = map->buffer_size;
         status = gBS->GetMemoryMap(&map->map_size, (EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key, &map->desc_size, &map->desc_ver);
         if (status == EFI_BUFFER_TOO_SMALL) {
+            PrintWarn();
+            Print(L"Buffer size is too small. will try again !\n");
             const UINTN buffer_size = (map->map_size) + (map->desc_size * 4);
-            Print(L"Memory Map Size %lu", buffer_size);
+            Print(L"[ INFO ] Memory Map Size %lu\n", buffer_size);
+            // Free Pool
             status = gBS->FreePool(map->buffer);
+            if (EFI_ERROR(status)) {
+                PrintError();
+                Print(L"Free Pool\n");
+            }
+            // Try Again !
+            status = allocate_memmap(map, buffer_size);
+            if (EFI_ERROR(status)) {
+                PrintError();
+                Print(L"Allocate Pool\n");
+            }
+            continue;
         }
+        if (EFI_ERROR(status)) {
+            PrintError();
+            Print(L"Unknown Error : %r", status);
+        }
+        return EFI_SUCCESS;
     }
 }
