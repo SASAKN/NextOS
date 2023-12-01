@@ -1,5 +1,6 @@
 #include <Uefi/UefiBaseType.h>
 #include <Uefi/UefiSpec.h>
+#include <Library/PrintLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 
 /* OKを緑で表示 */
