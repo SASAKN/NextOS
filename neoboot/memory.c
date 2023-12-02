@@ -80,17 +80,20 @@ EFI_STATUS get_memmap(memmap *map) {
         }
         return EFI_SUCCESS;
     }
-    map->desc_entry = map->map_size + map->desc_size;
 }
 
 EFI_STATUS print_memmap(memmap *map) {
+    // Print header
     Print(L"\n [ INFO ] Memory Map \n");
     UINT16 *header = L"Index, Buffer, Type, Type(name), PhysicalStart, VirtualStart, NumberOfPages, Size, Attribute";
     Print(L"%-ls\n", header);
-    EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer;
-    for (UINT32 i = 0; i < map->desc_entry; i++) {
+    int i;
+    EFI_PHYSICAL_ADDRESS iter;
+    for (iter = (EFI_PHYSICAL_ADDRESS)map->buffer, i = 0;
+    iter < (EFI_PHYSICAL_ADDRESS)map->buffer + map->map_size;
+    iter += map->desc_size, i++) {
+        EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)iter;
         Print(L"%02d, %016x, %02x, %-ls, %016x, %016x, %016x, %d, %016x \n", i, desc, desc->Type, get_memtype(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
-        desc = (EFI_MEMORY_DESCRIPTOR *)((UINT8 *)desc + map->desc_size);
     }
     Print(L"\n");
     PrintOK();
