@@ -96,6 +96,8 @@ EFI_STATUS print_memmap(memmap *map) {
         EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)iter;
         Print(L"%02d, %016x, %02x, %-ls, %016x, %016x, %016x, %d, %016x \n", i, desc, desc->Type, get_memtype(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
     }
+    // Entryを変更
+    map->entry = iter;
     Print(L"\n");
     PrintOK();
     Print(L"Print Memory Map\n");
