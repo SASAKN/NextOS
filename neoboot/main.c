@@ -51,6 +51,8 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     EFI_FILE_PROTOCOL *memmap_f;
     memmap_f = NULL;
     save_memmap(&map, memmap_f, root);
+    // Load kernel
+    
     // Halt
     while (1) __asm__ ("hlt");
     return EFI_SUCCESS;
