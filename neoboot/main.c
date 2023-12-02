@@ -47,6 +47,8 @@ EFI_STATUS EFIAPI main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     get_memmap(&map);
     print_memmap(&map);
     save_memmap(&map, root);
+    // Halt
+    while (1) __asm__ ("hlt");
     return EFI_SUCCESS;
 } 
 
