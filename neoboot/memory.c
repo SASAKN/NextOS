@@ -114,30 +114,39 @@ EFI_STATUS save_memmap(memmap *map, EFI_FILE_PROTOCOL *f, EFI_FILE_PROTOCOL *roo
     // Header
     CHAR8 *header = "Index, Buffer, Type, Type(name), PhysicalStart, VirtualStart, NumberOfPages, Size, Attribute\n"
                     "--|----------------|--|--------------------|----------------|----------------|----------------|---|----------------|\n";
-    size = AsciiStrLen(header);
+    size = AsciiStrLen(header); // 211
     // Open memory map file
     status = root_dir->Open(root_dir, &f, L"\\memmap.blmm", EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE, 0);
     if (EFI_ERROR(status)) {
         PrintError();
         Print(L"Create a file : %r\n", status);
     }
+    PrintOK();
+    Print(L"Create a file 'memmap.blmm' \n");
     // Write header
     status = f->Write(f, &size, header);
     if (EFI_ERROR(status)) {
         PrintError();
         Print(L"Write header : %r\n", status);
     }
+    PrintOK();
+    Print(L"Write header\n");
     // Write memory map
-    EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer;
-    for (UINT32 i = 0; i < map->desc_entry; i++) {
-        size = AsciiSPrint(buffer, sizeof(buffer), "%02u, %016x, %02x, %-ls, %016x, %016x, %016x, %d, %016x \n", i, desc, desc->Type, get_memtype(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
+    EFI_PHYSICAL_ADDRESS iter;
+    int i;
+    for (iter = (EFI_PHYSICAL_ADDRESS)map->buffer, i = 0;
+    iter < (EFI_PHYSICAL_ADDRESS)map->buffer + map->map_size;
+    iter += map->desc_size, i++)  {
+        EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)iter;
+        size = AsciiSPrint(buffer, sizeof(buffer), "|%02u|%016x|%02x|%20ls|%016x|%016x|%016x|%d| %2ls %5lx| \n", i, desc, desc->Type, get_memtype(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, (desc->Attribute & EFI_MEMORY_RUNTIME) ? L"RT" : L"", desc->Attribute & 0xffffflu);
         status = f->Write(f, &size, header);
         if (EFI_ERROR(status)) {
             PrintError();
             Print(L"Write Memory Map : %r\n", status);
         }
-        desc = (EFI_MEMORY_DESCRIPTOR *)((UINT8 *)desc + map->desc_size);
     }
+    PrintOK();
+    Print(L"Save Memory Map");
     f->Close(f);
     return EFI_SUCCESS;
 }
