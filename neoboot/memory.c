@@ -99,11 +99,11 @@ EFI_STATUS print_memmap(memmap *map) {
         mem_size += desc->NumberOfPages;
     }
     // Entryを変更
-    map->desc_entry = (UINT64)i;
+    map->desc_entry = (UINT64)(i - 1);
     Print(L"\n");
     PrintOK();
     Print(L"Print Memory Map\n");
-    Print(L"[ INFO ] Number Of Pages : %lu bytes", mem_size);
+    Print(L"[ INFO ] Number Of Pages : %lu bytes\n", mem_size);
     return EFI_SUCCESS;
 }
 
