@@ -69,9 +69,14 @@ EFI_STATUS open_root_dir(EFI_HANDLE IM, EFI_FILE_PROTOCOL **root) {
     return EFI_SUCCESS;
 }
 
-EFI_STATUS open_file_read(UINTN *file_size, EFI_FILE_PROTOCOL *root, EFI_FILE_PROTOCOL *file, CHAR16 *file_path) {
+EFI_STATUS open_file_read(UINTN file_size, EFI_FILE_PROTOCOL *root, EFI_FILE_PROTOCOL *file, CHAR16 *file_path) {
     EFI_STATUS status;
     status = root->Open(root, &file, file_path, EFI_FILE_MODE_READ, 0);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Open '%-ls' : %r\n", file_path, status);
+        return status;
+    }
     // FMAのところも計算
     UINTN file_info_buffer_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * StrLen(file_path) + 2;
     UINT8 file_info_buffer[file_info_buffer_size];
