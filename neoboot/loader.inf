@@ -4,7 +4,7 @@
     FILE_GUID   = C22CBB18-E430-4A1F-AE68-A0578DEB6A02
     MODULE_TYPE = UEFI_APPLICATION
     VERSION_STRING = 0.01
-    ENTRY_POINT = main
+    ENTRY_POINT = efi_main
 
 [Sources]
     efiio.c

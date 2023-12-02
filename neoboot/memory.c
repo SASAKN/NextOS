@@ -31,6 +31,15 @@ EFI_STATUS allocate_memmap(memmap *map, UINTN buffer_size) {
     return gBS->AllocatePool(EfiLoaderData, buffer_size, &map->buffer);
 }
 
+EFI_STATUS init_memmap(memmap *map) {
+    map->buffer = NULL;
+    map->buffer_size = INIT_MAP_SIZE;
+    map->map_size = 0;
+    map->map_key = 0;
+    map->desc_size = 0;
+    map->desc_ver = 0;
+}
+
 EFI_STATUS get_memmap(memmap *map) {
     EFI_STATUS status = EFI_SUCCESS;
     if (map->buffer_size == 0 && map->buffer == NULL) {

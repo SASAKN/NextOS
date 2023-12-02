@@ -33,11 +33,11 @@ void init_uefi(void) {
     Print(L"Welcome to NextOS \n");
 }
 
-EFI_STATUS EFIAPI main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
+EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // Welcome
     init_uefi();
     // Init MemoryMap
-    struct MemoryMap map;
+    memmap map;
     char *buffer = NULL;
     init_memmap(&map, buffer);
     // Open Root Directory

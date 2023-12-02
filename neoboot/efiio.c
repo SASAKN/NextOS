@@ -29,11 +29,10 @@ void PrintError(void)
 };
 
 // Open root directory
-EFI_STATUS open_root_dir(EFI_HANDLE IM, DIR **root) {
+EFI_STATUS open_root_dir(EFI_HANDLE IM, EFI_FILE_PROTOCOL **root) {
     EFI_STATUS status;
     EFI_LOADED_IMAGE_PROTOCOL *lip;
     EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *fs;
-    EFI_HANDLE fs_opener;
     // Loaded Image Protocol
     status = gBS->OpenProtocol(IM, &gEfiLoadedImageProtocolGuid, (VOID**)&lip, IM, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
     if (EFI_ERROR(status)) {

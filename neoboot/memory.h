@@ -19,6 +19,7 @@ typedef struct memory_map {
 // Prototype
 const CHAR16 *get_memtype(EFI_MEMORY_TYPE type);
 EFI_STATUS allocate_memmap(memmap *map, UINTN buffer_size);
+EFI_STATUS init_memmap(memmap *map);
 EFI_STATUS get_memmap(memmap *map);
 EFI_STATUS print_memmap(memmap *map);
 EFI_STATUS save_memmap(memmap *map, EFI_FILE_PROTOCOL *f, EFI_FILE_PROTOCOL *root_dir);
