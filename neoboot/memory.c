@@ -31,7 +31,7 @@ EFI_STATUS allocate_memmap(memmap *map, UINTN buffer_size) {
     return gBS->AllocatePool(EfiLoaderData, buffer_size, &map->buffer);
 }
 
-EFI_STATUS init_memmap(memmap *map) {
+void init_memmap(memmap *map) {
     map->buffer = NULL;
     map->buffer_size = INIT_MAP_SIZE;
     map->map_size = 0;
@@ -50,7 +50,7 @@ EFI_STATUS get_memmap(memmap *map) {
             return status;
         }
     }
-    while(true) {
+    while(1) {
         map->map_size = map->buffer_size;
         status = gBS->GetMemoryMap(&map->map_size, (EFI_MEMORY_DESCRIPTOR *)map->buffer, &map->map_key, &map->desc_size, &map->desc_ver);
         if (status == EFI_BUFFER_TOO_SMALL) {
@@ -78,6 +78,7 @@ EFI_STATUS get_memmap(memmap *map) {
         }
         return EFI_SUCCESS;
     }
+    map->desc_entry = map->map_size + map->desc_size;
 }
 
 EFI_STATUS print_memmap(memmap *map) {
@@ -85,9 +86,9 @@ EFI_STATUS print_memmap(memmap *map) {
     UINT16 *header = L"Index, Buffer, Type, Type(name), PhysicalStart, VirtualStart, NumberOfPages, Size, Attribute";
     Print(L"%-ls\n", header);
     EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer;
-    for (UINT32 i = 0; i < map->memmap_desc_entry; i++) {
+    for (UINT32 i = 0; i < map->desc_entry; i++) {
         Print(L"%02d, %016x, %02x, %-ls, %016x, %016x, %016x, %d, %016x \n", i, desc, desc->Type, get_memtype(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
-        desc = (EFI_MEMORY_DESCRIPTOR *)((UINT8 *)desc + map->descriptor_size);
+        desc = (EFI_MEMORY_DESCRIPTOR *)((UINT8 *)desc + map->desc_size);
     }
     Print(L"\n");
     PrintOK();
@@ -116,14 +117,14 @@ EFI_STATUS save_memmap(memmap *map, EFI_FILE_PROTOCOL *f, EFI_FILE_PROTOCOL *roo
     }
     // Write memory map
     EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)map->buffer;
-    for (UINT32 i = 0; i < map->memmap_desc_entry; i++) {
+    for (UINT32 i = 0; i < map->desc_entry; i++) {
         size = AsciiSPrint(buffer, sizeof(buffer), "%02u, %016x, %02x, %-ls, %016x, %016x, %016x, %d, %016x \n", i, desc, desc->Type, get_memtype(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
         status = f->Write(f, &size, header);
         if (EFI_ERROR(status)) {
             PrintError();
             Print(L"Write Memory Map : %r\n", status);
         }
-        desc = (EFI_MEMORY_DESCRIPTOR *)((UINT8 *)desc + map->descriptor_size);
+        desc = (EFI_MEMORY_DESCRIPTOR *)((UINT8 *)desc + map->desc_size);
     }
     f->Close(f);
     return EFI_SUCCESS;

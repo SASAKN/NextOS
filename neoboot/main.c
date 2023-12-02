@@ -38,15 +38,16 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     init_uefi();
     // Init MemoryMap
     memmap map;
-    char *buffer = NULL;
-    init_memmap(&map, buffer);
+    init_memmap(&map);
     // Open Root Directory
     EFI_FILE_PROTOCOL *root;
     open_root_dir(IM, &root);
     // Get it, Print it and Save it
     get_memmap(&map);
     print_memmap(&map);
-    save_memmap(&map, root);
+    EFI_FILE_PROTOCOL *memmap_f;
+    memmap_f = NULL;
+    save_memmap(&map, memmap_f, root);
     // Halt
     while (1) __asm__ ("hlt");
     return EFI_SUCCESS;
