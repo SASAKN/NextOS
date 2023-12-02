@@ -113,7 +113,7 @@ EFI_STATUS save_memmap(memmap *map, EFI_FILE_PROTOCOL *f, EFI_FILE_PROTOCOL *roo
     UINTN size;
     // Header
     CHAR8 *header = "Index, Buffer, Type, Type(name), PhysicalStart, VirtualStart, NumberOfPages, Size, Attribute\n"
-                    "----|------------------|----|----------------------|------------------|------------------|------------------|-----|--------------------|\n";
+                    "-----|------------------|----|----------------------|------------------|------------------|------------------|-----|----------------|\n";
     size = AsciiStrLen(header); // 211
     // Open memory map file
     status = root_dir->Open(root_dir, &f, L"\\memmap.blmm", EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE, 0);
