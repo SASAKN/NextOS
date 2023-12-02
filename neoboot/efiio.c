@@ -71,7 +71,7 @@ EFI_STATUS open_root_dir(EFI_HANDLE IM, EFI_FILE_PROTOCOL **root) {
 
 EFI_STATUS open_file_read(EFI_FILE_PROTOCOL *root, CHAR16 *file_path, EFI_FILE_PROTOCOL **file, UINTN file_size) {
     EFI_STATUS status;
-    status = root->Open(root, &file, file_path, EFI_FILE_MODE_READ, 0);
+    status = root->Open(root, file, file_path, EFI_FILE_MODE_READ, 0);
     if (EFI_ERROR(status)) {
         PrintError();
         Print(L"Open '%-ls' : %r\n", file_path, status);
