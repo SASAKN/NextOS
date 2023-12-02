@@ -14,7 +14,20 @@
 #include "elf.h"
 
 void init_uefi(void) {
+    // Do not reboot
     gBS->SetWatchdogTimer(0, 0 ,0, NULL);
+    // Interval of priting text
+    gBS->
+    // Welcome
+    Print(L" __    __                        __       ______    ______  \n")
+    Print(L"/  \  /  |                      /  |     /      \  /      \  \n")
+    Print(L"$$  \ $$ |  ______   __    __  _$$ |_   /$$$$$$  |/$$$$$$  | \n")
+    Print(L"$$$  \$$ | /      \ /  \  /  |/ $$   |  $$ |  $$ |$$ \__$$/ \n")
+    Print(L"$$$$  $$ |/$$$$$$  |$$  \/$$/ $$$$$$/   $$ |  $$ |$$      \ \n")
+    Print(L"$$ $$ $$ |$$    $$ | $$  $$<    $$ | __ $$ |  $$ | $$$$$$  |\n")
+    Print(L"$$ |$$$$ |$$$$$$$$/  /$$$$  \   $$ |/  |$$ \__$$ |/  \__$$ |\n")
+    Print(L"$$ | $$$ |$$       |/$$/ $$  |  $$  $$/ $$    $$/ $$    $$/ \n ")
+    Print(L"$$/   $$/  $$$$$$$/ $$/   $$/    $$$$/   $$$$$$/   $$$$$$/  \n")
     PrintOK();
     Print(L"Welcome to NextOS \n");
 }
