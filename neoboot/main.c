@@ -54,7 +54,8 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // Load kernel
     UINTN kernel_size = 0;
     EFI_FILE_PROTOCOL *file = NULL;
-    open_file_read(kernel_size, root, file, L"\\kernel.elf");
+    open_file_read(root, L"\\kernel.elf", file, kernel_size);
+    Print(L"kernel file size is %lu \n", kernel_size);
     // Halt
     while (1) __asm__ ("hlt");
     return EFI_SUCCESS;
