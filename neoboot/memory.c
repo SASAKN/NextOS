@@ -103,7 +103,7 @@ EFI_STATUS print_memmap(memmap *map) {
     Print(L"\n");
     PrintOK();
     Print(L"Print Memory Map\n");
-    Print(L"[ INFO ] Number Of Pages : %lu bytes\n", mem_size);
+    Print(L"[ INFO ] Number Of Pages : %lu\n", (mem_size + 0xfff) / 0x1000);
     return EFI_SUCCESS;
 }
 

@@ -13,3 +13,5 @@
 #include "memory.h"
 #include "elf.h"
 
+// ELFファイルの読み取りなど
+

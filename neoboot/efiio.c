@@ -1,5 +1,6 @@
 #include <Uefi/UefiBaseType.h>
 #include <Protocol/SimpleFileSystem.h>
+#include <Guid/FileInfo.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Protocol/SimpleTextOut.h>
 #include <Protocol/LoadedImage.h>
@@ -66,4 +67,9 @@ EFI_STATUS open_root_dir(EFI_HANDLE IM, EFI_FILE_PROTOCOL **root) {
     PrintOK();
     Print(L"Open Volume\n");
     return EFI_SUCCESS;
+}
+
+EFI_STATUS open_kernel(UINTN *file_size, EFI_FILE_PROTOCOL *root, EFI_FILE_PROTOCOL **kernel) {
+    EFI_STATUS status;
+    status = root->Open(root, kernel, L"\\kernel.elf", )
 }
