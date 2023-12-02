@@ -38,6 +38,7 @@ void init_memmap(memmap *map) {
     map->map_key = 0;
     map->desc_size = 0;
     map->desc_ver = 0;
+    map->desc_entry = 0;
 }
 
 EFI_STATUS get_memmap(memmap *map) {
@@ -46,7 +47,7 @@ EFI_STATUS get_memmap(memmap *map) {
         status = allocate_memmap(map, INIT_MAP_SIZE);
         if (EFI_ERROR(status)) {
             PrintError();
-            Print(L"Allocate Pool");
+            Print(L"Allocate Pool\n");
             return status;
         }
         PrintOK();
