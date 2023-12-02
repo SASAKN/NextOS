@@ -33,7 +33,7 @@ EFI_STATUS allocate_memmap(memmap *map, UINTN buffer_size) {
 
 void init_memmap(memmap *map) {
     map->buffer = NULL;
-    map->buffer_size = INIT_MAP_SIZE;
+    map->buffer_size = 0;
     map->map_size = 0;
     map->map_key = 0;
     map->desc_size = 0;
@@ -49,6 +49,8 @@ EFI_STATUS get_memmap(memmap *map) {
             Print(L"Allocate Pool");
             return status;
         }
+        PrintOK();
+        Print(L"Allocate Memory Map\n");
     }
     while(1) {
         map->map_size = map->buffer_size;
@@ -62,7 +64,7 @@ EFI_STATUS get_memmap(memmap *map) {
             status = gBS->FreePool(map->buffer);
             if (EFI_ERROR(status)) {
                 PrintError();
-                Print(L"Free Pool\n");
+                Print(L"Free Pool : %r\n", status);
             }
             // Try Again !
             status = allocate_memmap(map, buffer_size);
