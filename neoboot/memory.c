@@ -90,17 +90,20 @@ EFI_STATUS print_memmap(memmap *map) {
     Print(L"%-ls\n", header);
     int i;
     EFI_PHYSICAL_ADDRESS iter;
+    UINTN mem_size = 0;
     for (iter = (EFI_PHYSICAL_ADDRESS)map->buffer, i = 0;
     iter < (EFI_PHYSICAL_ADDRESS)map->buffer + map->map_size;
     iter += map->desc_size, i++) {
         EFI_MEMORY_DESCRIPTOR *desc = (EFI_MEMORY_DESCRIPTOR *)iter;
         Print(L"%02d, %016x, %02x, %-ls, %016x, %016x, %016x, %d, %016x \n", i, desc, desc->Type, get_memtype(desc->Type), desc->PhysicalStart, desc->VirtualStart, desc->NumberOfPages, desc->NumberOfPages, desc->Attribute);
+        mem_size += desc->NumberOfPages;
     }
     // Entryを変更
     map->entry = iter;
     Print(L"\n");
     PrintOK();
     Print(L"Print Memory Map\n");
+    Print(L"[ INFO ] Total Memory : %lu bytes", mem_size);
     return EFI_SUCCESS;
 }
 
