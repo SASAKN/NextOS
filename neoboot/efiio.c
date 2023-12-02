@@ -81,6 +81,8 @@ EFI_STATUS open_file_read(UINTN *file_size, EFI_FILE_PROTOCOL *root, EFI_FILE_PR
         Print(L"Get Info : %r \n", status);
         return status;
     }
+    PrintOK();
+    Print(L"Get Info\n");
     EFI_FILE_INFO *file_info = (EFI_FILE_INFO *)file_info_buffer;
     file_size = file_info->FileSize;
     return EFI_SUCCESS;
