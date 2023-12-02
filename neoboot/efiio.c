@@ -1,6 +1,7 @@
 #include <Uefi/UefiBaseType.h>
 #include <Protocol/SimpleFileSystem.h>
 #include <Library/UefiBootServicesTableLib.h>
+#include <Protocol/SimpleTextOut.h>
 #include <Protocol/LoadedImage.h>
 #include <Guid/FileInfo.h>
 #include <Library/BaseLib.h>
@@ -8,23 +9,23 @@
 
 void PrintOK(void)
 {
-    gST->ConOut->SetAttribute(gST->ConOut, 0x02); /* 緑で、OKを表示 */
+    gST->ConOut->SetAttribute(gST->ConOut, EFI_GREEN); /* 緑で、OKを表示 */
     gST->ConOut->OutputString(gST->ConOut, L"[ OK ]");
-    gST->ConOut->SetAttribute(gST->ConOut, 0x0F); /* 白に戻す */
+    gST->ConOut->SetAttribute(gST->ConOut, EFI_WHITE); /* 白に戻す */
 };
 
 void PrintWarn(void)
 {
-    gST->ConOut->SetAttribute(gST->ConOut, 0x0E); /* 黄色で、Warnを表示 */
+    gST->ConOut->SetAttribute(gST->ConOut, EFI_YELLOW); /* 黄色で、Warnを表示 */
     gST->ConOut->OutputString(gST->ConOut, L"[ Warn ]");
-    gST->ConOut->SetAttribute(gST->ConOut, 0x0F); /* 白に戻す */
+    gST->ConOut->SetAttribute(gST->ConOut, EFI_WHITE); /* 白に戻す */
 };
 
 void PrintError(void)
 {
-    gST->ConOut->SetAttribute(gST->ConOut, 0x04); /* あかで、Errorを表示 */
+    gST->ConOut->SetAttribute(gST->ConOut, EFI_RED); /* あかで、Errorを表示 */
     gST->ConOut->OutputString(gST->ConOut, L"[ Error ! ]");
-    gST->ConOut->SetAttribute(gST->ConOut, 0x0F); /* 白に戻す */
+    gST->ConOut->SetAttribute(gST->ConOut, EFI_WHITE); /* 白に戻す */
 };
 
 // Open root directory
