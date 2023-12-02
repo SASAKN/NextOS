@@ -16,7 +16,7 @@ for pid in $pids; do
 done
 
 qemu-system-x86_64 \
-    -m 3G \
+    -m 4G \
     -drive if=pflash,format=raw,file=${script_dir}/OVMF.fd \
     -drive if=ide,index=0,media=disk,format=raw,file=${script_dir}/neos.img \
     -device nec-usb-xhci,id=xhci \
