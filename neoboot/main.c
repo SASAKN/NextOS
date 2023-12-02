@@ -42,11 +42,6 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // Open Root Directory
     EFI_FILE_PROTOCOL *root;
     open_root_dir(IM, &root);
-    // Load kernel
-    UINTN kernel_size = 0;
-    EFI_FILE_PROTOCOL *file = NULL;
-    open_file_read(root, L"\\kernel.elf", file, kernel_size);
-    Print(L"kernel file size is %lu \n", kernel_size);
     // Get it, Print it and Save it
     get_memmap(&map);
     print_memmap(&map);
@@ -56,6 +51,12 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     EFI_FILE_PROTOCOL *memmap_f;
     memmap_f = NULL;
     save_memmap(&map, memmap_f, root);
+    // Load kernel
+    UINTN kernel_size = 0;
+    EFI_FILE_PROTOCOL *file = NULL;
+    open_file_read(root, L"\\kernel.elf", file, &kernel_size);
+    // Print kernel file size
+    Print(L"[ INFO ] Kernel File Size : %lu bytes. \n", kernel_size);
     // Halt
     while (1) __asm__ ("hlt");
     return EFI_SUCCESS;
