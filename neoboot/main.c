@@ -27,7 +27,7 @@ void init_uefi(void) {
     Print(L"$$ $$ $$ |$$    $$ | $$  $$<    $$ | __ $$ |  $$ | $$$$$$  |\n");
     Print(L"$$ |$$$$ |$$$$$$$$/  /$$$$  \\   $$ |/  |$$ \\__$$ |/  \\__$$ |\n");
     Print(L"$$ | $$$ |$$       |/$$/ $$  |  $$  $$/ $$    $$/ $$    $$/ \n ");
-    Print(L"$$/   $$/  $$$$$$$/ $$/   $$/    $$$$/   $$$$$$/   $$$$$$/  \n");
+    Print(L"$$/   $$/  $$$$$$$/ $$/   $$/    $$$$/   $$$$$$/   $$$$$$/  \n\n");
     // Welcome
     PrintOK();
     Print(L"Welcome to NextOS \n");
@@ -44,10 +44,10 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     open_root_dir(IM, &root);
     // Get it, Print it and Save it
     get_memmap(&map);
-    // print_memmap(&map);
-    EFI_FILE_PROTOCOL *memmap_f;
-    memmap_f = NULL;
-    save_memmap(&map, memmap_f, root);
+    print_memmap(&map);
+    // EFI_FILE_PROTOCOL *memmap_f;
+    // memmap_f = NULL;
+    // save_memmap(&map, memmap_f, root);
     // Halt
     while (1) __asm__ ("hlt");
     return EFI_SUCCESS;
