@@ -45,6 +45,9 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // Get it, Print it and Save it
     get_memmap(&map);
     print_memmap(&map);
+    // Print memory map info
+    Print(L"\n [ INFO ] Memory Map Info \n");
+    Print(L"map : %08x map_size : %lu\n desc_size : %lu\n desc_ver : %lu\n key : %lu\n entry : %lu  \n\n", map.buffer, map.map_size, map.desc_size, map.desc_ver, map.map_key, map.desc_entry);
     // EFI_FILE_PROTOCOL *memmap_f;
     // memmap_f = NULL;
     // save_memmap(&map, memmap_f, root);
