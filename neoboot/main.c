@@ -61,8 +61,8 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
 
     // Get info about the kernel file
     EFI_FILE_PROTOCOL* kernel_file;
-    root_dir->Open(
-      root_dir, &kernel_file, L"\\kernel.elf",
+    root->Open(
+      root, &kernel_file, L"\\kernel.elf",
       EFI_FILE_MODE_READ, 0);
 
     UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 12;
@@ -82,7 +82,6 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     kernel_file->Read(kernel_file, &kernel_file_size, (VOID*)kernel_base_addr);
     Print(L"Kernel: 0x%0lx (%lu bytes)\n", kernel_base_addr, kernel_file_size);
 
-    
     // Halt
     while (1) __asm__ ("hlt");
     return EFI_SUCCESS;
