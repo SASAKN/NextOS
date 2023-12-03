@@ -103,13 +103,7 @@ EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root, EFI_FILE_PROTOCOL *kernel_file, 
   }
 
   // Copy LOAD segments
-  for (Elf64_Half i = 0; i < kernel_ehdr->e_phnum; i++) {
-    if (kernel_phdr[i].p_type != PT_LOAD) continue;
-    UINT64 segment_in_file = (UINT64)kernel_ehdr + kernel_phdr[i].p_offset;
-    CopyMem((VOID *)kernel_phdr[i].p_vaddr, (VOID *)segment_in_file, kernel_phdr[i].p_filesz);
-    UINTN remain_bytes = kernel_phdr[i].p_memsz - kernel_phdr[i].p_filesz;
-    SetMem((VOID *)(kernel_phdr[i].p_vaddr + kernel_phdr[i].p_filesz), remain_bytes, 0);
-  }
+  copy_load_segments(kernel_ehdr);
 
   // Locate entry point
   *entry_addr = kernel_ehdr->e_entry;
