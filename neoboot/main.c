@@ -59,11 +59,9 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // Print kernel file size
     Print(L"[ INFO ] Kernel File Size : %lu bytes. \n", kernel_size);
     // Read kernel
-    char *buffer = NULL;
+    VOID *buffer = NULL;
     UINTN tmp_kernel_size = (kernel_size + 4095) / 4096l;
-    read_file(&tmp_kernel_size, kernel_file, (void *)buffer);
-    // elf64_ehdr *ehdr = (elf64_ehdr *)buffer;
-    // Print(L"Type : %u", ehdr->e_type);
+    read_file(&tmp_kernel_size, kernel_file, buffer);
     // Halt
     while (1) __asm__ ("hlt");
     return EFI_SUCCESS;
