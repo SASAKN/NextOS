@@ -93,6 +93,6 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     entry_point();
 
     // Halt
-    while (1) __asm__ ("hlt");
+    // while (1) __asm__ ("hlt");
     return EFI_SUCCESS;
 } 
