@@ -14,7 +14,7 @@
 #include "elf_loader.h"
 
 void calc_address_range(elf64_ehdr* ehdr, UINT64* first, UINT64* last) {
-  elf64_phdr* phdr = (Elf64_Phdr*)((UINT64)ehdr + ehdr->e_phoff);
+  elf64_phdr* phdr = (elf64_phdr*)((UINT64)ehdr + ehdr->e_phoff);
   *first = MAX_UINT64;
   *last = 0;
   for (Elf64_Half i = 0; i < ehdr->e_phnum; ++i) {
@@ -25,7 +25,7 @@ void calc_address_range(elf64_ehdr* ehdr, UINT64* first, UINT64* last) {
 }
 
 void copy_load_segments(elf64_ehdr* ehdr) {
-  elf64_phdr* phdr = (Elf64_Phdr*)((UINT64)ehdr + ehdr->e_phoff);
+  elf64_phdr* phdr = (elf64_phdr*)((UINT64)ehdr + ehdr->e_phoff);
   for (Elf64_Half i = 0; i < ehdr->e_phnum; ++i) {
     if (phdr[i].p_type != PT_LOAD) continue;
 
