@@ -37,27 +37,26 @@ void init_uefi(void) {
 EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // Welcome
     init_uefi();
-    // Init MemoryMap
+    /* Memory Map関連の処理 */
+    // Init memory map
     memmap map;
     init_memmap(&map);
     // Open Root Directory
     EFI_FILE_PROTOCOL *root;
     open_root_dir(IM, &root);
-    // Load kernel
-    UINTN kernel_file_size = 0;
-    EFI_FILE_PROTOCOL *kernel_file = NULL;
-    open_file_read(root, L"\\kernel.elf", kernel_file, &kernel_file_size);
-    // Print kernel file size
-    Print(L"[ INFO ] Kernel File Size : %lu bytes. \n", kernel_file_size);
-    // Get it, Print it and Save it
+    // Get memory map
     get_memmap(&map);
+    // Print memory map
     print_memmap(&map);
     // Print memory map info
     Print(L"\n[ INFO ] Memory Map Info \n");
     Print(L" map : %08x\n map_size : %lu\n desc_size : %lu\n desc_ver : %lu\n key : %lu\n entry : %lu  \n\n", map.buffer, map.map_size, map.desc_size, map.desc_ver, map.map_key, map.desc_entry);
+    // Save memory map
     EFI_FILE_PROTOCOL *memmap_f;
     memmap_f = NULL;
     save_memmap(&map, memmap_f, root);
+    /* @END メモリーマップ関係の処理 */
+    
     // Halt
     while (1) __asm__ ("hlt");
     return EFI_SUCCESS;
