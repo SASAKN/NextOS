@@ -86,24 +86,3 @@ UINT64 open_file_read(EFI_FILE_PROTOCOL *root, CHAR16 *file_path, EFI_FILE_PROTO
     EFI_FILE_INFO *file_info = (EFI_FILE_INFO *)file_info_buffer;
     return file_info->FileSize;
 }
-
-EFI_STATUS exit_bs(EFI_HANDLE IM, struct memory_map *map) {
-    EFI_STATUS status;
-    status = gBS->ExitBootServices(IM, map->map_key);
-    if (EFI_ERROR(status)) {
-        init_memmap(map);
-        status = get_memmap(map);
-        if (EFI_ERROR(status)) {
-            PrintError();
-            Print(L"Get Memory Map - Exit BS : %r \n", status);
-            while(1);
-        }
-        status = gBS->ExitBootServices(IM, map->map_key);
-        if (EFI_ERROR(status)) {
-            PrintError();
-            Print(L"Exit BS : %r\n", status);
-            while(1);
-        }
-    }
-    return EFI_SUCCESS;
-}
