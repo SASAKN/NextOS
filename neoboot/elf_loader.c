@@ -15,23 +15,19 @@
 
 // ELFファイルの読み取りなど
 
-EFI_STATUS read_file(UINTN *file_size, EFI_FILE_PROTOCOL *file, void *buffer) {
+EFI_STATUS read_kernel(EFI_FILE_PROTOCOL *kernel_file, UINTN kernel_f_size, VOID *kernel_buffer) {
     EFI_STATUS status;
-    // Allocate Pool
-    status = gBS->AllocatePool(EfiLoaderData, *file_size, &buffer);
+    status = gBS->AllocatePool(EfiLoaderData, kernel_f_size, &kernel_buffer);
     if (EFI_ERROR(status)) {
         PrintError();
         Print(L"Allocate Pool\n");
+        return EFI_SUCCESS;
     }
-    PrintOK();
-    Print(L"Allocate pool\n");
-    // Read File
-    status = file->Read(file, file_size, &buffer);
+    status = kernel_file->Read(kernel_file, &kernel_f_size, kernel_buffer);
     if (EFI_ERROR(status)) {
         PrintError();
-        Print(L"Read Kernel \n");
+        Print(L"Read kernel file\n");
+        return EFI_SUCCESS;
     }
-    PrintOK();
-    Print(L"Read kernel\n");
     return EFI_SUCCESS;
 }
