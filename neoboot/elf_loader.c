@@ -33,4 +33,5 @@ EFI_STATUS read_file(UINTN *file_size, EFI_FILE_PROTOCOL *file, void *buffer) {
     }
     PrintOK();
     Print(L"Allocate pool\n");
+    return EFI_SUCCESS;
 }
