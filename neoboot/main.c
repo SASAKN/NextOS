@@ -85,11 +85,12 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
         }
     }
 
-    // // Call kernel
-    // UINT64 entry_addr = *(UINT64 *)(kbase_addr + 24);
-    // typedef void entry_point_t(void);
-    // entry_point_t *entry_point = (entry_point_t *)entry_addr;
-    // entry_point();
+    // Call kernel
+    UINT64 entry_addr = *(UINT64 *)(kbase_addr + 24);
+    entry_addr -= 0x1000UL
+    typedef void entry_point_t(void);
+    entry_point_t *entry_point = (entry_point_t *)entry_addr;
+    entry_point();
 
     // Halt
     while (1) __asm__ ("hlt");
