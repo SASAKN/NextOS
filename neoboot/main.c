@@ -53,14 +53,22 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     memmap_f = NULL;
     save_memmap(&map, memmap_f, root);
     // Load kernel
-    UINTN kernel_size = 0;
+    UINTN kernel_file_size = 0;
     EFI_FILE_PROTOCOL *kernel_file = NULL;
     open_file_read(root, L"\\kernel.elf", kernel_file, &kernel_size);
     // Print kernel file size
     Print(L"[ INFO ] Kernel File Size : %lu bytes. \n", kernel_size);
-    // Read kernel
-    VOID *kernel_buffer = NULL;
-    read_kernel(kernel_file, kernel_size, kernel_buffer);
+    // Read kernel  
+    VOID* kernel_buffer;
+    status = gBS->AllocatePool(EfiLoaderData, kernel_file_size, &kernel_buffer);
+    if (EFI_ERROR(status)) {
+      Print(L"failed to allocate pool: %r\n", status);
+    }
+    status = kernel_file->Read(kernel_file, &kernel_file_size, kernel_buffer);
+    if (EFI_ERROR(status)) {
+      Print(L"error: %r", status);
+    }
+
     // Halt
     while (1) __asm__ ("hlt");
     return EFI_SUCCESS;
