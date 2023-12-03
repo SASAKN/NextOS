@@ -10,6 +10,7 @@
     efiio.c
     main.c
     memory.c
+    elf_loader.c
 # ELFローダー
 
 [Packages]
