@@ -87,7 +87,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
 
     // Call kernel
     UINT64 entry_addr = *(UINT64 *)(kbase_addr + 24);
-    entry_addr -= 0x1000UL
+    entry_addr -= 0x1000UL; //LLD10以降では、これがないと、カーネルが起動しない
     typedef void entry_point_t(void);
     entry_point_t *entry_point = (entry_point_t *)entry_addr;
     entry_point();
