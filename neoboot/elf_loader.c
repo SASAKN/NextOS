@@ -13,30 +13,26 @@
 #include "elf.h"
 #include "elf_loader.h"
 
-EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root, EFI_FILE_PROTOCOL *k, UINTN kfile_size, EFI_PHYSICAL_ADDRESS kbase_addr) {
+EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root, EFI_FILE_PROTOCOL *kernel_file, UINTN kernel_file_size, EFI_PHYSICAL_ADDRESS kernel_base_addr) {
     EFI_STATUS status;
-    // Get info the kernel file
-    kfile_size = open_file_read(root, L"\\kernel.elf", k);
-    Print(L"\n");
-    Print(L"[ INFO ] Kernel File Size = %lu bytes\n", kfile_size);
+    // Open file
+    root->Open(root, &kernel_file, L"\\kernel.elf", EFI_FILE_MODE_READ, 0);
 
-    // Allocate
-    status = gBS->AllocatePages(AllocateAddress, EfiLoaderData, (kfile_size + 4095) / 4096, &kbase_addr);
-    if (EFI_ERROR(status)) {
-        PrintError();
-        Print(L"Allocate pages : %r\n", status);
-    }
-    PrintOK();
-    Print(L"Allocate kernel\n");
+    // Get info
+    UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 12;
+    UINT8 file_info_buffer[file_info_size];
+    kernel_file->GetInfo(kernel_file, &gEfiFileInfoGuid, &file_info_size, file_info_buffer);
 
-    // Read
-    status = k->Read(k, &kfile_size, (VOID *)kbase_addr);
-    if (EFI_ERROR(status)) {
-        PrintError();
-        Print(L"Read kernel : %r\n", status);
-    }
-    PrintOK();
-    Print(L"Read kernel\n");
+    // Get file size
+    EFI_FILE_INFO* file_info = (EFI_FILE_INFO*)file_info_buffer;
+    kernel_file_size = file_info->FileSize;
+
+    // Allocate kernel
+    gBS->AllocatePages(
+      AllocateAddress, EfiLoaderData,
+      (kernel_file_size + 4095) / 4096, &kernel_base_addr);
+    kernel_file->Read(kernel_file, &kernel_file_size, (VOID*)kernel_base_addr);
+    Print(L"Kernel: 0x%0lx (%lu bytes)\n", kernel_base_addr, kernel_file_size);
 
     return EFI_SUCCESS;
 }
