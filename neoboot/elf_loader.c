@@ -18,7 +18,10 @@ void calc_address_range(elf64_ehdr* ehdr, UINT64* first, UINT64* last) {
   *first = MAX_UINT64;
   *last = 0;
   for (Elf64_Half i = 0; i < ehdr->e_phnum; ++i) {
-    if (phdr[i].p_type != PT_LOAD) continue;
+    if (phdr[i].p_type != PT_LOAD) {
+      Print(L"[ DEBUG ] !=PT_LOAD, i = %u\n", i);
+      continue;
+    }
     *first = MIN(*first, phdr[i].p_vaddr);
     *last = MAX(*last, phdr[i].p_vaddr + phdr[i].p_memsz);
   }
