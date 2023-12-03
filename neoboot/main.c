@@ -66,7 +66,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
         PrintError();
         Print(L"Allocate Pages\n");
     }
-    kernel_file->Read(kernel_file, &kernel_file_size, (VOID *)kernel_file_addr);
+    Print(L"Debug : (kernel_file_size + 4095) / 4096 = result : %lu\n", (kernel_file_size + 4095) / 4096);
     // Halt
     while (1) __asm__ ("hlt");
     return EFI_SUCCESS;
