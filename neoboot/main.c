@@ -61,11 +61,12 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
 
     // Open the kernel file
     EFI_FILE_PROTOCOL *kernel_f = NULL;
-    UINTN kernel_f_size = 0;
-    open_file_read(root, L"\\kernel.elf", kernel_f, kernel_f_size);
-
-    Print(L"[ INFO ] Kernel File Size : %lu", kernel_f_size);
-    
+    UINTN kernel_t_size = 0; // This is temporary
+    open_file_read(root, L"\\kernel.elf", kernel_f, &kernel_t_size);
+    // Kernel file size
+    UINTN kernel_f_size;
+    kernel_f_size = *kernel_t_size;
+    Print(L"[ DEBUG ] %lu bytes", kernel_file_size);
     // Allocate the kernel file
     EFI_PHYSICAL_ADDRESS kernel_base_addr = 0x100000;
     allocate_kernel(kernel_f_size, &kernel_base_addr);
