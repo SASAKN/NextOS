@@ -61,6 +61,8 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
         Print(L"Could not allocate pages at %08lx: %r\n", KernelFileAddr, status);
         while (1);
     }
+    // UDの元
+    kernel_file->Read(kernel_file, &kernel_file_size, (VOID *)KernelFileAddr);
     // Get it, Print it and Save it
     get_memmap(&map);
     print_memmap(&map);
