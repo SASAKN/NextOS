@@ -134,4 +134,6 @@ typedef struct {
     Elf64_Sxword r_append;
 } elf64_rela;
 
+#define ELF64_GET_PHDR(ehdr) ((Elf64_Phdr*)((char*)(ehdr) + (ehdr)->e_phoff))
+
 #endif
