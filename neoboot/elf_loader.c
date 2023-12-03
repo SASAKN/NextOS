@@ -25,4 +25,5 @@ EFI_STATUS allocate_kernel(UINTN kernel_file_size, EFI_PHYSICAL_ADDRESS *kernel_
 
 EFI_STATUS read_kernel(EFI_FILE_PROTOCOL *f, UINTN *kernel_file_size, EFI_PHYSICAL_ADDRESS *kernel_base_addr) {
     f->Read(f, kernel_file_size, (VOID *)kernel_base_addr);
+    return EFI_SUCCESS;
 }

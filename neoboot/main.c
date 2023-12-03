@@ -60,7 +60,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     FreePool(map.buffer);
 
     // Open the kernel file
-    EFI_FILE_PROTOCOL *kernel_f;
+    EFI_FILE_PROTOCOL *kernel_f = NULL;
     UINTN kernel_f_size = 0;
     open_file_read(root, L"\\kernel.elf", kernel_f, kernel_f_size);
     // Allocate the kernel file
