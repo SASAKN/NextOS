@@ -61,7 +61,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // Allocate buffer for the kernel file
     EFI_STATUS status;
     EFI_PHYSICAL_ADDRESS kernel_base_addr = 0x100000;
-    status = gBS->AllcatePages(AllocateAddress, EfiLoaderData, (kernel_file_size + 4095) / 4096, &kernel_base_addr);
+    status = gBS->AllocatePages(AllocateAddress, EfiLoaderData, (kernel_file_size + 4095) / 4096, &kernel_base_addr);
     if (EFI_ERROR(status)) {
         PrintError();
         Print(L"Allocate Pages \n");
