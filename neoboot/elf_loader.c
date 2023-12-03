@@ -13,16 +13,31 @@
 #include "elf.h"
 #include "elf_loader.h"
 
-void calc_address_range(elf64_ehdr *kernel_ehdr, UINT64 *kernel_start_addr, UINT64 *kernel_end_addr) {
-  *kernel_start_addr = MAX_UINT64;
-  *kernel_end_addr = 0;
-  elf64_phdr *kernel_phdr = (elf64_phdr*)((UINT64)kernel_ehdr + kernel_ehdr->e_phoff);
-  for (Elf64_Half i = 0; i < kernel_ehdr->e_phnum; i++) {
-    if (kernel_phdr[i].p_type != PT_LOAD) continue;
-    *kernel_start_addr = MIN(kernel_start_addr, kernel_phdr[i].p_vaddr);
-    *kernel_end_addr = MAX(kernel_end_addr, kernel_phdr[i].p_vaddr + kernel_phdr[i].p_memsz);
+void calc_address_range(elf64_ehdr* ehdr, UINT64* first, UINT64* last) {
+  elf64_phdr* phdr = (Elf64_Phdr*)((UINT64)ehdr + ehdr->e_phoff);
+  *first = MAX_UINT64;
+  *last = 0;
+  for (Elf64_Half i = 0; i < ehdr->e_phnum; ++i) {
+    if (phdr[i].p_type != PT_LOAD) continue;
+    *first = MIN(*first, phdr[i].p_vaddr);
+    *last = MAX(*last, phdr[i].p_vaddr + phdr[i].p_memsz);
   }
 }
+
+void copy_load_segments(elf64_ehdr* ehdr) {
+  elf64_phdr* phdr = (Elf64_Phdr*)((UINT64)ehdr + ehdr->e_phoff);
+  for (Elf64_Half i = 0; i < ehdr->e_phnum; ++i) {
+    if (phdr[i].p_type != PT_LOAD) continue;
+
+    UINT64 segm_in_file = (UINT64)ehdr + phdr[i].p_offset;
+    CopyMem((VOID*)phdr[i].p_vaddr, (VOID*)segm_in_file, phdr[i].p_filesz);
+
+    UINTN remain_bytes = phdr[i].p_memsz - phdr[i].p_filesz;
+    SetMem((VOID*)(phdr[i].p_vaddr + phdr[i].p_filesz), remain_bytes, 0);
+  }
+}
+
+
 
 // ELFローダーあり
 EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root, EFI_FILE_PROTOCOL *kernel_file, UINTN kernel_file_size, EFI_PHYSICAL_ADDRESS kernel_base_addr, Elf64_Addr *entry_addr) {
@@ -65,8 +80,6 @@ EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root, EFI_FILE_PROTOCOL *kernel_file, 
   elf64_ehdr *kernel_ehdr = (elf64_ehdr *)kernel_buffer;
   UINT64 kernel_start_addr;
   UINT64 kernel_end_addr;
-  kernel_start_addr = MAX_UINT64;
-  kernel_end_addr = 0;
 
   // Is the kernel file is executable ?
   if (kernel_ehdr->e_ident[0] == 0x7f && kernel_ehdr->e_ident[1] == 'E' && kernel_ehdr->e_ident[2] == 'L' && kernel_ehdr->e_ident[3] == 'F' && kernel_ehdr->e_ident[4] == 2 && kernel_ehdr->e_ident[5] == 1 && kernel_ehdr->e_type == ET_EXEC) {
@@ -78,6 +91,7 @@ EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root, EFI_FILE_PROTOCOL *kernel_file, 
   }
 
   // Calculate address range
+  calc_address_range(kernel_ehdr, &kernel_start_addr, &kernel_end_addr);
 
   // Allocate pages
   UINTN num_pages = (kernel_end_addr - kernel_start_addr + 4095) / 4096;
