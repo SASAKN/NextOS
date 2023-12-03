@@ -17,14 +17,6 @@
 
 EFI_STATUS read_file(UINTN *file_size, EFI_FILE_PROTOCOL *file, void *buffer) {
     EFI_STATUS status;
-    // Read File
-    status = file->Read(file, file_size, &buffer);
-    if (EFI_ERROR(status)) {
-        PrintError();
-        Print(L"Read Kernel \n");
-    }
-    PrintOK();
-    Print(L"Read kernel\n");
     // Allocate Pool
     status = gBS->AllocatePool(EfiLoaderData, *file_size, &buffer);
     if (EFI_ERROR(status)) {
@@ -33,5 +25,13 @@ EFI_STATUS read_file(UINTN *file_size, EFI_FILE_PROTOCOL *file, void *buffer) {
     }
     PrintOK();
     Print(L"Allocate pool\n");
+    // // Read File
+    // status = file->Read(file, file_size, &buffer);
+    // if (EFI_ERROR(status)) {
+    //     PrintError();
+    //     Print(L"Read Kernel \n");
+    // }
+    // PrintOK();
+    // Print(L"Read kernel\n");
     return EFI_SUCCESS;
 }
