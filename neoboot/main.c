@@ -59,6 +59,16 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // End Memory Map
     FreePool(map.buffer);
 
+    // Open the kernel file
+    EFI_FILE_PROTOCOL *kernel_f;
+    UINTN kernel_f_size = 0;
+    open_file_read(root, L"\\kernel.elf", kernel_f, kernel_f_size);
+    // Allocate the kernel file
+    EFI_PHYSICAL_ADDRESS kernel_base_addr = 0x100000;
+    allocate_kernel(kernel_f_size, &kernel_base_addr);
+    // Read Kernel
+    read_kernel(kernel_f, &kernel_f_size, &kernel_base_addr);
+    Print(L"[ INFO ] Kernel File Info \n Size: %lu \n Address: %lx", kernel_f_size, kernel_base_addr);
     // Halt
     while (1) __asm__ ("hlt");
     return EFI_SUCCESS;
