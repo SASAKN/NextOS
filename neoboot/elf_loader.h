@@ -2,6 +2,6 @@
 #define _BOOT_ELF_LOADER_H
 
 // Prototype
-EFI_STATUS read_file(UINTN *file_size, EFI_FILE_PROTOCOL *file, void *buffer);
+EFI_STATUS read_kernel(EFI_FILE_PROTOCOL *kernel_file, UINTN kernel_f_size, VOID *kernel_buffer);
 
 #endif //_BOOT_ELF_LOADER_H
