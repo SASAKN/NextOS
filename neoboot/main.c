@@ -71,7 +71,14 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     Print(L"\n[ INFO ] Kernel File Info \n");
     Print(L" size: %lu bytes\n address: %lx\n", kernel_f_size, kbase_addr);
 
-    
+    // Exit boot services
+    exit_bs(IM, &map);
+
+    // Call kernel
+    UINT64 entry_addr = *(UINT64 *)(kbase_addr + 24);
+    typedef void entry_point_t(void);
+    entry_point_t *entry_point = (entry_point_t *)entry_addr;
+    entry_point();
 
     // Halt
     while (1) __asm__ ("hlt");
