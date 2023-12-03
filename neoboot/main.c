@@ -55,10 +55,11 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // Load kernel
     UINTN kernel_file_size = 0;
     EFI_FILE_PROTOCOL *kernel_file = NULL;
-    open_file_read(root, L"\\kernel.elf", kernel_file, &kernel_size);
+    open_file_read(root, L"\\kernel.elf", kernel_file, &kernel_file_size);
     // Print kernel file size
-    Print(L"[ INFO ] Kernel File Size : %lu bytes. \n", kernel_size);
+    Print(L"[ INFO ] Kernel File Size : %lu bytes. \n", kernel_file_size);
     // Read kernel  
+    EFI_STATUS status;
     VOID* kernel_buffer;
     status = gBS->AllocatePool(EfiLoaderData, kernel_file_size, &kernel_buffer);
     if (EFI_ERROR(status)) {
