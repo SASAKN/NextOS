@@ -59,14 +59,8 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // Print kernel file size
     Print(L"[ INFO ] Kernel File Size : %lu bytes. \n", kernel_file_size);
     // Allocate buffer for the kernel file
-    EFI_STATUS status;
-    EFI_PHYSICAL_ADDRESS kernel_file_addr = 0;
-    status = gBS->AllocatePages(AllocateAnyPages, EfiLoaderData, (kernel_file_size + 4095) / 4096, &kernel_file_addr);
-    if (EFI_ERROR(status)) {
-        PrintError();
-        Print(L"Allocate Pages\n");
-    }
-    Print(L"Debug : (kernel_file_size + 4095) / 4096 = result : %lu\n", (kernel_file_size + 4095) / 4096);
+    VOID **kbuffer;
+    read_kernel(kernel_file, kbuffer);
     // Halt
     while (1) __asm__ ("hlt");
     return EFI_SUCCESS;
