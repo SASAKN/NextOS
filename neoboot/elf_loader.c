@@ -13,31 +13,16 @@
 #include "elf.h"
 #include "elf_loader.h"
 
-// ELFローダーなし
-
-// #ifndef _NEOBOOT_ELF_LOADER
-// EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root, EFI_FILE_PROTOCOL *kernel_file, UINTN kernel_file_size, EFI_PHYSICAL_ADDRESS kernel_base_addr) {
-//     // EFI_STATUS status;
-//     // Open file
-//     root->Open(root, &kernel_file, L"\\kernel.elf", EFI_FILE_MODE_READ, 0);
-
-//     // Get info
-//     UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 12;
-//     UINT8 file_info_buffer[file_info_size];
-//     kernel_file->GetInfo(kernel_file, &gEfiFileInfoGuid, &file_info_size, file_info_buffer);
-
-//     // Get file size
-//     EFI_FILE_INFO* file_info = (EFI_FILE_INFO*)file_info_buffer;
-//     kernel_file_size = file_info->FileSize;
-
-//     // Allocate kernel
-//     gBS->AllocatePages(AllocateAddress, EfiLoaderData, (kernel_file_size + 4095) / 4096, &kernel_base_addr);
-//     // Read kernel
-//     kernel_file->Read(kernel_file, &kernel_file_size, (VOID*)kernel_base_addr);
-
-//     return EFI_SUCCESS;
-// }
-// #endif
+void calc_address_range(elf64_ehdr *kernel_ehdr, UINT64 *kernel_start_addr, UINT64 *kernel_end_addr) {
+  *kernel_start_addr = MAX_UINT64;
+  *kernel_end_addr = 0;
+  elf64_phdr *kernel_phdr = (elf64_phdr*)((UINT64)kernel_ehdr + kernel_ehdr->e_phoff);
+  for (Elf64_Half i = 0; i < kernel_ehdr->e_phnum; i++) {
+    if (kernel_phdr[i].p_type != PT_LOAD) continue;
+    *kernel_start_addr = MIN(kernel_start_addr, kernel_phdr[i].p_vaddr);
+    *kernel_end_addr = MAX(kernel_end_addr, kernel_phdr[i].p_vaddr + kernel_phdr[i].p_memsz);
+  }
+}
 
 // ELFローダーあり
 EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root, EFI_FILE_PROTOCOL *kernel_file, UINTN kernel_file_size, EFI_PHYSICAL_ADDRESS kernel_base_addr, Elf64_Addr *entry_addr) {
@@ -64,7 +49,7 @@ EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root, EFI_FILE_PROTOCOL *kernel_file, 
   
   // Allocate pool
   VOID *kernel_buffer;
-  status = gBS->AllocatePool(EfiLoaderData, kernel_file_size, &file_buffer);
+  status = gBS->AllocatePool(EfiLoaderData, kernel_file_size, &kernel_buffer);
   if (EFI_ERROR(status)) {
     PrintError();
     Print(L"Allocate Pool \n");
@@ -78,7 +63,8 @@ EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root, EFI_FILE_PROTOCOL *kernel_file, 
 
   // Read program headers
   elf64_ehdr *kernel_ehdr = (elf64_ehdr *)kernel_buffer;
-  UINT64 kernel_start_addr, kernel_end_addr;
+  UINT64 kernel_start_addr;
+  UINT64 kernel_end_addr;
   kernel_start_addr = MAX_UINT64;
   kernel_end_addr = 0;
 
@@ -92,15 +78,10 @@ EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root, EFI_FILE_PROTOCOL *kernel_file, 
   }
 
   // Calculate address range
-  elf64_phdr *kernel_phdr = (elf64_phdr*)((UINT64)kernel_ehdr + kernel_ehdr->e_phoff);
-  for (Elf64_Half i = 0; i < kernel_ehdr->e_phnum; i++) {
-    if (kernel_phdr[i].p_type != PT_LOAD) continue;
-    kernel_start_addr = MIN(kernel_start_addr, kernel_phdr[i].p_vaddr);
-    kernel_end_addr = MAX(kernel_end_addr, kernel_phdr[i].p_vaddr + kernel_phdr[i].p_memsz);
-  }
 
   // Allocate pages
   UINTN num_pages = (kernel_end_addr - kernel_start_addr + 4095) / 4096;
+  Print(L"[ INFO ] NUM_PAGES %lu, KERNEL_START_ADDR %lx\n", num_pages, kernel_start_addr);
   status = gBS->AllocatePages(AllocateAddress, EfiLoaderData, num_pages, &kernel_start_addr);
   if (EFI_ERROR(status)) {
     PrintError();
