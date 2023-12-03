@@ -7,9 +7,9 @@
     ENTRY_POINT = efi_main
 
 [Sources]
+    memory.c
     efiio.c
     main.c
-    memory.c
     elf_loader.c
 # ELFローダー
 
