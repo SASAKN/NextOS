@@ -49,12 +49,6 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     open_file_read(root, L"\\kernel.elf", kernel_file, &kernel_file_size);
     // Print kernel file size
     Print(L"[ INFO ] Kernel File Size : %lu bytes. \n", kernel_file_size);
-    // Allocate buffer for the kernel file
-    EFI_STATUS status;
-    VOID *kern_buf;
-    kern_buf = AllocatePool(kernel_file_size);
-    // UDの元
-    kernel_file->Read(kernel_file, &kernel_file_size, kern_buf);
     // Get it, Print it and Save it
     get_memmap(&map);
     print_memmap(&map);

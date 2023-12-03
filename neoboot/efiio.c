@@ -50,19 +50,7 @@ EFI_STATUS open_root_dir(EFI_HANDLE IM, EFI_FILE_PROTOCOL **root) {
     status = fs->OpenVolume(fs, root);
     if (EFI_ERROR(status)) {
         PrintError();
-        Print(L"Open Protocol : %r\n", status);
-    }
-    // Close Loaded Image Protocol
-    status = gBS->CloseProtocol(IM, &gEfiLoadedImageProtocolGuid, IM, NULL);
-    if (EFI_ERROR(status)) {
-        PrintError();
-        Print(L"Close Loaded Image Protocol : %r\n", status);
-    }
-    // Close Simple File System Protocol
-    status = gBS->CloseProtocol(lip->DeviceHandle, &gEfiSimpleFileSystemProtocolGuid, IM, NULL);
-    if (EFI_ERROR(status)) {
-        PrintError();
-        Print(L"Close Simple File System Protocol : %r\n", status);
+        Print(L"Open Volume : %r\n", status);
     }
     PrintOK();
     Print(L"Open Volume\n");
