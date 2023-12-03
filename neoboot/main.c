@@ -64,6 +64,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     UINTN kernel_f_size = 0;
     EFI_PHYSICAL_ADDRESS kbase_addr = 0x100000;
     load_kernel(root, kernel_f, kernel_f_size, &kbase_addr);
+
     PrintOK();
     Print(L"Load kernel\n");
     // Halt

@@ -13,7 +13,7 @@
 #include "elf.h"
 #include "elf_loader.h"
 
-EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root, EFI_FILE_PROTOCOL *k, UINTN kfile_size, EFI_PHYSICAL_ADDRESS *kbase_addr) {
+EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root, EFI_FILE_PROTOCOL *k, UINTN kfile_size, EFI_PHYSICAL_ADDRESS kbase_addr) {
     EFI_STATUS status;
     // Get info the kernel file
     kfile_size = open_file_read(root, L"\\kernel.elf", k);
@@ -21,7 +21,7 @@ EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root, EFI_FILE_PROTOCOL *k, UINTN kfil
     Print(L"[ INFO ] Kernel File Size = %lu bytes\n", kfile_size);
 
     // Allocate
-    status = gBS->AllocatePages(AllocateAddress, EfiLoaderData, (kfile_size + 4095) / 4096, kbase_addr);
+    status = gBS->AllocatePages(AllocateAddress, EfiLoaderData, (kfile_size + 4095) / 4096, &kbase_addr);
     if (EFI_ERROR(status)) {
         PrintError();
         Print(L"Allocate pages : %r\n", status);
