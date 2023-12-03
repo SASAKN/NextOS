@@ -15,3 +15,13 @@
 
 // ELFファイルの読み取りなど
 
+EFI_STATUS load_elf (UINTN file_size, EFI_FILE_PROTOCOL *buffer) {
+    EFI_STATUS status;
+    // Allocate Pool
+    status = gBS->AllocatePool(EfiLoaderData, file_size, &buffer);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Allocate Pool\n");
+    }
+    // 
+}

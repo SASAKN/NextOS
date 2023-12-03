@@ -12,6 +12,7 @@
 #include "efiio.h"
 #include "memory.h"
 #include "elf.h"
+#include "elf_loader.h"
 
 void init_uefi(void) {
     // Do not reboot
@@ -57,6 +58,8 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     open_file_read(root, L"\\kernel.elf", file, &kernel_size);
     // Print kernel file size
     Print(L"[ INFO ] Kernel File Size : %lu bytes. \n", kernel_size);
+    // Allocate pool
+    
     // Halt
     while (1) __asm__ ("hlt");
     return EFI_SUCCESS;
