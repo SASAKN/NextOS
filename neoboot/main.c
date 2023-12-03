@@ -43,15 +43,6 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // Open Root Directory
     EFI_FILE_PROTOCOL *root;
     open_root_dir(IM, &root);
-    // Get it, Print it and Save it
-    get_memmap(&map);
-    print_memmap(&map);
-    // Print memory map info
-    Print(L"\n[ INFO ] Memory Map Info \n");
-    Print(L" map : %08x\n map_size : %lu\n desc_size : %lu\n desc_ver : %lu\n key : %lu\n entry : %lu  \n\n", map.buffer, map.map_size, map.desc_size, map.desc_ver, map.map_key, map.desc_entry);
-    EFI_FILE_PROTOCOL *memmap_f;
-    memmap_f = NULL;
-    save_memmap(&map, memmap_f, root);
     // Load kernel
     UINTN kernel_file_size = 0;
     EFI_FILE_PROTOCOL *kernel_file = NULL;
@@ -67,15 +58,18 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
         (kernel_file_size + 4095) / 4096,
         &KernelFileAddr);
     if (EFI_ERROR(status)) {
-        Print(L"Could not allocate pages at %08lx: %r\n", KernelFileAddr, Status);
+        Print(L"Could not allocate pages at %08lx: %r\n", KernelFileAddr, status);
         while (1);
     }
-    // Read the kernel file
-    status = kernel_file->Read(kernel_file, &kernel_file_size, (VOID*)KernelFileAddr);
-    if (EFI_ERROR(status)) {
-        Print(L"Could not read kernel file: %r\n", Status);
-        while (1);
-    }
+    // Get it, Print it and Save it
+    get_memmap(&map);
+    print_memmap(&map);
+    // Print memory map info
+    Print(L"\n[ INFO ] Memory Map Info \n");
+    Print(L" map : %08x\n map_size : %lu\n desc_size : %lu\n desc_ver : %lu\n key : %lu\n entry : %lu  \n\n", map.buffer, map.map_size, map.desc_size, map.desc_ver, map.map_key, map.desc_entry);
+    EFI_FILE_PROTOCOL *memmap_f;
+    memmap_f = NULL;
+    save_memmap(&map, memmap_f, root);
     // Halt
     while (1) __asm__ ("hlt");
     return EFI_SUCCESS;
