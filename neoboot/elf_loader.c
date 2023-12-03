@@ -22,7 +22,7 @@ EFI_STATUS read_kernel(EFI_FILE_PROTOCOL *f, UINTN kernel_file_size, EFI_PHYSICA
         Print(L"Allocate pages for the kernel file : %r\n", status);
     }
 
-    //Read
-    f->Read(f, kernel_file_size, (VOID *)kernel_base_addr);
+    // Read
+    f->Read(f, &kernel_file_size, (VOID *)kernel_base_addr);
     return EFI_SUCCESS;
 }

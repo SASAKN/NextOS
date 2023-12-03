@@ -35,14 +35,14 @@ void init_uefi(void) {
 }
 
 EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
+    EFI_STATUS status;
+
     // Welcome
     init_uefi();
-
 
     // Open Root Directory
     EFI_FILE_PROTOCOL *root;
     open_root_dir(IM, &root);
-
 
     // Init memory map
     memmap map;
@@ -61,18 +61,24 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // End Memory Map
     FreePool(map.buffer);
 
-
     // Open the kernel file
     EFI_FILE_PROTOCOL *kernel_f = NULL;
     UINTN kernel_f_size = 0;
     kernel_f_size = open_file_read(root, L"\\kernel.elf", kernel_f);
     Print(L"[ INFO ] Kernel File Size = %lu bytes\n", kernel_f_size);
 
-    // Allocate the kernel file and Read it
+    // Allocate
     EFI_PHYSICAL_ADDRESS kernel_base_addr = 0x100000;
-    read_kernel(kernel_f_size, &kernel_base_addr);
+    status = gBS->AllocatePages(AllocateAddress, EfiLoaderData, (kernel_f_size + 4095) / 4096, kernel_base_addr);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Allocate pages for the kernel file : %r\n", status);
+    }
     PrintOK();
     Print(L"Allocate kernel \n");
+
+    // Read
+    kernel_f->Read(kernel_f, &kernel_f_size, (VOID *)kernel_base_addr);
     PrintOK();
     Print(L"Read kernel \n");
 
