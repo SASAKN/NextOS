@@ -25,7 +25,7 @@ EFI_PHYSICAL_ADDRESS get_segment_end_addr(elf64_phdr *phdr) {
 }
 
 // Get segment size
-void calc_segment_start_size(elf64_ehdr *ehdr, EFI_PHYSICAL_ADDRESS *segment_start_addr, UINTTN *segment_size) {
+void calc_segment_start_size(elf64_ehdr *ehdr, EFI_PHYSICAL_ADDRESS *segment_start_addr, UINTN *segment_size) {
   UINTN i = 0;
   elf64_phdr *phdr = ELF64_GET_PHDR(ehdr);
 
@@ -34,7 +34,7 @@ void calc_segment_start_size(elf64_ehdr *ehdr, EFI_PHYSICAL_ADDRESS *segment_sta
   EFI_PHYSICAL_ADDRESS end = get_segment_end_addr(&phdr[i]);
   ++i;
 
-  for (; i < edhr->e_phnum; ++i) {
+  for (; i < ehdr->e_phnum; ++i) {
     if (phdr[i].p_type != PT_LOAD) continue;
 
     if (start > phdr[i].p_vaddr) {
@@ -103,7 +103,6 @@ EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root, EFI_FILE_PROTOCOL *kernel_file, 
   // Read program headers
   elf64_ehdr *kernel_ehdr = (elf64_ehdr *)kernel_buffer;
   EFI_PHYSICAL_ADDRESS kernel_start_addr;
-  EFI_PHYSICAL_ADDRESS kernel_end_addr;
 
   // Is the kernel file is executable ?
   if (kernel_ehdr->e_ident[0] == 0x7f && kernel_ehdr->e_ident[1] == 'E' && kernel_ehdr->e_ident[2] == 'L' && kernel_ehdr->e_ident[3] == 'F' && kernel_ehdr->e_ident[4] == 2 && kernel_ehdr->e_ident[5] == 1 && kernel_ehdr->e_type == ET_EXEC) {
@@ -119,11 +118,11 @@ EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root, EFI_FILE_PROTOCOL *kernel_file, 
   EFI_PHYSICAL_ADDRESS kernel_file_addr = 0;
   EFI_PHYSICAL_ADDRESS load_addr = 0;
   calc_segment_start_size(kernel_ehdr, &kernel_start_addr, &segment_size);
-  UINTN num_pages = (segment_size + 4095) / 4096;
-  Print(L"[ INFO ] NUM_PAGES %lu, KERNEL_START_ADDR %lx\n", num_pages, &kernel_start_addr);
+  // UINTN num_pages = (segment_size + 4095) / 4096;
+  Print(L"[ INFO ] NUM_PAGES %lu, KERNEL_START_ADDR %lx\n", 1, &kernel_start_addr);
 
   // Allocate pages
-  status = gBS->AllocatePages(AllocateAddress, EfiLoaderData, num_pages, &kernel_start_addr);
+  status = gBS->AllocatePages(AllocateAddress, EfiLoaderData, 1, &kernel_start_addr);
   if (EFI_ERROR(status)) {
     PrintError();
     Print(L"Allocate pages : %r \n", status);

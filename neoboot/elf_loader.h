@@ -4,7 +4,8 @@
 // Prototype
 EFI_PHYSICAL_ADDRESS align_addr(EFI_PHYSICAL_ADDRESS addr, UINTN align);
 EFI_PHYSICAL_ADDRESS get_segment_end_addr(elf64_phdr *phdr);
-void calc_segment_start_size(elf64_ehdr *ehdr, EFI_PHYSICAL_ADDRESS *segment_start_addr, UINTTN *segment_size);
+void calc_segment_start_size(elf64_ehdr *ehdr, EFI_PHYSICAL_ADDRESS *segment_start_addr, UINTN *segment_size);
+void copy_a_segment(elf64_phdr *phdr, EFI_PHYSICAL_ADDRESS image_base_addr, EFI_PHYSICAL_ADDRESS load_addr);
 EFI_STATUS load_kernel(EFI_FILE_PROTOCOL *root, EFI_FILE_PROTOCOL *kernel_file, UINTN kernel_file_size, EFI_PHYSICAL_ADDRESS kernel_base_addr, Elf64_Addr *entry_addr);
 
 #endif //_BOOT_ELF_LOADER_H
