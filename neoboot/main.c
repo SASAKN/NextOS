@@ -59,7 +59,8 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // End Memory Map
     FreePool(map.buffer);
 
-    // Load the kernel file
+    // Load the kernel file (Mikanos)
+    EFI_STATUS status;
     EFI_FILE_PROTOCOL* kernel_file;
   status = root_dir->Open(
       root_dir, &kernel_file, L"\\kernel.elf",
@@ -97,7 +98,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   // #@@range_end(read_kernel)
 
   // #@@range_begin(alloc_pages)
-  Elf64_Ehdr* kernel_ehdr = (Elf64_Ehdr*)kernel_buffer;
+  elf64_edhr* kernel_ehdr = (elf64_edhr*)kernel_buffer;
   UINT64 kernel_first_addr, kernel_last_addr;
   CalcLoadAddressRange(kernel_ehdr, &kernel_first_addr, &kernel_last_addr);
 
@@ -141,7 +142,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // Call kernel
     // entry_addr -= 0x1000UL; //LLD10以降では、これがないと、カーネルが起動しない
     typedef void entry_point_t(void);
-    entry_point_t *entry_point = (entry_point_t *)entry_addr;
+    entry_point_t *entry_point = (entry_point_t *)kernel_first_addr;
     entry_point();
 
     // Halt
