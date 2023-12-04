@@ -7,11 +7,7 @@
     ENTRY_POINT = efi_main
 
 [Sources]
-    memory.c
-    efiio.c
     main.c
-    elf_loader.c
-# ELFローダー
 
 [Packages]
     MdePkg/MdePkg.dec
