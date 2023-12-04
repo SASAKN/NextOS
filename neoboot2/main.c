@@ -61,75 +61,6 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // End Memory Map
     FreePool(map.buffer);
 
-    // Open the kernel file
-    EFI_FILE_PROTOCOL *kernel_file;
-    status = root->Open(root, &kernel_file, L"\\kernel.elf", EFI_FILE_MODE_READ, 0);
-    if (EFI_ERROR(status)) {
-        PrintError();
-        Print(L"Open the kernel file \n");
-    }
-
-    // Get info about the kernel file
-    void *kernel_buffer;
-    UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 12;
-    UINT8 file_info_buffer[file_info_size];
-    status = kernel_file->GetInfo(kernel_file, &gEfiFileInfoGuid, &file_info_size, file_info_buffer);
-    if (EFI_ERROR(status)) {
-        PrintError();
-        Print(L"Get info the kernel file \n");
-    }
-    EFI_FILE_INFO *file_info = (EFI_FILE_INFO *)file_info_buffer;
-    UINTN file_size = file_info->FileSize;
-
-    // Allocate pool for the kernel file
-    status = gBS->AllocatePool(EfiLoaderData, file_size, &kernel_buffer);
-    if (EFI_ERROR(status)) {
-        PrintError();
-        Print(L"Allocate pool\n");
-    }
-
-    // Read the kernel file
-    status = kernel_file->Read(kernel_file, &file_size, kernel_buffer);
-    if (EFI_ERROR(status)) {
-        PrintError();
-        Print(L"Read the kernel file \n");
-    }
-
-    // Load the ELF header
-    elf64_ehdr *kernel_ehdr = (elf64_ehdr *)kernel_buffer;
-    EFI_PHYSICAL_ADDRESS kernel_start_addr;
-    EFI_PHYSICAL_ADDRESS kernel_end_addr;
-
-    // calculate LOAD address range
-    calc_load_addr_range(kernel_ehdr, &kernel_start_addr, &kernel_end_addr);
-    UINTN num_pages = (kernel_end_addr - kernel_start_addr + 0xfff) / 0x1000;
-
-    kernel_start_addr = 0x101120;
-    // Allocate pages
-    status = gBS->AllocatePages(AllocateAddress, EfiLoaderData, num_pages, &kernel_start_addr);
-    if (EFI_ERROR(status)) {
-        PrintError();
-        Print(L"Allocate pages\n");
-    }
-
-    // copy LOAD segments
-    copy_load_segments(kernel_ehdr);
-
-    // Print Kernel Address Range
-    Print(L"Kernel : 0x%0lx - 0x%0lx & entry = 0x%0lx\n", kernel_start_addr, kernel_end_addr, kernel_ehdr->e_entry);
-
-    // Free pool
-    status = gBS->FreePool(kernel_buffer);
-    if (EFI_ERROR(status)) {
-        PrintError();
-        Print(L"Free pool\n");
-    }
-
-    // Locate entry point
-    Elf64_Addr entry_addr;
-    entry_addr = kernel_ehdr->e_entry;
-
-
     // Exit boot services  
     status = gBS->ExitBootServices(IM, map.map_key);
     if (EFI_ERROR(status)) {
@@ -147,11 +78,11 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
         }
     }
 
-    // Call kernel
-    // entry_addr -= 0x1000UL; //LLD10以降では、これがないと、カーネルが起動しない
-    typedef void entry_point_t(void);
-    entry_point_t *entry_point = (entry_point_t *)entry_addr;
-    entry_point();
+    // // Call kernel
+    // // entry_addr -= 0x1000UL;
+    // typedef void entry_point_t(void);
+    // entry_point_t *entry_point = (entry_point_t *)entry_addr;
+    // entry_point();
 
     // Halt
     while (1) __asm__ ("hlt");
