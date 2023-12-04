@@ -86,3 +86,7 @@ UINT64 open_file_read(EFI_FILE_PROTOCOL *root, CHAR16 *file_path, EFI_FILE_PROTO
     EFI_FILE_INFO *file_info = (EFI_FILE_INFO *)file_info_buffer;
     return file_info->FileSize;
 }
+
+void Halt(void) {
+    while(1) __asm__ ("hlt");
+}

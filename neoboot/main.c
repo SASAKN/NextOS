@@ -60,13 +60,65 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     FreePool(map.buffer);
 
     // Load the kernel file
-    EFI_FILE_PROTOCOL *kernel_f = NULL;
-    UINTN kernel_f_size = 0;
-    EFI_PHYSICAL_ADDRESS kbase_addr = 0x100000;
-    Elf64_Addr entry_addr = 0;
-    load_kernel(root, kernel_f, kernel_f_size, kbase_addr, &entry_addr);
-    PrintOK();
-    Print(L"Load kernel\n");
+    EFI_FILE_PROTOCOL* kernel_file;
+  status = root_dir->Open(
+      root_dir, &kernel_file, L"\\kernel.elf",
+      EFI_FILE_MODE_READ, 0);
+  if (EFI_ERROR(status)) {
+    Print(L"failed to open file '\\kernel.elf': %r\n", status);
+    Halt();
+  }
+
+  UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 12;
+  UINT8 file_info_buffer[file_info_size];
+  status = kernel_file->GetInfo(
+      kernel_file, &gEfiFileInfoGuid,
+      &file_info_size, file_info_buffer);
+  if (EFI_ERROR(status)) {
+    Print(L"failed to get file information: %r\n", status);
+    Halt();
+  }
+
+  // #@@range_begin(read_kernel)
+  EFI_FILE_INFO* file_info = (EFI_FILE_INFO*)file_info_buffer;
+  UINTN kernel_file_size = file_info->FileSize;
+
+  VOID* kernel_buffer;
+  status = gBS->AllocatePool(EfiLoaderData, kernel_file_size, &kernel_buffer);
+  if (EFI_ERROR(status)) {
+    Print(L"failed to allocate pool: %r\n", status);
+    Halt();
+  }
+  status = kernel_file->Read(kernel_file, &kernel_file_size, kernel_buffer);
+  if (EFI_ERROR(status)) {
+    Print(L"error: %r", status);
+    Halt();
+  }
+  // #@@range_end(read_kernel)
+
+  // #@@range_begin(alloc_pages)
+  Elf64_Ehdr* kernel_ehdr = (Elf64_Ehdr*)kernel_buffer;
+  UINT64 kernel_first_addr, kernel_last_addr;
+  CalcLoadAddressRange(kernel_ehdr, &kernel_first_addr, &kernel_last_addr);
+
+  UINTN num_pages = (kernel_last_addr - kernel_first_addr + 0xfff) / 0x1000;
+  status = gBS->AllocatePages(AllocateAddress, EfiLoaderData,
+                              num_pages, &kernel_first_addr);
+  if (EFI_ERROR(status)) {
+    Print(L"failed to allocate pages: %r\n", status);
+    Halt();
+  }
+  // #@@range_end(alloc_pages)
+
+  // #@@range_begin(copy_segments)
+  CopyLoadSegments(kernel_ehdr);
+  Print(L"Kernel: 0x%0lx - 0x%0lx\n", kernel_first_addr, kernel_last_addr);
+
+  status = gBS->FreePool(kernel_buffer);
+  if (EFI_ERROR(status)) {
+    Print(L"failed to free pool: %r\n", status);
+    Halt();
+  }
 
     // Exit boot services
     EFI_STATUS status;   
