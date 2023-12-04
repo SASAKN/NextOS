@@ -46,7 +46,7 @@ void calc_load_addr_range(elf64_ehdr *ehdr, EFI_PHYSICAL_ADDRESS *first, EFI_PHY
     }
 }
 
-void copy_load_segments(Elf64_Ehdr* ehdr) {
+void copy_load_segments(elf64_ehdr* ehdr) {
   elf64_phdr* phdr = ELF64_GET_PHDR(ehdr);
   for (Elf64_Half i = 0; i < ehdr->e_phnum; ++i) {
     if (phdr[i].p_type != PT_LOAD) continue;
@@ -129,6 +129,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     calc_load_addr_range(kernel_ehdr, &kernel_start_addr, &kernel_end_addr);
     UINTN num_pages = (kernel_end_addr - kernel_start_addr + 0xfff) / 0x1000;
 
+    kernel_start_addr = 0x101120;
     // Allocate pages
     status = gBS->AllocatePages(AllocateAddress, EfiLoaderData, num_pages, &kernel_start_addr);
     if (EFI_ERROR(status)) {
