@@ -34,31 +34,6 @@ void init_uefi(void) {
     Print(L"Welcome to NextOS \n");
 }
 
-void calc_load_addr_range(elf64_ehdr *ehdr, EFI_PHYSICAL_ADDRESS *first, EFI_PHYSICAL_ADDRESS *last) {
-    elf64_phdr *phdr = ELF64_GET_PHDR(ehdr);
-    *first = MAX_UINT64;
-    *last = 0;
-    for (Elf64_Half i = 0; i < ehdr->e_phnum; i++) {
-        if (phdr[i].p_type != PT_LOAD) continue;
-        Print(L"[ DEBUG ] PT_LOAD Segment\n");
-        *first = MIN(*first, phdr[i].p_vaddr);
-        *last = MAX(*last, phdr[i].p_vaddr + phdr[i].p_memsz);
-    }
-}
-
-void copy_load_segments(elf64_ehdr* ehdr) {
-  elf64_phdr* phdr = ELF64_GET_PHDR(ehdr);
-  for (Elf64_Half i = 0; i < ehdr->e_phnum; ++i) {
-    if (phdr[i].p_type != PT_LOAD) continue;
-
-    UINT64 segm_in_file = (UINT64)ehdr + phdr[i].p_offset;
-    CopyMem((VOID*)phdr[i].p_vaddr, (VOID*)segm_in_file, phdr[i].p_filesz);
-
-    UINTN remain_bytes = phdr[i].p_memsz - phdr[i].p_filesz;
-    SetMem((VOID*)(phdr[i].p_vaddr + phdr[i].p_filesz), remain_bytes, 0);
-  }
-}
-
 
 EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // Welcome
