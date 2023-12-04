@@ -34,8 +34,35 @@ void init_uefi(void) {
     Print(L"Welcome to NextOS \n");
 }
 
+void calc_load_addr_range(elf64_ehdr *ehdr, EFI_PHYSICAL_ADDRESS *first, EFI_PHYSICAL_ADDRESS *last) {
+    elf64_phdr *phdr = ELF64_GET_PHDR(ehdr);
+    *first = MAX_UINT64;
+    *last = 0;
+    for (Elf64_Half i = 0; i < ehdr->e_phnum; i++) {
+        if (phdr[i].p_type != PT_LOAD) continue;
+        Print(L"[ DEBUG ] PT_LOAD Segment\n");
+        *first = MIN(*first, phdr[i].p_vaddr);
+        *last = MAX(*last, phdr[i].p_vaddr + phdr[i].p_memsz);
+    }
+}
+
+void copy_load_segments(Elf64_Ehdr* ehdr) {
+  elf64_phdr* phdr = ELF64_GET_PHDR(ehdr);
+  for (Elf64_Half i = 0; i < ehdr->e_phnum; ++i) {
+    if (phdr[i].p_type != PT_LOAD) continue;
+
+    UINT64 segm_in_file = (UINT64)ehdr + phdr[i].p_offset;
+    CopyMem((VOID*)phdr[i].p_vaddr, (VOID*)segm_in_file, phdr[i].p_filesz);
+
+    UINTN remain_bytes = phdr[i].p_memsz - phdr[i].p_filesz;
+    SetMem((VOID*)(phdr[i].p_vaddr + phdr[i].p_filesz), remain_bytes, 0);
+  }
+}
+
+
 EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // Welcome
+    EFI_STATUS status;
     init_uefi();
 
     // Open Root Directory
@@ -59,70 +86,75 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // End Memory Map
     FreePool(map.buffer);
 
-    // Load the kernel file (Mikanos)
-    EFI_STATUS status;
-    EFI_FILE_PROTOCOL* kernel_file;
-  status = root_dir->Open(
-      root_dir, &kernel_file, L"\\kernel.elf",
-      EFI_FILE_MODE_READ, 0);
-  if (EFI_ERROR(status)) {
-    Print(L"failed to open file '\\kernel.elf': %r\n", status);
-    Halt();
-  }
+    // Open the kernel file
+    EFI_FILE_PROTOCOL *kernel_file;
+    status = root->Open(root, &kernel_file, L"\\kernel.elf", EFI_FILE_MODE_READ, 0);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Open the kernel file \n");
+    }
 
-  UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 12;
-  UINT8 file_info_buffer[file_info_size];
-  status = kernel_file->GetInfo(
-      kernel_file, &gEfiFileInfoGuid,
-      &file_info_size, file_info_buffer);
-  if (EFI_ERROR(status)) {
-    Print(L"failed to get file information: %r\n", status);
-    Halt();
-  }
+    // Get info about the kernel file
+    void *kernel_buffer;
+    UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 12;
+    UINT8 file_info_buffer[file_info_size];
+    status = kernel_file->GetInfo(kernel_file, &gEfiFileInfoGuid, &file_info_size, file_info_buffer);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Get info the kernel file \n");
+    }
+    EFI_FILE_INFO *file_info = (EFI_FILE_INFO *)file_info_buffer;
+    UINTN file_size = file_info->FileSize;
 
-  // #@@range_begin(read_kernel)
-  EFI_FILE_INFO* file_info = (EFI_FILE_INFO*)file_info_buffer;
-  UINTN kernel_file_size = file_info->FileSize;
+    // Allocate pool for the kernel file
+    status = gBS->AllocatePool(EfiLoaderData, file_size, &kernel_buffer);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Allocate pool\n");
+    }
 
-  VOID* kernel_buffer;
-  status = gBS->AllocatePool(EfiLoaderData, kernel_file_size, &kernel_buffer);
-  if (EFI_ERROR(status)) {
-    Print(L"failed to allocate pool: %r\n", status);
-    Halt();
-  }
-  status = kernel_file->Read(kernel_file, &kernel_file_size, kernel_buffer);
-  if (EFI_ERROR(status)) {
-    Print(L"error: %r", status);
-    Halt();
-  }
-  // #@@range_end(read_kernel)
+    // Read the kernel file
+    status = kernel_file->Read(kernel_file, &file_size, kernel_buffer);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Read the kernel file \n");
+    }
 
-  // #@@range_begin(alloc_pages)
-  elf64_edhr* kernel_ehdr = (elf64_edhr*)kernel_buffer;
-  UINT64 kernel_first_addr, kernel_last_addr;
-  CalcLoadAddressRange(kernel_ehdr, &kernel_first_addr, &kernel_last_addr);
+    // Load the ELF header
+    elf64_ehdr *kernel_ehdr = (elf64_ehdr *)kernel_buffer;
+    EFI_PHYSICAL_ADDRESS kernel_start_addr;
+    EFI_PHYSICAL_ADDRESS kernel_end_addr;
 
-  UINTN num_pages = (kernel_last_addr - kernel_first_addr + 0xfff) / 0x1000;
-  status = gBS->AllocatePages(AllocateAddress, EfiLoaderData,
-                              num_pages, &kernel_first_addr);
-  if (EFI_ERROR(status)) {
-    Print(L"failed to allocate pages: %r\n", status);
-    Halt();
-  }
-  // #@@range_end(alloc_pages)
+    // calculate LOAD address range
+    calc_load_addr_range(kernel_ehdr, &kernel_start_addr, &kernel_end_addr);
+    UINTN num_pages = (kernel_end_addr - kernel_start_addr + 0xfff) / 0x1000;
 
-  // #@@range_begin(copy_segments)
-  CopyLoadSegments(kernel_ehdr);
-  Print(L"Kernel: 0x%0lx - 0x%0lx\n", kernel_first_addr, kernel_last_addr);
+    // Allocate pages
+    status = gBS->AllocatePages(AllocateAddress, EfiLoaderData, num_pages, &kernel_start_addr);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Allocate pages\n");
+    }
 
-  status = gBS->FreePool(kernel_buffer);
-  if (EFI_ERROR(status)) {
-    Print(L"failed to free pool: %r\n", status);
-    Halt();
-  }
+    // copy LOAD segments
+    copy_load_segments(kernel_ehdr);
 
-    // Exit boot services
-    EFI_STATUS status;   
+    // Print Kernel Address Range
+    Print(L"Kernel : 0x%0lx - 0x%0lx & entry = 0x%0lx\n", kernel_start_addr, kernel_end_addr, kernel_ehdr->e_entry);
+
+    // Free pool
+    status = gBS->FreePool(kernel_buffer);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Free pool\n");
+    }
+
+    // Locate entry point
+    Elf64_Addr entry_addr;
+    entry_addr = kernel_ehdr->e_entry;
+
+
+    // Exit boot services  
     status = gBS->ExitBootServices(IM, map.map_key);
     if (EFI_ERROR(status)) {
         status = get_memmap(&map);
@@ -142,7 +174,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // Call kernel
     // entry_addr -= 0x1000UL; //LLD10以降では、これがないと、カーネルが起動しない
     typedef void entry_point_t(void);
-    entry_point_t *entry_point = (entry_point_t *)kernel_first_addr;
+    entry_point_t *entry_point = (entry_point_t *)entry_addr;
     entry_point();
 
     // Halt
