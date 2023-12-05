@@ -295,8 +295,8 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     init_uefi();
 
     // Open Root Directory
-    EFI_FILE_PROTOCOL *root;
-    open_root_dir(IM, &root);
+    EFI_FILE_PROTOCOL *root_dir;
+    open_root_dir(IM, &root_dir);
 
     // Init memory map
     memmap map;
@@ -311,7 +311,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // Save memory map
     EFI_FILE_PROTOCOL *memmap_f;
     memmap_f = NULL;
-    save_memmap(&map, memmap_f, root);
+    save_memmap(&map, memmap_f, root_dir);
     // End Memory Map
     FreePool(map.buffer);
 
@@ -365,7 +365,10 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
 
   // #@@range_begin(copy_segments)
   copy_load_segments(kernel_ehdr);
-  Print(L"Kernel: 0x%0lx - 0x%0lx\n", kernel_first_addr, kernel_last_addr);
+  Print(L"Kernel: 0x%0lx - 0x%0lx, e_entry :0x0%lx \n", kernel_first_addr, kernel_last_addr, ehdr->e_entry);
+
+  // Locate Entry Point
+  EFI_PHYSICAL_ADDRESS entry_addr = *(EFI_PHYSICAL_ADDRESS *)(kernel_first_addr + 24);
 
   status = gBS->FreePool(kernel_buffer);
   if (EFI_ERROR(status)) {
@@ -392,10 +395,9 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     }
 
     // // Call kernel
-    // // entry_addr -= 0x1000UL;
-    // typedef void entry_point_t(void);
-    // entry_point_t *entry_point = (entry_point_t *)entry_addr;
-    // entry_point();
+    typedef void entry_point_t(void);
+    entry_point_t *entry_point = (entry_point_t *)entry_addr;
+    entry_point();
 
     // Halt
     while (1) __asm__ ("hlt");
