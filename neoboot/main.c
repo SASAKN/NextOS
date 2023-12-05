@@ -322,7 +322,6 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     Halt();
   }
 
-  // ELF Loader
   UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 12;
   UINT8 file_info_buffer[file_info_size];
   status = kernel_file->GetInfo(
@@ -352,8 +351,12 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
 
   // #@@range_begin(alloc_pages)
   Elf64_Ehdr* kernel_ehdr = (Elf64_Ehdr*)kernel_buffer;
-  UINTN num_pages = (kernel_ehdr->e_entry + 0xfff) / 0x1000;
-  status = gBS->AllocatePages(AllocateAddress, EfiLoaderData, num_pages, &kernel_ehdr->e_entry);
+  UINT64 kernel_first_addr, kernel_last_addr;
+  calc_load_addr_range(kernel_ehdr, &kernel_first_addr, &kernel_last_addr);
+
+  UINTN num_pages = (kernel_last_addr - kernel_first_addr + 0xfff) / 0x1000;
+  status = gBS->AllocatePages(AllocateAddress, EfiLoaderData,
+                              num_pages, &kernel_first_addr);
   if (EFI_ERROR(status)) {
     Print(L"failed to allocate pages: %r\n", status);
     Halt();
@@ -362,10 +365,10 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
 
   // #@@range_begin(copy_segments)
   copy_load_segments(kernel_ehdr);
-  Print(L"e_entry :0x0%lx \n" kernel_ehdr->e_entry);
+  Print(L"Kernel: 0x%0lx - 0x%0lx, e_entry :0x0%lx \n", kernel_first_addr, kernel_last_addr, kernel_ehdr->e_entry);
 
   // Locate Entry Point
-  EFI_PHYSICAL_ADDRESS entry_addr = *(EFI_PHYSICAL_ADDRESS *)(kernel_ehdr->e_entry);
+  EFI_PHYSICAL_ADDRESS entry_addr = *(EFI_PHYSICAL_ADDRESS *)(kernel_first_addr + 24);
 
   status = gBS->FreePool(kernel_buffer);
   if (EFI_ERROR(status)) {
