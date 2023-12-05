@@ -370,6 +370,8 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   // Locate Entry Point
   EFI_PHYSICAL_ADDRESS entry_addr = *(EFI_PHYSICAL_ADDRESS *)(kernel_first_addr + 24);
 
+  Print(L"Kernel : 0x%0lx", kernel_ehdr->e_entry - 0x1000UL);
+
   status = gBS->FreePool(kernel_buffer);
   if (EFI_ERROR(status)) {
     Print(L"failed to free pool: %r\n", status);
