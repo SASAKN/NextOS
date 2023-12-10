@@ -378,22 +378,22 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     Halt();
   }
 
-    // Exit boot services  
-    status = gBS->ExitBootServices(IM, map.map_key);
-    if (EFI_ERROR(status)) {
-        status = get_memmap(&map);
-        if (EFI_ERROR(status)) {
-            PrintError();
-            Print(L"Get Memory Map - Exit BS : %r \n", status);
-            while(1);
-        }
-        status = gBS->ExitBootServices(IM, map.map_key);
-        if (EFI_ERROR(status)) {
-            PrintError();
-            Print(L"Exit BS : %r\n", status);
-            while(1);
-        }
-    }
+  // Exit boot services  
+  status = gBS->ExitBootServices(IM, map.map_key);
+  if (EFI_ERROR(status)) {
+      status = get_memmap(&map);
+      if (EFI_ERROR(status)) {
+          PrintError();
+          Print(L"Get Memory Map - Exit BS : %r \n", status);
+          while(1);
+      }
+      status = gBS->ExitBootServices(IM, map.map_key);
+      if (EFI_ERROR(status)) {
+          PrintError();
+          Print(L"Exit BS : %r\n", status);
+          while(1);
+      }
+  }
 
     // // Call kernel
     typedef void entry_point_t(void);
