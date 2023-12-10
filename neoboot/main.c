@@ -35,6 +35,25 @@ void PrintError(void)
     gST->ConOut->SetAttribute(gST->ConOut, EFI_WHITE); /* 白に戻す */
 };
 
+// Open graphics output protocol
+EFI_STATUS open_gop() {
+    EFI_STATUS status;
+    UINTN num_handles;
+    num_handles = 0;
+    EFI_HANDLE *gop_handles;
+    gop_handles = NULL;
+
+    // Locate Handle Buffer
+    status = gBS->LocateHandleBuffer(ByProtocol, &gEfiGraphicsOutputProtocolGuid, NULL, &num_handles, &gop_handles);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Locate handle buffer\n");
+    }
+
+    // Open graphics output protocol
+    
+}
+
 // Open root directory
 EFI_STATUS open_root_dir(EFI_HANDLE IM, EFI_FILE_PROTOCOL **root) {
     EFI_STATUS status;
@@ -243,6 +262,8 @@ EFI_STATUS save_memmap(memmap *map, EFI_FILE_PROTOCOL *f, EFI_FILE_PROTOCOL *roo
     return EFI_SUCCESS;
 }
 
+
+// ELFを解析
 void calc_load_addr_range(Elf64_Ehdr* ehdr, UINT64* first, UINT64* last) {
   Elf64_Phdr* phdr = (Elf64_Phdr*)((UINT64)ehdr + ehdr->e_phoff);
   *first = MAX_UINT64;
@@ -347,9 +368,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     Print(L"error: %r", status);
     Halt();
   }
-  // #@@range_end(read_kernel)
 
-  // #@@range_begin(alloc_pages)
   Elf64_Ehdr* kernel_ehdr = (Elf64_Ehdr*)kernel_buffer;
   UINT64 kernel_first_addr, kernel_last_addr;
   calc_load_addr_range(kernel_ehdr, &kernel_first_addr, &kernel_last_addr);
