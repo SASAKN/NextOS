@@ -332,7 +332,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     Halt();
   }
 
-  // #@@range_begin(read_kernel)
+  // Read Kernel
   EFI_FILE_INFO* file_info = (EFI_FILE_INFO*)file_info_buffer;
   UINTN kernel_file_size = file_info->FileSize;
 
@@ -361,14 +361,13 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     Print(L"failed to allocate pages: %r\n", status);
     Halt();
   }
-  // #@@range_end(alloc_pages)
 
-  // #@@range_begin(copy_segments)
   copy_load_segments(kernel_ehdr);
   Print(L"Kernel: 0x%0lx - 0x%0lx, e_entry :0x0%lx \n", kernel_first_addr, kernel_last_addr, kernel_ehdr->e_entry);
 
   // Locate Entry Point
   EFI_PHYSICAL_ADDRESS entry_addr = *(EFI_PHYSICAL_ADDRESS *)(kernel_first_addr + 24);
+
 
   Print(L"Kernel : 0x%0lx", kernel_ehdr->e_entry - 0x1000UL);
 
@@ -395,7 +394,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
       }
   }
 
-    // // Call kernel
+    // Call kernel
     typedef void entry_point_t(void);
     entry_point_t *entry_point = (entry_point_t *)entry_addr;
     entry_point();
