@@ -10,7 +10,7 @@
 #include  <Guid/FileInfo.h>
 
 #include "memory.h"
-#include "elf.hpp"
+#include "elf.h"
 
 // Print(Special Ver.)
 
