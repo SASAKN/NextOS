@@ -69,7 +69,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // Print the Screen info
     PrintOK();
     Print(L"Open the graphics protocol\n");
-    Print(L"\n[ INFO ] Graphics Info\n Horizontal Resolution : %ux\n Vertical Resolution : %u\n Resolution : %ux%u\n Pixel Format Type : %x\n PixelsPerLine : %u\n", 
+    Print(L"\n[ INFO ] Graphics Info\n Horizontal Resolution : %u\n Vertical Resolution : %u\n Resolution : %ux%u\n Pixel Format Type : %x\n PixelsPerLine : %u\n", 
             gop->Mode->Info->HorizontalResolution, 
             gop->Mode->Info->VerticalResolution, 
             gop->Mode->Info->HorizontalResolution, 

@@ -9,6 +9,11 @@
 #include  <Protocol/SimpleFileSystem.h>
 #include  <Guid/FileInfo.h>
 
+#include "common.h"
+#include "memory.h"
+#include "elf.h"
+#include "graphics.h"
+
 
 
 // Memory Map 

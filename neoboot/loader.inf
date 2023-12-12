@@ -10,6 +10,7 @@
     main.c
     common.c
     graphics.c
+    memory.c
     elf.c
 
 [Packages]

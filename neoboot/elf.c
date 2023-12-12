@@ -9,7 +9,10 @@
 #include  <Protocol/SimpleFileSystem.h>
 #include  <Guid/FileInfo.h>
 
+#include "common.h"
+#include "memory.h"
 #include "elf.h"
+#include "graphics.h"
 
 // ELFを解析
 void calc_load_addr_range(Elf64_Ehdr* ehdr, UINT64* first, UINT64* last) {
