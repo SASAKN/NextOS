@@ -9,8 +9,10 @@
 #include  <Protocol/SimpleFileSystem.h>
 #include  <Guid/FileInfo.h>
 
+#include "common.h"
 #include "memory.h"
 #include "elf.h"
+#include "graphics.h"
 
 
 void init_uefi(void) {
@@ -59,6 +61,21 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     save_memmap(&map, memmap_f, root_dir);
     // End Memory Map
     FreePool(map.buffer);
+
+    // Graphics
+    EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
+    open_gop(IM, &gop);
+
+    // Print the Screen info
+    PrintOK();
+    Print(L"Open the graphics protocol\n");
+    Print(L"\n[ INFO ] Graphics Info\n Horizontal Resolution : %ux\n Vertical Resolution : %u\n Resolution : %ux%u\n Pixel Format Type : %x\n PixelsPerLine : %u\n", 
+            gop->Mode->Info->HorizontalResolution, 
+            gop->Mode->Info->VerticalResolution, 
+            gop->Mode->Info->HorizontalResolution, 
+            gop->Mode->Info->VerticalResolution, 
+            gop->Mode->Info->PixelFormat,
+            gop->Mode->Info->PixelsPerScanLine);
 
     EFI_FILE_PROTOCOL* kernel_file;
   status = root_dir->Open(root_dir, &kernel_file, L"\\kernel.elf", EFI_FILE_MODE_READ, 0);

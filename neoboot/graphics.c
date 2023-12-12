@@ -8,7 +8,7 @@
 #include "common.h"
 
 // Open graphics output protocol
-EFI_STATUS open_gop(void) {
+EFI_STATUS open_gop(EFI_HANDLE IM, EFI_GRAPHICS_OUTPUT_PROTOCOL **gop) {
     EFI_STATUS status;
     UINTN num_handles;
     num_handles = 0;
@@ -23,5 +23,13 @@ EFI_STATUS open_gop(void) {
     }
 
     // Open graphics output protocol
+    status = gBS->OpenProtocol(gop_handles[0], &gEfiGraphicsOutputProtocolGuid, (VOID **)gop, IM, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+    if (EFI_ERROR(status)) {
+        PrintError();
+        Print(L"Open Protocol : %r\n", status);
+    }
 
+    gBS->FreePool(gop_handles);
+
+    return EFI_SUCCESS;
 }

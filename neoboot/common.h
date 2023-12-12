@@ -1,3 +1,4 @@
+#pragma once
 #include <Uefi/UefiBaseType.h>
 
 void PrintOK(void);

@@ -8,6 +8,9 @@
 
 [Sources]
     main.c
+    common.c
+    graphics.c
+    elf.c
 
 [Packages]
     MdePkg/MdePkg.dec

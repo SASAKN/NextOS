@@ -34,7 +34,7 @@ void copy_load_segments(Elf64_Ehdr* ehdr) {
     gST->ConOut->SetAttribute(gST->ConOut, EFI_LIGHTBLUE);
     gST->ConOut->OutputString(gST->ConOut, L"[ PROCESSING ]");
     gST->ConOut->SetAttribute(gST->ConOut, EFI_WHITE);
-    Print(L"Program header %lu(count) vaddr : %08x, paddr : %08x, offset %x, file_size : %x, memory_size : %x", i, phdr->p_vaddr, phdr->p_paddr, phdr->p_offset, phdr->p_filesz, phdr->p_memsz);
+    Print(L"Program header %lu(count) vaddr : %08x, paddr : %08x, offset %x, file_size : %x, memory_size : %x\n", i, phdr->p_vaddr, phdr->p_paddr, phdr->p_offset, phdr->p_filesz, phdr->p_memsz);
 
     if (phdr[i].p_type != PT_LOAD) continue;
     UINT64 segm_in_file = (UINT64)ehdr + phdr[i].p_offset;
