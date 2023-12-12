@@ -73,3 +73,8 @@ typedef struct {
 #define ELF64_R_INFO(s,t) (((s)<<32)+((t)&0xffffffffL))
 
 #define R_X86_64_RELATIVE 8
+
+
+// Prototype
+void calc_load_addr_range(Elf64_Ehdr* ehdr, UINT64* first, UINT64* last);
+void copy_load_segments(Elf64_Ehdr* ehdr);

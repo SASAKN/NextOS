@@ -3,6 +3,9 @@
 #include  <Library/UefiBootServicesTableLib.h>
 #include  <Library/UefiRuntimeServicesTableLib.h>
 #include  <Library/PrintLib.h>
+#include  <Protocol/LoadedImage.h>
+#include  <Protocol/SimpleFileSystem.h>
+#include  <Guid/FileInfo.h>
 
 #include "common.h"
 
