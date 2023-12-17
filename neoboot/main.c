@@ -79,7 +79,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
             gop->Mode->Info->PixelsPerScanLine);
     
     // Prepare the frame buffer
-    unsigned char *fb = gop->Mode->FrameBufferBase;
+    unsigned char *fb = (unsigned char *)gop->Mode->FrameBufferBase;
     UINT64 fb_size = gop->Mode->FrameBufferSize;
 
     EFI_FILE_PROTOCOL* kernel_file;
@@ -161,9 +161,9 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   }
 
     // Call kernel
-    typedef void entry_point_t(unsigned char *fb, unsigned long long fb_size);
+    typedef void entry_point_t(void);
     entry_point_t *entry_point = (entry_point_t *)entry_addr;
-    entry_point(fb, fb_size);
+    entry_point();
 
     // Halt
     while (1) __asm__ ("hlt");
