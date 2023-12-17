@@ -80,14 +80,8 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     
     // Prepare the frame buffer
     struct fb_configuration fb_config;
-    fb_config.hr = gop->Mode->Info->HorizontalResolution;
-    fb_config.vr = gop->Mode->Info->VerticalResolution;
     fb_config.fb_size = gop->Mode->FrameBufferSize;
     fb_config.base_addr = gop->Mode->FrameBufferBase;
-
-    // Prepare the boot parameter
-    struct boot_param bp;
-    bp.fb_config = fb_config;
 
     EFI_FILE_PROTOCOL* kernel_file;
   status = root_dir->Open(root_dir, &kernel_file, L"\\kernel.elf", EFI_FILE_MODE_READ, 0);
@@ -168,9 +162,9 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   }
 
     // Call kernel
-    typedef void entry_point_t(struct boot_param bp);
+    typedef void entry_point_t(struct fb_configuration fb_config);
     entry_point_t *entry_point = (entry_point_t *)entry_addr;
-    entry_point(bp);
+    entry_point(fb_config);
 
     // Halt
     while (1) __asm__ ("hlt");
