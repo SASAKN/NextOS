@@ -12,6 +12,7 @@
 #include "common.h"
 #include "memory.h"
 #include "elf.h"
+#include "bootparam.h"
 #include "graphics.h"
 
 
@@ -76,15 +77,17 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
             gop->Mode->Info->VerticalResolution, 
             gop->Mode->Info->PixelFormat,
             gop->Mode->Info->PixelsPerScanLine);
-
-    // Fill white in the screen
-    UINT8 *fb;
-    fb = (UINT8 *)gop->Mode->FrameBufferBase;
-    for (UINT32 i = 0; i < gop->Mode->FrameBufferSize; i++) {
-      fb[i] = 255;
-    }
-
     
+    // Prepare the frame buffer
+    struct fb_configuration fb_config;
+    fb_config.hr = gop->Mode->Info->HorizontalResolution;
+    fb_config.vr = gop->Mode->Info->VerticalResolution;
+    fb_config.fb_size = gop->Mode->FrameBufferSize;
+    fb_config.base_addr = gop->Mode->FrameBufferBase;
+
+    // Prepare the boot parameter
+    struct boot_param bp;
+    bp.fb_config = fb_config;
 
     EFI_FILE_PROTOCOL* kernel_file;
   status = root_dir->Open(root_dir, &kernel_file, L"\\kernel.elf", EFI_FILE_MODE_READ, 0);
@@ -167,7 +170,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     // Call kernel
     typedef void entry_point_t(struct boot_param bp);
     entry_point_t *entry_point = (entry_point_t *)entry_addr;
-    entry_point();
+    entry_point(bp);
 
     // Halt
     while (1) __asm__ ("hlt");
