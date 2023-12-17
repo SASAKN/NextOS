@@ -161,6 +161,10 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
           while(1);
       }
   }
+  // Fill the screen
+    for (UINT32 i = 0; i < gop->Mode->FrameBufferSize; i++) {
+      fb[i] = 255;
+    }
 
     // Call kernel
     typedef void entry_point_t(void);
