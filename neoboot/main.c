@@ -12,7 +12,6 @@
 #include "common.h"
 #include "memory.h"
 #include "elf.h"
-#include "bootparam.h"
 #include "graphics.h"
 
 
@@ -77,10 +76,13 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
             gop->Mode->Info->VerticalResolution, 
             gop->Mode->Info->PixelFormat,
             gop->Mode->Info->PixelsPerScanLine);
-    
-    // Prepare the frame buffer
-    unsigned char *fb = (unsigned char *)gop->Mode->FrameBufferBase;
-    UINT64 fb_size = gop->Mode->FrameBufferSize;
+
+    // Fill space gray in the screen
+    UINT8 *fb;
+    fb = (UINT8 *)gop->Mode->FrameBufferBase;
+    for (UINT32 i = 0; i < gop->Mode->FrameBufferSize; i++) {
+      fb[i] = 64;
+    }
 
     EFI_FILE_PROTOCOL* kernel_file;
   status = root_dir->Open(root_dir, &kernel_file, L"\\kernel.elf", EFI_FILE_MODE_READ, 0);
