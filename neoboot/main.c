@@ -162,9 +162,9 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   }
 
     // Call kernel
-    typedef void entry_point_t(struct fb_configuration fb_config);
+    typedef void entry_point_t(unsigned char *fb, unsigned long long fb_size);
     entry_point_t *entry_point = (entry_point_t *)entry_addr;
-    entry_point(fb_config);
+    entry_point((unsigned char *)gop->Mode->FrameBufferBase, gop->Mode->FrameBufferSize);
 
     // Halt
     while (1) __asm__ ("hlt");
