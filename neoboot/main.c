@@ -77,6 +77,15 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
             gop->Mode->Info->PixelFormat,
             gop->Mode->Info->PixelsPerScanLine);
 
+    // Fill white in the screen
+    UINT8 *fb;
+    fb = (UINT8 *)gop->Mode->FrameBufferBase;
+    for (UINT32 i = 0; i < gop->Mode->FrameBufferSize; i++) {
+      fb[i] = 255;
+    }
+
+    
+
     EFI_FILE_PROTOCOL* kernel_file;
   status = root_dir->Open(root_dir, &kernel_file, L"\\kernel.elf", EFI_FILE_MODE_READ, 0);
   if (EFI_ERROR(status)) {
@@ -156,7 +165,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   }
 
     // Call kernel
-    typedef void entry_point_t(void);
+    typedef void entry_point_t(struct boot_param bp);
     entry_point_t *entry_point = (entry_point_t *)entry_addr;
     entry_point();
 
