@@ -14,8 +14,6 @@
 #include "elf.h"
 #include "graphics.h"
 
-
-
 // Memory Map 
 const CHAR16 *get_memtype(EFI_MEMORY_TYPE type) {
     switch (type) {
