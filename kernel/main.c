@@ -4,4 +4,5 @@
 void kernel_main(void) {
     //CPU Halt
     while(1) __asm__ ("hlt");
-}
+};
+

@@ -167,6 +167,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     }
 
     // Call kernel
+    // entry pointの引数を設定
     typedef void entry_point_t(void);
     entry_point_t *entry_point = (entry_point_t *)entry_addr;
     entry_point();
