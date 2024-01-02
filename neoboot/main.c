@@ -146,7 +146,6 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
 
   // Locate entry point for boot the kernel file
   EFI_PHYSICAL_ADDRESS entry_addr = *(EFI_PHYSICAL_ADDRESS *)(kernel_first_addr + 24);
-  Print(L"[ INFO ] Kernel : 0x%0lx\n", kernel_ehdr->e_entry - 0x1000UL);
 
   // Free up memory for the kernel file
   status = gBS->FreePool(kernel_buffer);

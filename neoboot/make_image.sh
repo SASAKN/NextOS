@@ -6,14 +6,13 @@ script_dir="$(dirname "$(readlink -f "$0")")"
 
 # Usage
 function usage() {
-    echo "NeoBootのビルドツール"
+    echo "[ Important !! ]NeoBootのビルドツール"
     echo "第一引数に、EFIファイルの名前を入れて実行してください"
     echo "Developerがこれをせず、実行し、neobootディレクトリーをコピーして起動させてしまい、失敗する人がいます"
 }
 
-#Main
-function main() {
 #ルートファイルシステムを作成
+usage
 source ${script_dir}/make_root_fs.sh
 
 #DMGファイルの作成
@@ -58,9 +57,3 @@ hdiutil unmount /Volumes/NEOS -force
 
 #QEMUの実行に移る
 command ${script_dir}/run_image.sh
-}
-
-# Main process
-usage
-main
-exit 0
