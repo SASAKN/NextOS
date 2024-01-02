@@ -11,26 +11,8 @@ function usage() {
     echo "Developerがこれをせず、実行し、neobootディレクトリーをコピーして起動させてしまい、失敗する人がいます"
 }
 
-#引数解析
-while (( $# > 0 ))
-do
-  case $1 in
-    -h)
-      usage  
-      exit 0
-      ;;
-    --help)
-      usage
-      exit 0
-      ;;
-    -*)
-      echo "Invalid option"
-      exit 1
-      ;;
-  esac
-  shift
-done
-
+#Main
+function main() {
 #ルートファイルシステムを作成
 source ${script_dir}/make_root_fs.sh
 
@@ -76,3 +58,9 @@ hdiutil unmount /Volumes/NEOS -force
 
 #QEMUの実行に移る
 command ${script_dir}/run_image.sh
+}
+
+# Main process
+usage
+main
+exit 0
