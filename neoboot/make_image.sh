@@ -4,6 +4,33 @@
 
 script_dir="$(dirname "$(readlink -f "$0")")"
 
+# Usage
+function usage() {
+    echo "NeoBootのビルドツール"
+    echo "第一引数に、EFIファイルの名前を入れて実行してください"
+    echo "Developerがこれをせず、実行し、neobootディレクトリーをコピーして起動させてしまい、失敗する人がいます"
+}
+
+#引数解析
+while (( $# > 0 ))
+do
+  case $1 in
+    -h)
+      usage  
+      exit 0
+      ;;
+    --help)
+      usage
+      exit 0
+      ;;
+    -*)
+      echo "Invalid option"
+      exit 1
+      ;;
+  esac
+  shift
+done
+
 #ルートファイルシステムを作成
 source ${script_dir}/make_root_fs.sh
 
