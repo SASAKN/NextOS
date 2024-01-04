@@ -26,7 +26,7 @@ void init_uefi(void) {
   gBS->SetWatchdogTimer(0, 0, 0, NULL);
   // Interval of priting text
   gBS->Stall(50000);
-  // Ascii art
+  // Ascii art - OS Logo
   Print(L" __    __                        __       ______    ______  \n");
   Print(L"/  \\  /  |                      /  |     /      \\  /      \\  \n");
   Print(L"$$  \\ $$ |  ______   __    __  _$$ |_   /$$$$$$  |/$$$$$$  | \n");
