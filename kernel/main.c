@@ -1,8 +1,7 @@
 #include "graphics.h"
 
 //この関数がジャンプされてすぐに実行される
-void kernel_main(void) {
-    //CPU Halt
+void kernel_main(struct *fb_config) {
     while(1) __asm__ ("hlt");
 };
 

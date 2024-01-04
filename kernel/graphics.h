@@ -7,7 +7,7 @@ enum pixel_format {
 };
 
 // Frame Buffer
-struct fb_configuration {
+struct fb_config {
     unsigned int hr; //水平の画質
     unsigned int vr; //垂直の画質
     unsigned long long fb_size; //フレームバッファーのサイズ

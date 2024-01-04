@@ -88,6 +88,18 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
         gop->Mode->Info->PixelFormat,
         gop->Mode->Info->PixelsPerScanLine);
   
+  // Make a structure for the kernel file
+  fb_config fb_con;
+  fb_con.hr = gop->Mode->Info->HorizontalResolution;
+  fb_con.vr = gop->Mode->Info->VerticalResolution;
+  fb_con.fb_size = gop->Mode->FrameBufferSize;
+  fb_con.base_addr = gop->Mode->FrameBufferBase;
+  fb_con.pixels_per_scan_line = gop->Mode->Info->PixelsPerScanLine;
+  fb_con.pf = gop->Mode->Info->PixelFormat;
+  UINT64 fb_config_addr = BOOT_CONFIG_ADDRESS;
+  gBS->AllocatePages(AllocateAddress, EfiLoaderData, (sizeof(fb_con) + 4095) / 4096, );
+
+  
   // Load the kernel file into structure
   EFI_FILE_PROTOCOL *kernel_file;
   status = root_dir->Open(root_dir, &kernel_file, L"\\kernel.elf", EFI_FILE_MODE_READ, 0);
