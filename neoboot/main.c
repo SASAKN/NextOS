@@ -100,17 +100,18 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   //Note - [ Important ! ]
   //BootParamの変更がこれに以降にあると、いけない
   //BootParamの内容のみがこの前に編集し切るべしである
+  //BootParamは、0x200000に配置します
 
   // Allocate a temporary structure
   EFI_PHYSICAL_ADDRESS bp_addr;
   bp_addr = 0x200000; // Boot paramater address
   gBS->AllocatePages(AllocateAddress, EfiLoaderData, (sizeof(struct _boot_param) + 4095) / 4096, &bp_addr); //Alignmentしないとエラー。
 
-  struct _boot_param *bp = (unsigned long long *)bp_addr;
-  bp_addr->fb_setting = fb_con;
+  struct _boot_param *bp = (struct _boot_param *)bp_addr;
+  bp->fb_setting = fb_con;
 
   // Know where the structure
-  Print(L"[ BOOT CONFIG ADDRESS ] 0x0%p\n", fb_con);
+  Print(L"[ BOOT CONFIG ADDRESS ] 0x0%p\n", bp);
 
   
   // Load the kernel file into structure
