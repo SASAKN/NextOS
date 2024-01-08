@@ -88,7 +88,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
         gop->Mode->Info->PixelFormat,
         gop->Mode->Info->PixelsPerScanLine);
   
-  // Make a structure for the kernel file
+  // Make a structure for a frame buffer of the kernel
   fb_config fb_con;
   fb_con.hr = gop->Mode->Info->HorizontalResolution;
   fb_con.vr = gop->Mode->Info->VerticalResolution;
@@ -97,6 +97,9 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   fb_con.pixels_per_scan_line = gop->Mode->Info->PixelsPerScanLine;
   fb_con.pf = gop->Mode->Info->PixelFormat;
   UINT64 fb_config_addr = BOOT_CONFIG_ADDRESS;
+
+  // Make a structure for the kernel
+  
 
   // Allocate the structure
   (void *)fb_con = AllocatePool((sizeof(fb_con) + 4095) / 4096);
