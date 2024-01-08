@@ -95,19 +95,18 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   fb_con.fb_size = gop->Mode->FrameBufferSize;
   fb_con.base_addr = gop->Mode->FrameBufferBase;
   fb_con.pixels_per_scan_line = gop->Mode->Info->PixelsPerScanLine;
-  fb_con.pf = gop->Mode->Info->PixelFormat;
-  UINT64 fb_config_addr = BOOT_CONFIG_ADDRESS;
+  // Pixel Formatの処理は、また後で
 
   // Make a structure for the kernel
-  boot_param bp;
-  bp.fb_setting = fb_con;
-  bp.neoboot_ver = NEOBOOT_VERSION;
+  struct _boot_param *bp = NULL;
+  bp->fb_setting = fb_con;
+  bp->neoboot_ver = NEOBOOT_VERSION;
 
   // Allocate the structure
-  (void *)bp = AllocatePool((sizeof(fb_con) + 4095) / 4096);
+  bp = (struct _boot_param *)AllocatePool((sizeof(*bp) + 4095) / 4096);
 
   // Know where the structure
-  Print("[ BOOT CONFIG ADDRESS ] %p\n", fb_con);
+  Print(L"[ BOOT CONFIG ADDRESS ] %p\n", fb_con);
 
   
   // Load the kernel file into structure

@@ -14,7 +14,7 @@ void Halt(void);
 struct _boot_param {
     fb_config fb_setting; //フレームバッファーの設定
     int neoboot_ver; //ブートローダーバージョン
-} boot_param;
+};
 
 //ブートパラメーターの関係性について
 //ブートローダーバージョンがないと、カーネルはあ、ブートローダーから送られてきた情報の処理ができなくなる恐れがあります。
