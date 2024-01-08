@@ -97,7 +97,12 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   fb_con.pixels_per_scan_line = gop->Mode->Info->PixelsPerScanLine;
   fb_con.pf = gop->Mode->Info->PixelFormat;
   UINT64 fb_config_addr = BOOT_CONFIG_ADDRESS;
-  gBS->AllocatePages(AllocateAddress, EfiLoaderData, (sizeof(fb_con) + 4095) / 4096, );
+
+  // Allocate the structure
+  (void *)fb_con = AllocatePool((sizeof(fb_con) + 4095) / 4096);
+
+  // Know where the structure
+  Print("[ BOOT CONFIG ADDRESS ] %p\n", fb_con);
 
   
   // Load the kernel file into structure

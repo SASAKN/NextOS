@@ -1,8 +1,6 @@
 #pragma once
 #include <Uefi/UefiBaseType.h>
 
-#define BOOT_CONFIG_ADDRESS 0x
-
 void PrintOK(void);
 void PrintWarn(void);
 void PrintError(void);
