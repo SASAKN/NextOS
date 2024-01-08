@@ -103,7 +103,9 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
 
   // Allocate a temporary structure
   void *bp;
-  gBS->AllocatePool(EfiLoaderData, sizeof(struct _boot_param), &bp);
+  EFI_PHYSICAL_ADDRESS bp_addr;
+  bp_addr = 0x0bff94960; // Boot paramater address
+  gBS->AllocatePages(EfiLoaderData, AllocateAddress, (sizeof(struct _boot_param) + 4095) / 4096, &bp);
 
   // Make a structure for the kernel
   struct _boot_param *boot_param = (struct _boot_param *)bp;
