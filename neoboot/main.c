@@ -80,7 +80,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   // Print the screen info
   PrintOK();
   Print(L"Open the graphics protocol\n");
-  Print(L"\n[ INFO ] Graphics Info\n Horizontal Resolution : %u\n Vertical Resolution : %u\n Resolution : %ux%u\n Pixel Format Type : %x\n PixelsPerLine : %u\n",
+  Print(L"\n[ INFO ] Graphics Info\n Horizontal Resolution : %u\n Vertical Resolution : %u\n Resolution : %ux%u\n Pixel Format Type : %x\n PixelsPerLine : %u\n\n",
         gop->Mode->Info->HorizontalResolution,
         gop->Mode->Info->VerticalResolution,
         gop->Mode->Info->HorizontalResolution,
@@ -103,8 +103,11 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
 
   // Allocate a temporary structure
   void *bp;
-  gBS->AllocatePool(EfiLoaderData, (UINTN)(sizeof(fb_con)) ,&bp); // Byteごとにメモリーを管理すべし。
-  
+  gBS->AllocatePool(EfiLoaderData, sizeof(struct _boot_param), &bp);
+
+  // Make a structure for the kernel
+  struct _boot_param *boot_param = (struct _boot_param *)bp;
+  boot_param->fb_setting = fb_con;
 
   // Know where the structure
   Print(L"[ BOOT CONFIG ADDRESS ] 0x0%p\n", fb_con);
