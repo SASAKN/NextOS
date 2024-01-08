@@ -99,10 +99,12 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   UINT64 fb_config_addr = BOOT_CONFIG_ADDRESS;
 
   // Make a structure for the kernel
-  
+  boot_param bp;
+  bp.fb_setting = fb_con;
+  bp.neoboot_ver = NEOBOOT_VERSION;
 
   // Allocate the structure
-  (void *)fb_con = AllocatePool((sizeof(fb_con) + 4095) / 4096);
+  (void *)bp = AllocatePool((sizeof(fb_con) + 4095) / 4096);
 
   // Know where the structure
   Print("[ BOOT CONFIG ADDRESS ] %p\n", fb_con);
