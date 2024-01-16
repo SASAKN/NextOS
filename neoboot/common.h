@@ -12,7 +12,7 @@ void Halt(void);
 #define NEOBOOT_VERSION 1
 
 struct _boot_param {
-    fb_config fb_setting; //フレームバッファーの設定
+    EFI_PHYSICAL_ADDRESS fb_addr; //FBへのアドレス
     int neoboot_ver; //ブートローダーバージョン
 };
 

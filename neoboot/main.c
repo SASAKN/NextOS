@@ -88,6 +88,25 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
         gop->Mode->Info->PixelFormat,
         gop->Mode->Info->PixelsPerScanLine);
   
+  // Pixel Format
+  enum pixel_format pf;
+  switch (gop->Mode->Info->PixelFormat) {
+    case PixelRedGreenBlueReserved8BitPerColor:
+    pf = efi_rgb;
+    break;
+    case PixelBlueGreenRedReserved8BitPerColor:
+    pf =  efi_bgr;
+    case PixelBitMask:
+    pf = efi_bit_mask;
+    case PixelBltOnly:
+    pf = efi_blt_only;
+    case PixelFormatMax:
+    pf = efi_format_max;
+    default:
+    pf = efi_unknown;
+    break;
+  }
+
   // Make a structure for a frame buffer of the kernel
   fb_config fb_con;
   fb_con.hr = gop->Mode->Info->HorizontalResolution;
@@ -95,23 +114,14 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   fb_con.fb_size = gop->Mode->FrameBufferSize;
   fb_con.base_addr = gop->Mode->FrameBufferBase;
   fb_con.pixels_per_scan_line = gop->Mode->Info->PixelsPerScanLine;
-  // Pixel Formatの処理は、また後で
 
   //Note - [ Important ! ]
-  //BootParamの変更がこれに以降にあると、いけない
-  //BootParamの内容のみがこの前に編集し切るべしである
-  //BootParamは、0x200000に配置します
+  // ブートパラメータのジャンプ方法
+  // さらに今後は固定されたメモリーアドレス空間において、カーネルに最も近いアドレスで行われる予定ですが、今は、メモリーのアドレスを渡します。
 
-  // Allocate a temporary structure
-  EFI_PHYSICAL_ADDRESS bp_addr;
-  bp_addr = 0x200000; // Boot paramater address
-  gBS->AllocatePages(AllocateAddress, EfiLoaderData, (sizeof(struct _boot_param) + 4095) / 4096, &bp_addr); //Alignmentしないとエラー。
-
-  struct _boot_param *bp = (struct _boot_param *)bp_addr;
-  bp->fb_setting = fb_con;
-
-  // Know where the structure
-  Print(L"[ BOOT CONFIG ADDRESS ] 0x0%p\n", bp);
+  EFI_PHYSICAL_ADDRESS fb_addr = (UINTN)&fb_con;
+  struct _boot_param bp;
+  bp.fb_addr = fb_addr;
 
   
   // Load the kernel file into structure

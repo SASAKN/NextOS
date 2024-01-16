@@ -1,11 +1,15 @@
 #pragma once
 #include <Uefi/UefiBaseType.h>
 
-
+// EFIからあゆ得したフレームバッファに必要
 enum pixel_format {
-    kPixelRGBResv8BitPerColor,
-    kPixelBGRResv8BitPerColor,
-};
+  efi_rgb,
+  efi_bgr,
+  efi_bit_mask,
+  efi_blt_only,
+  efi_format_max,
+  efi_unknown
+} EFI_GRAPHICS_PIXEL_FORMAT;
 
 
 // Frame Buffer
