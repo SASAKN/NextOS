@@ -114,14 +114,18 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   fb_con.fb_size = gop->Mode->FrameBufferSize;
   fb_con.base_addr = gop->Mode->FrameBufferBase;
   fb_con.pixels_per_scan_line = gop->Mode->Info->PixelsPerScanLine;
+  fb_con.pf = pf;
 
   //Note - [ Important ! ]
   // ブートパラメータのジャンプ方法
   // さらに今後は固定されたメモリーアドレス空間において、カーネルに最も近いアドレスで行われる予定ですが、今は、メモリーのアドレスを渡します。
 
-  EFI_PHYSICAL_ADDRESS fb_addr = (UINTN)&fb_con;
-  struct _boot_param bp;
-  bp.fb_addr = fb_addr;
+  struct _boot_param *bp;
+  bp->fb_addr = (UINTN)&fb_con; // fb_addr
+
+  // Calculate the boot paramater address and Allocate the boot paramater
+  bp = AllocatePool(sizeof(struct _boot_param));
+  UINTN bp_addr = (UINTN)bp;
 
   
   // Load the kernel file into structure
