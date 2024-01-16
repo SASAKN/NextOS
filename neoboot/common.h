@@ -12,10 +12,5 @@ void Halt(void);
 #define NEOBOOT_VERSION 1
 
 struct _boot_param {
-    EFI_PHYSICAL_ADDRESS fb_addr; //FBへのアドレス
-    int neoboot_ver; //ブートローダーバージョン
+    fb_config fb_setting; //Frame Buffer Setting
 };
-
-//ブートパラメーターの関係性について
-//ブートローダーバージョンがないと、カーネルはあ、ブートローダーから送られてきた情報の処理ができなくなる恐れがあります。
-//フレームバッファーは、起動時に送られ、画面表示に必要です。

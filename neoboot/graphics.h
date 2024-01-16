@@ -9,7 +9,7 @@ enum pixel_format {
   efi_blt_only,
   efi_format_max,
   efi_unknown
-} EFI_GRAPHICS_PIXEL_FORMAT;
+};
 
 
 // Frame Buffer
