@@ -121,11 +121,14 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   // さらに今後は固定されたメモリーアドレス空間において、カーネルに最も近いアドレスで行われる予定ですが、今は、メモリーのアドレスを渡します。
 
   // Allocate the structure of boot paramater
-  struct _boot_param *bp = AllocatePool(sizeof(struct _boot_param));
-
-  // Setting frame buffer for the kernel
+  struct _boot_param *bp;
   bp->fb_setting = fb_con;
-
+  status = gBS->AllocatePool(EfiLoaderData, sizeof(bp), (void **)&bp);
+  if (EFI_ERROR(status)) {
+    PrintError();
+    Print(L"Allocate Pool - BP\n");
+    Halt();
+  }
   
   // Load the kernel file into structure
   EFI_FILE_PROTOCOL *kernel_file;
