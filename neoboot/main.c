@@ -120,8 +120,11 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   // ブートパラメータのジャンプ方法
   // さらに今後は固定されたメモリーアドレス空間において、カーネルに最も近いアドレスで行われる予定ですが、今は、メモリーのアドレスを渡します。
 
-  struct _boot_param bp;
-  bp.fb_setting = fb_con;
+  // Allocate the structure of boot paramater
+  struct _boot_param *bp = AllocatePool(sizeof(struct _boot_param));
+
+  // Setting frame buffer for the kernel
+  bp->fb_setting = fb_con;
 
   
   // Load the kernel file into structure
@@ -213,7 +216,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   // Boot the kernel!!
   typedef void entry_point_t(struct _boot_param *bp);
   entry_point_t *entry_point = (entry_point_t *)entry_addr;
-  entry_point(&bp);
+  entry_point(bp);
 
   // stop cpu
   while (1)
