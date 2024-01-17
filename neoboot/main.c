@@ -116,6 +116,8 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   fb_con.pixels_per_scan_line = gop->Mode->Info->PixelsPerScanLine;
   fb_con.pf = pf;
 
+  Print(L"[ INFO ] Frame Buffer Base : 0x%x\n", fb_con.base_addr);
+
   //Note - [ Important ! ]
   // ブートパラメータのジャンプ方法
   // さらに今後は固定されたメモリーアドレス空間において、カーネルに最も近いアドレスで行われる予定ですが、今は、メモリーのアドレスを渡します。

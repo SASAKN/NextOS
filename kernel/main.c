@@ -10,12 +10,12 @@ void kernel_main(struct _boot_param bp) {
     }
 
     //とりあえず、Printせずにできるもので
-    __asm__ volatile ("movl %0 %%rdi;"
-                      : "r"(bp.fb_setting.base_addr));
-    __asm__ volatile ("movl %0 %%rsi;"
-                      : "r"(bp.fb_setting.fb_size));
-    __asm__ volatile ("movl %0 %%rdx;"
-                      : "r"(bp.fb_setting.pixels_per_scan_line));
+    asm volatile (
+        "movq %0, %%rax;" // RAXレジスターに値をセット
+        : // 出力オペランドはなし
+        : "r" (bp.fb_setting.base_addr) // 入力オペランドとして変数valueを指定
+        : "%rax" // 破壊されるレジスターを指定
+    );
     while(1) __asm__ volatile ("hlt");
 };
 
