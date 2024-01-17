@@ -20,7 +20,7 @@ qemu-system-x86_64 \
     -drive if=ide,index=0,media=disk,format=raw,file=${script_dir}/neos.img \
     -device nec-usb-xhci,id=xhci \
     -device usb-mouse -device usb-kbd \
-    -nographic -serial mon:stdio
+    -monitor stdio
 
 # -monitor stdio　//GUIを使いたい場合
 # -nographic -serial mon:stdio //CUIで、シリアルの出力と入力を受け取ったり、送信したりしたい場合
