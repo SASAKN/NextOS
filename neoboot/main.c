@@ -166,20 +166,16 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   }
 
   // Make a structure for a frame buffer of the kernel
-  fb_config fb_con;
-  fb_con.hr = gop->Mode->Info->HorizontalResolution;
-  fb_con.vr = gop->Mode->Info->VerticalResolution;
-  fb_con.fb_size = gop->Mode->FrameBufferSize;
-  fb_con.base_addr = gop->Mode->FrameBufferBase;
-  fb_con.pixels_per_scan_line = gop->Mode->Info->PixelsPerScanLine;
-  fb_con.pf = pf;
+  struct _boot_param bp;
+  bp.fb_setting.hr = gop->Mode->Info->HorizontalResolution;
+  bp.fb_setting.vr = gop->Mode->Info->VerticalResolution;
+  bp.fb_setting.fb_size = gop->Mode->FrameBufferSize;
+  bp.fb_setting.base_addr = gop->Mode->FrameBufferBase;
+  bp.fb_setting.pixels_per_scan_line = gop->Mode->Info->PixelsPerScanLine;
+  bp.fb_setting.pf = pf;
 
   // Print the frame buffer info
-  Print(L"\n[ INFO ] Frame Buffer\n Horizontal Resolution : %d \n Vertical Resolution : %d \n Size : %d \n Base Address : 0x%x \n Pixels Per Scan Line : %d \n Screen : %dx%d", fb_con.hr, fb_con.vr, fb_con.fb_size, fb_con.base_addr, fb_con.pixels_per_scan_line, fb_con.hr, fb_con.vr);
-
-  // Allocate the structure of boot paramater
-  struct _boot_param bp;
-  bp.fb_setting = fb_con;
+  Print(L"\n[ INFO ] Frame Buffer\n Horizontal Resolution : %d \n Vertical Resolution : %d \n Size : %d \n Base Address : 0x%x \n Pixels Per Scan Line : %d \n Screen : %dx%d", bp.fb_setting.hr, bp.fb_setting.vr, bp.fb_setting.fb_size, bp.fb_setting.base_addr, bp.fb_setting.pixels_per_scan_line, bp.fb_setting.hr, bp.fb_setting.vr);
 
   // Exit boot services
   status = gBS->ExitBootServices(IM, map.map_key);
