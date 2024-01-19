@@ -77,55 +77,6 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
   open_gop(IM, &gop);
 
-  // Print the screen info
-  PrintOK();
-  Print(L"Open the graphics protocol\n");
-  Print(L"\n[ INFO ] Graphics Info\n Horizontal Resolution : %u\n Vertical Resolution : %u\n Resolution : %ux%u\n Pixel Format Type : %x\n PixelsPerLine : %u\n\n",
-        gop->Mode->Info->HorizontalResolution,
-        gop->Mode->Info->VerticalResolution,
-        gop->Mode->Info->HorizontalResolution,
-        gop->Mode->Info->VerticalResolution,
-        gop->Mode->Info->PixelFormat,
-        gop->Mode->Info->PixelsPerScanLine);
-  
-  // Pixel Format
-  enum pixel_format pf;
-  switch (gop->Mode->Info->PixelFormat) {
-    case PixelRedGreenBlueReserved8BitPerColor:
-    pf = efi_rgb;
-    break;
-    case PixelBlueGreenRedReserved8BitPerColor:
-    pf =  efi_bgr;
-    case PixelBitMask:
-    pf = efi_bit_mask;
-    case PixelBltOnly:
-    pf = efi_blt_only;
-    case PixelFormatMax:
-    pf = efi_format_max;
-    default:
-    pf = efi_unknown;
-    break;
-  }
-
-  // Make a structure for a frame buffer of the kernel
-  fb_config fb_con;
-  fb_con.hr = gop->Mode->Info->HorizontalResolution;
-  fb_con.vr = gop->Mode->Info->VerticalResolution;
-  fb_con.fb_size = gop->Mode->FrameBufferSize;
-  fb_con.base_addr = gop->Mode->FrameBufferBase;
-  fb_con.pixels_per_scan_line = gop->Mode->Info->PixelsPerScanLine;
-  fb_con.pf = pf;
-
-  Print(L"[ INFO ] Frame Buffer Base : 0x%x\n", fb_con.base_addr);
-
-  //Note - [ Important ! ]
-  // ブートパラメータのジャンプ方法
-  // さらに今後は固定されたメモリーアドレス空間において、カーネルに最も近いアドレスで行われる予定ですが、今は、メモリーのアドレスを渡します。
-
-  // Allocate the structure of boot paramater
-  struct _boot_param bp;
-  bp.fb_setting = fb_con;
-
   // Load the kernel file into structure
   EFI_FILE_PROTOCOL *kernel_file;
   status = root_dir->Open(root_dir, &kernel_file, L"\\kernel.elf", EFI_FILE_MODE_READ, 0);
@@ -192,6 +143,51 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     Print(L"Free Pool: %r\n", status);
     Halt();
   }
+
+  // Print the screen info
+  PrintOK();
+  Print(L"Open the graphics protocol\n");
+  Print(L"\n[ INFO ] Graphics Info\n Horizontal Resolution : %u\n Vertical Resolution : %u\n Resolution : %ux%u\n Pixel Format Type : %x\n PixelsPerLine : %u\n\n",
+        gop->Mode->Info->HorizontalResolution,
+        gop->Mode->Info->VerticalResolution,
+        gop->Mode->Info->HorizontalResolution,
+        gop->Mode->Info->VerticalResolution,
+        gop->Mode->Info->PixelFormat,
+        gop->Mode->Info->PixelsPerScanLine);
+  
+  // Pixel Format
+  enum pixel_format pf;
+  switch (gop->Mode->Info->PixelFormat) {
+    case PixelRedGreenBlueReserved8BitPerColor:
+    pf = efi_rgb;
+    break;
+    case PixelBlueGreenRedReserved8BitPerColor:
+    pf =  efi_bgr;
+    case PixelBitMask:
+    pf = efi_bit_mask;
+    case PixelBltOnly:
+    pf = efi_blt_only;
+    case PixelFormatMax:
+    pf = efi_format_max;
+    default:
+    pf = efi_unknown;
+    break;
+  }
+
+  // Make a structure for a frame buffer of the kernel
+  fb_config fb_con;
+  fb_con.hr = gop->Mode->Info->HorizontalResolution;
+  fb_con.vr = gop->Mode->Info->VerticalResolution;
+  fb_con.fb_size = gop->Mode->FrameBufferSize;
+  fb_con.base_addr = gop->Mode->FrameBufferBase;
+  fb_con.pixels_per_scan_line = gop->Mode->Info->PixelsPerScanLine;
+  fb_con.pf = pf;
+
+  Print(L"[ INFO ] Frame Buffer Base : 0x%x\n", fb_con.base_addr);
+
+  // Allocate the structure of boot paramater
+  struct _boot_param bp;
+  bp.fb_setting = fb_con;
 
   // Exit boot services
   status = gBS->ExitBootServices(IM, map.map_key);
