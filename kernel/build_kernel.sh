@@ -11,8 +11,9 @@ ld.lld --entry kernel_main -z norelro --image-base 0x100000 --static -o kernel.e
 # First Output File : kernel.elf 
 # This is the neos kernel file
 
-if [$? = 0]; then
+if [ $? = 0 ]; then
     cp ${script_dir}/kernel.elf ${script_dir}/../neoboot/kernel.elf
+fi
 
 # Remove Temporary file
 rm kernel.o
