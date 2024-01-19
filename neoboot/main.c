@@ -76,6 +76,8 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   // Open uefi graphics output protocol
   EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
   open_gop(IM, &gop);
+  PrintOK();
+  Print(L"Open the graphics protocol\n");
 
   // Load the kernel file into structure
   EFI_FILE_PROTOCOL *kernel_file;
@@ -143,17 +145,6 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     Print(L"Free Pool: %r\n", status);
     Halt();
   }
-
-  // Print the screen info
-  PrintOK();
-  Print(L"Open the graphics protocol\n");
-  Print(L"\n[ INFO ] Graphics Info\n Horizontal Resolution : %u\n Vertical Resolution : %u\n Resolution : %ux%u\n Pixel Format Type : %x\n PixelsPerLine : %u\n\n",
-        gop->Mode->Info->HorizontalResolution,
-        gop->Mode->Info->VerticalResolution,
-        gop->Mode->Info->HorizontalResolution,
-        gop->Mode->Info->VerticalResolution,
-        gop->Mode->Info->PixelFormat,
-        gop->Mode->Info->PixelsPerScanLine);
   
   // Pixel Format
   enum pixel_format pf;
@@ -182,6 +173,16 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   fb_con.base_addr = gop->Mode->FrameBufferBase;
   fb_con.pixels_per_scan_line = gop->Mode->Info->PixelsPerScanLine;
   fb_con.pf = pf;
+
+  // Print the frame buffer info
+  Print(L"\n[ INFO ] Frame Buffer\n
+         Horizontal Resolution : %d \n
+         Vertical Resolution : %d \n
+         Size : %d \n
+         Base Address : %d \n
+         Pixels Per Scan Line : %d \n
+         Screen : %dx%d", 
+         fb_con.hr, fb_con.vr, fb_con.fb_size, fb_con.base_addr, fb_con.pixels_per_scan_line, fb_con.hr, fb_con.vr);
 
   Print(L"[ INFO ] Frame Buffer Base : 0x%x\n", fb_con.base_addr);
 
