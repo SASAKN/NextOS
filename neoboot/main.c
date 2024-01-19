@@ -174,6 +174,8 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   bp.fb_setting.pixels_per_scan_line = gop->Mode->Info->PixelsPerScanLine;
   bp.fb_setting.pf = pf;
 
+  unsigned long long bp_addr = (unsigned long long)&bp;
+
   // Print the frame buffer info
   Print(L"\n[ INFO ] Frame Buffer\n Horizontal Resolution : %d \n Vertical Resolution : %d \n Size : %d \n Pixels Per Scan Line : %d \n Screen : %dx%d", bp.fb_setting.hr, bp.fb_setting.vr, bp.fb_setting.fb_size, bp.fb_setting.pixels_per_scan_line, bp.fb_setting.hr, bp.fb_setting.vr);
 
@@ -196,10 +198,14 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
     }
   }
 
-  // Boot the kernel!!
-  typedef void entry_point_t(const struct _boot_param *bp);
-  entry_point_t *entry_point = (entry_point_t *)entry_addr;
-  entry_point(&bp);
+
+  // Boot the kernel !!(ASM)
+  __asm__ __volatile__ ("mov %0 %rdi\n", "r"(bp_addr));
+  __asm__ __volatile__ ("jmp")
+  // // Boot the kernel!! (C)
+  // typedef void entry_point_t(const struct _boot_param *bp);
+  // entry_point_t *entry_point = (entry_point_t *)entry_addr;
+  // entry_point(&bp);
 
   // stop cpu
   while (1)
