@@ -170,12 +170,12 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   bp.fb_setting.hr = gop->Mode->Info->HorizontalResolution;
   bp.fb_setting.vr = gop->Mode->Info->VerticalResolution;
   bp.fb_setting.fb_size = gop->Mode->FrameBufferSize;
-  bp.fb_setting.base_addr = gop->Mode->FrameBufferBase;
+  bp.fb_setting.base = (unsigned char *)gop->Mode->FrameBufferBase;
   bp.fb_setting.pixels_per_scan_line = gop->Mode->Info->PixelsPerScanLine;
   bp.fb_setting.pf = pf;
 
   // Print the frame buffer info
-  Print(L"\n[ INFO ] Frame Buffer\n Horizontal Resolution : %d \n Vertical Resolution : %d \n Size : %d \n Base Address : 0x%x \n Pixels Per Scan Line : %d \n Screen : %dx%d", bp.fb_setting.hr, bp.fb_setting.vr, bp.fb_setting.fb_size, bp.fb_setting.base_addr, bp.fb_setting.pixels_per_scan_line, bp.fb_setting.hr, bp.fb_setting.vr);
+  Print(L"\n[ INFO ] Frame Buffer\n Horizontal Resolution : %d \n Vertical Resolution : %d \n Size : %d \n Pixels Per Scan Line : %d \n Screen : %dx%d", bp.fb_setting.hr, bp.fb_setting.vr, bp.fb_setting.fb_size, bp.fb_setting.pixels_per_scan_line, bp.fb_setting.hr, bp.fb_setting.vr);
 
   // Exit boot services
   status = gBS->ExitBootServices(IM, map.map_key);
