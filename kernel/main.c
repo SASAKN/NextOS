@@ -13,25 +13,28 @@
 
 void mmio_write8_paddr(uint16_t paddr, uint8_t val) {
     __asm__ __volatile__ (
-        "mov dx, di\n"
-        "mov al, sil\n"
-        "out dx, al\n"
+        "mov %0, %%dx\n"
+        "mov %1, %%al\n"
+        "out %%al, %%dx\n"
         :
-        :
-        : "rdx", "rax"
+        : "r" (paddr), "r" (val)
+        : "dx", "al"
     );
 }
 
 uint8_t mmio_read8_paddr(uint16_t paddr) {
+    uint8_t result;
     __asm__ __volatile__ (
-        "xor eax, eax\n"
-        "mov dx, di\n"
-        "in al, dx\n"
-        :
-        :
-        : "rdx", "rax"
+        "xor %%eax, %%eax\n"
+        "mov %1, %%dx\n"
+        "in %%dx, %%al\n"
+        : "=a" (result)
+        : "r" (paddr)
+        : "dx"
     );
+    return result;
 }
+
 
 void arch_serial_write(char ch) {
     while ((mmio_read8_paddr(UART_LSR) & UART_LSR_TX_READY) == 0);
