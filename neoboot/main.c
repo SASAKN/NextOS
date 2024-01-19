@@ -200,8 +200,8 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
 
 
   // Boot the kernel !!(ASM)
-  __asm__ __volatile__ ("mov %0 %rdi\n", "r"(bp_addr));
-  __asm__ __volatile__ ("jmp")
+  __asm__ __volatile__ ("mov %0 %rdi", "r"(bp_addr));
+  __asm__ __volatile__ ("jmp *%0", "r"(entry_addr));
   // // Boot the kernel!! (C)
   // typedef void entry_point_t(const struct _boot_param *bp);
   // entry_point_t *entry_point = (entry_point_t *)entry_addr;
