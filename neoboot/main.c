@@ -175,16 +175,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   fb_con.pf = pf;
 
   // Print the frame buffer info
-  Print(L"\n[ INFO ] Frame Buffer\n
-         Horizontal Resolution : %d \n
-         Vertical Resolution : %d \n
-         Size : %d \n
-         Base Address : %d \n
-         Pixels Per Scan Line : %d \n
-         Screen : %dx%d", 
-         fb_con.hr, fb_con.vr, fb_con.fb_size, fb_con.base_addr, fb_con.pixels_per_scan_line, fb_con.hr, fb_con.vr);
-
-  Print(L"[ INFO ] Frame Buffer Base : 0x%x\n", fb_con.base_addr);
+  Print(L"\n[ INFO ] Frame Buffer\n Horizontal Resolution : %d \n Vertical Resolution : %d \n Size : %d \n Base Address : 0x%x \n Pixels Per Scan Line : %d \n Screen : %dx%d", fb_con.hr, fb_con.vr, fb_con.fb_size, fb_con.base_addr, fb_con.pixels_per_scan_line, fb_con.hr, fb_con.vr);
 
   // Allocate the structure of boot paramater
   struct _boot_param bp;
