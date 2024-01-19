@@ -22,12 +22,23 @@ void mmio_write8_paddr(uint16_t paddr, uint8_t val) {
     );
 }
 
+uint8_t mmio_read8_paddr(uint16_t paddr) {
+    __asm__ __volatile__ (
+        "xor eax, eax\n"
+        "mov dx, di\n"
+        "in al, dx\n"
+        :
+        :
+        : "rdx", "rax"
+    );
+}
+
 void arch_serial_write(char ch) {
     while ((mmio_read8_paddr(UART_LSR) & UART_LSR_TX_READY) == 0);
     mmio_write8_paddr(UART_THR, ch);
 }
 
-extern void kernel_main(void) {
+void kernel_main(void) {
     char a = 'a';
     arch_serial_write(a);
     while(1) __asm__ ("hlt");
