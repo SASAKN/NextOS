@@ -197,9 +197,9 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   }
 
   // Boot the kernel!!
-  typedef void entry_point_t(void);
+  typedef void entry_point_t(const struct _boot_param *bp);
   entry_point_t *entry_point = (entry_point_t *)entry_addr;
-  entry_point();
+  entry_point(&bp);
 
   // stop cpu
   while (1)
