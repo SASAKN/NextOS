@@ -10,6 +10,12 @@ enum pixel_format {
   efi_unknown
 };
 
+struct fb {
+  uint8_t r;
+  uint8_t g;
+  uint8_t b;
+}
+
 
 // Frame Buffer
 typedef struct _fb_config {
