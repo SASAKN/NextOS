@@ -10,14 +10,15 @@ enum pixel_format {
   efi_unknown
 };
 
-struct fb {
+// Frame Buffer
+typedef struct _fb {
   uint8_t r;
   uint8_t g;
   uint8_t b;
-}
+} fb;
 
 
-// Frame Buffer
+// Frame Buffer Config
 typedef struct _fb_config {
     unsigned int hr; //水平の画質
     unsigned int vr; //垂直の画質
