@@ -1,4 +1,5 @@
 #pragma once
+#include <neos/types.h>
 
 // Pixel Format
 enum pixel_format {
