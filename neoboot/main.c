@@ -151,17 +151,23 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   switch (gop->Mode->Info->PixelFormat) {
     case PixelRedGreenBlueReserved8BitPerColor:
     pf = efi_rgb;
+    Print(L"[ Support ] This PC can display\n");
     break;
     case PixelBlueGreenRedReserved8BitPerColor:
     pf =  efi_bgr;
+    Print(L"[ Support ] This PC can display\n");
     case PixelBitMask:
     pf = efi_bit_mask;
+    Print(L"[ NOT Support ] This PC CAN NOT display\n");
     case PixelBltOnly:
     pf = efi_blt_only;
+    Print(L"[ NOT Support ] This PC CAN NOT display\n");
     case PixelFormatMax:
     pf = efi_format_max;
+    Print(L"[ NOT Support ] This PC CAN NOT display\n");
     default:
     pf = efi_unknown;
+    Print(L"[ Unknown ] Reboot your computer\n");
     break;
   }
 
