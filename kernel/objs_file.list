@@ -1,3 +1,4 @@
 main.o
 graphics.o
 font.o
+text.o
