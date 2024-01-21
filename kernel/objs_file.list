@@ -1,4 +1,4 @@
 main.o
 graphics.o
-font.o
+hankaku.o
 text.o
