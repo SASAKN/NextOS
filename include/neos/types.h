@@ -6,7 +6,7 @@
 #define FALSE 0
 
 /* NULL */
-typedef void NULL;
+#define NULL ((void*)0)
 
 /* Boolean */
 typedef unsigned char bool;
