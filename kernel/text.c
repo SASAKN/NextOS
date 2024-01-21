@@ -10,10 +10,10 @@ extern const uint8_t _binary_hankaku_bin_size;
 
 const uint8_t *get_font(char c) {
     uintptr_t index = 16 * (unsigned int)c;
-    if (index >= (uintptr_t)&_binary_font_bin_size) {
+    if (index >= (uintptr_t)&_binary_hankaku_bin_size) {
         return NULL;
     }
-    return &_binary_font_bin_start + index;
+    return &_binary_hankaku_bin_start + index;
 }
 
 void write_ascii(const fb_config *fb_con, int x, int y, char c, const fb *fb) {
