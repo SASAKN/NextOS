@@ -36,3 +36,20 @@ EFI_STATUS open_gop(EFI_HANDLE IM, EFI_GRAPHICS_OUTPUT_PROTOCOL **gop) {
 
     return EFI_SUCCESS;
 }
+
+const CHAR16 *get_pf_unicode(EFI_GRAPHICS_OUTPUT_PROTOCOL fmt) {
+    switch(fmt) {
+        case PixelRedGreenBlueReserved8BitPerColor:
+            return L"PixelRedGreenBlueReserved8BitPerColor";
+        case PixelBlueGreenRedReserved8BitPerColor:
+            return L"PixelBlueGreenRedReserved8BitPerColor";
+        case PixelBitMask:
+            return L"PixelBitMask";
+        case PixelBltOnly:
+            return L"PixelBltOnly";
+        case PixelFormatMax:
+            return L"PixelFormatMax";
+        default:
+            return L"UnknownPixelFormat";
+    }
+}

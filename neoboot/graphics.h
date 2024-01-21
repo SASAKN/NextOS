@@ -24,3 +24,4 @@ typedef struct _fb_config {
 
 
 EFI_STATUS open_gop(EFI_HANDLE IM, EFI_GRAPHICS_OUTPUT_PROTOCOL **gop);
+const CHAR16 *get_pf_unicode(EFI_GRAPHICS_OUTPUT_PROTOCOL fmt);
