@@ -12,7 +12,7 @@ ld.lld --entry kernel_main -z norelro --image-base 0x100000 --static -o kernel.e
 # This is the neos kernel file
 
 if [ $? = 0 ]; then
-    rm kernel.o
+    rm $(cat ${script_dir}/objs_file.list)
     cp ${script_dir}/kernel.elf ${script_dir}/../neoboot/kernel.elf
 else
     echo "[ EROOR ] Can not create the kernel file"
