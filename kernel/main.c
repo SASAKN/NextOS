@@ -3,6 +3,7 @@
 #include "include/proto.h"
 
 void kernel_main(const fb_config *fb_con) {
+    // BackGroundを作成
     fb bg;
     bg.r = 66;
     bg.g = 135;
@@ -12,6 +13,7 @@ void kernel_main(const fb_config *fb_con) {
             write_pixel(fb_con, x, y, &bg);
         }
     }
+    
     while(TRUE) __asm__ ("hlt");
 }
 
