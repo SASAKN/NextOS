@@ -157,17 +157,17 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE IM, EFI_SYSTEM_TABLE *sys_table) {
   // Pixel Format
   switch (gop->Mode->Info->PixelFormat) {
     case PixelRedGreenBlueReserved8BitPerColor:
-    fb_con.pf = efi_rgb;
-    break;
+      fb_con.pf = efi_rgb;
+      break;
     case PixelBlueGreenRedReserved8BitPerColor:
-    fb_con.pf =  efi_bgr;
+      fb_con.pf =  efi_bgr;
+      break;
     default:
-    fb_con.pf = efi_unknown;
-    break;
+      Halt();
   }
 
   // Print the frame buffer info
-  Print(L"\n[ INFO ] Frame Buffer\n Horizontal Resolution : %d \n Vertical Resolution : %d \n Size : %d \n Pixels Per Scan Line : %d \n Screen : %dx%d", fb_con.hr, fb_con.vr, fb_con.fb_size, fb_con.pixels_per_scan_line, fb_con.hr, fb_con.vr);
+  Print(L"\n[ INFO ] Frame Buffer\n Horizontal Resolution : %d \n Vertical Resolution : %d \n Size : %d \n Pixels Per Scan Line : %d \n Screen : %dx%d \n Pixel Format: %s", fb_con.hr, fb_con.vr, fb_con.fb_size, fb_con.pixels_per_scan_line, fb_con.hr, fb_con.vr, get_pf_unicode(gop->Mode->Info->PixelFormat));
 
   // Exit boot services
   status = gBS->ExitBootServices(IM, map.map_key);
