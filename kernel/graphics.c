@@ -1,4 +1,5 @@
 #include <neos/types.h>
+#include "include/proto.h"
 #include "include/graphics.h"
 
 // Write Pixel
@@ -17,7 +18,7 @@ void write_pixel(const fb_config *fb_con, uint32_t x, uint32_t y, const fb *fb) 
         pixel[1] = fb->g; // GREEN
         pixel[2] = fb->r; // RED
     } else if (fb_con->pf == efi_unknown) {
-        
+        halt();
     }
     //他にもpixel_formatはあるが実装していない
 }
