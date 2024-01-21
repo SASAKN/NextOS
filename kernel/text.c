@@ -4,9 +4,9 @@
 #include "include/font.h"
 
 //font.oにある定数
-extern const _binary_font_bin_start;
-extern const _binary_font_bin_end;
-extern const _binary_font_bin_size;
+extern const uint8_t _binary_font_bin_start;
+extern const uint8_t _binary_font_bin_end;
+extern const uint8_t _binary_font_bin_size;
 
 const uint8_t *get_font(char c) {
     uintptr_t index = 16 * (unsigned int)c;
@@ -17,7 +17,7 @@ const uint8_t *get_font(char c) {
 }
 
 void write_ascii(const fb_config *fb_con, int x, int y, char c, const fb *fb) {
-    const uint8_t font = get_font(c);
+    const uint8_t *font = get_font(c);
     if (font == NULL) {
         return;
     }
