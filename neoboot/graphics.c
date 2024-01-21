@@ -37,7 +37,7 @@ EFI_STATUS open_gop(EFI_HANDLE IM, EFI_GRAPHICS_OUTPUT_PROTOCOL **gop) {
     return EFI_SUCCESS;
 }
 
-const CHAR16 *get_pf_unicode(EFI_GRAPHICS_OUTPUT_PROTOCOL fmt) {
+const CHAR16 *get_pf_unicode(EFI_GRAPHICS_PIXEL_FORMAT fmt) {
     switch(fmt) {
         case PixelRedGreenBlueReserved8BitPerColor:
             return L"PixelRedGreenBlueReserved8BitPerColor";
