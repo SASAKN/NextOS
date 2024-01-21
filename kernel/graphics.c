@@ -4,7 +4,7 @@
 
 // Write Pixel
 void write_pixel(const fb_config *fb_con, uint32_t x, uint32_t y, const fb *fb) {
-    const uint32_t pixel_position = fb_con->pixels_per_scan_line * y + x;
+    const int pixel_position = fb_con->pixels_per_scan_line * y + x;
     // PixelRedGreenBlueReserved8BitPerColor
     if (fb_con->pf == efi_rgb) {
         unsigned char *pixel = &fb_con->base[4 * pixel_position];
