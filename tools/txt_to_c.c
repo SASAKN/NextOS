@@ -64,7 +64,7 @@ int main() {
     }
 
     //ファイルの最後を追加
-    fwritte(str2, sizeof(char), strlen(str2), font_c);
+    fwrite(str2, sizeof(char), strlen(str2), font_c);
 
     //ファイルをクローズ
     fclose(font_txt);
