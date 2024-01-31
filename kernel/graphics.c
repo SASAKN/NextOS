@@ -25,7 +25,12 @@ void write_pixel(const fb_config *fb_con, uint32_t x, uint32_t y, const color *c
     }
 }
 
-void putfont8(const fb_config *fb_con, uint32_t x, uint32_t y, const color *color, char c) {
+const char *get_font(char c) {
+    int ascii_code = (int)c; // Asciiコードに変換
+    return font[ascii_code]
+}
+
+void putfont(const fb_config *fb_con, uint32_t x, uint32_t y, const color *color, char c) {
     for (int dy = 0; dy < 16; dy++) {
         for (int dx = 0; dx < 8; dx++) {
             if ((font[dy] << dx) & 0x80u) {
