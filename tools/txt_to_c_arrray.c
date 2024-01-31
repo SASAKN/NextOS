@@ -57,18 +57,15 @@ int main() {
                     d |= (1 << (8 - j - 1));
                 }
             }
-            
-            //行最後は、必ず,があってはいけない
-            if (i != 15) {
-                sprintf(wbuffer, "0x%02x, ", d);
-            } else {
-                sprintf(wbuffer, "0x%02x", d);
-            }
 
-            //最後の特別な処理
+            sprintf(wbuffer, "0x%02x, ", d);
+
+            //行最後と配列の最後の特別な処理
             if (k == 255 && i == 15) {
                 fwrite(wbuffer, 1, 4, font_c);
-            } else {
+            } else if (i == 15) {
+                fwrite(wbuffer, 1, 4, font_c);
+            } else  {
                 fwrite(wbuffer, 1, 6, font_c);
             }
         }
