@@ -2,6 +2,9 @@
 #include "include/proto.h"
 #include "include/graphics.h"
 
+//これは、Kernel-modeドライバーです。
+// いつかマイクロカーネルにしたい
+
 // Write Pixel
 void write_pixel(const fb_config *fb_con, uint32_t x, uint32_t y, const fb *fb) {
     const int pixel_position = fb_con->pixels_per_scan_line * y + x;

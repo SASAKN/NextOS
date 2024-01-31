@@ -1,6 +1,13 @@
 #pragma once
 #include <neos/types.h>
 
+// Graphics Color
+#define COLOR_CONSOLE_BG {0x00, 0x00, 0x00}
+#define COLOR_CONSOLE_TEXT {0xff, 0xff, 0xff}
+#define COLOR_CONSOLE_ERR {0xff, 0x00, 0x00}
+#define COLOR_CONSOLE_WARN {0xff, 0xff, 0x00}
+#define COLOR_CONSOLE_DEB {0x00, 0xff, 0xff}
+
 // Pixel Format
 enum pixel_format {
   efi_rgb,
