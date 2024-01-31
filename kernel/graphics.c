@@ -27,7 +27,7 @@ void write_pixel(const fb_config *fb_con, uint32_t x, uint32_t y, const color *c
 
 const char *get_font(char c) {
     int ascii_code = (int)c; // Asciiコードに変換
-    return font[ascii_code]
+    return font[65 * 16];
 }
 
 void putfont(const fb_config *fb_con, uint32_t x, uint32_t y, const color *color, char c) {
