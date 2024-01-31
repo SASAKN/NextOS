@@ -6,8 +6,10 @@
 int main() {
     FILE *font_txt;
     FILE *font_c;
-    char str1[] = "char font[4096] =  {\n  "; //宣言部
-    char str2[] = "\n};"; //終わり
+    char str1[] = "char font[256][16] =  {\n"; //宣言部
+    char str2[] = "    {";
+    char str3[] = "}\n";
+    char str4[] = "\n};"; //終わり
     char buffer[256] = {0};
     char wbuffer[256] = {0};
     char filename_txt[50];
@@ -40,6 +42,8 @@ int main() {
     //テキストファイルから行を取得し、書き込む
     fgets(buffer, sizeof(buffer), font_txt);
     for (int k = 0; k < 256; k++) {
+        //２次元配列の宣言部を書き込み
+        fwrite(str2, sizeof(char), strlen(str2), font_c);
         for (int i = 0; i < 2; i++) {
             fgets(buffer, sizeof(buffer), font_txt);
         }
@@ -53,18 +57,24 @@ int main() {
                     d |= (1 << (8 - j - 1));
                 }
             }
+
             sprintf(wbuffer, "0x%02x, ", d);
+
+            //行最後と配列の最後の特別な処理
             if (k == 255 && i == 15) {
                 fwrite(wbuffer, 1, 4, font_c);
-            } else {
+            } else if (i == 15) {
+                fwrite(wbuffer, 1, 4, font_c);
+            } else  {
                 fwrite(wbuffer, 1, 6, font_c);
             }
         }
-        fwrite("\n  ", 1, 3, font_c);
+        //2次元配列の最後を書き込み
+        fwrite(str3, sizeof(char), strlen(str3), font_c);
     }
 
     //ファイルの最後を追加
-    fwrite(str2, sizeof(char), strlen(str2), font_c);
+    fwrite(str4, sizeof(char), strlen(str4), font_c);
 
     //ファイルをクローズ
     fclose(font_txt);
