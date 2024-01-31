@@ -14,7 +14,7 @@ void kernel_main(const fb_config *fb_con) {
             write_pixel(fb_con, x, y, &bg);
         }
     }
-    
+
     while(TRUE) __asm__ ("hlt");
 }
 
