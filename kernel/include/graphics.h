@@ -19,11 +19,11 @@ enum pixel_format {
 };
 
 // Frame Buffer
-typedef struct _fb {
+typedef struct _color {
   uint8_t r;
   uint8_t g;
   uint8_t b;
-} fb;
+} color;
 
 
 // Frame Buffer Config
