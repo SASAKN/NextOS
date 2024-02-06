@@ -8,7 +8,7 @@ int main() {
     FILE *font_c;
     char str1[] = "char font[256][16] =  {\n"; //宣言部
     char str2[] = "    {";
-    char str3[] = "}\n";
+    char str3[] = "},\n";
     char str4[] = "\n};"; //終わり
     char buffer[256] = {0};
     char wbuffer[256] = {0};
