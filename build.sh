@@ -4,6 +4,9 @@ script_dir="$(dirname "$(readlink -f "$0")")"
 # カーネルパス
 KERNEL_PATH=${script_dir}/kernel/kernel.elf
 
+#カーネルソースコードのパス
+KERNEL_SOURCE_DIR=${script_dir}/kernel/
+
 # ブートローダーパス
 LOADER_PATH=${script_dir}/neoboot/loader.efi
 
@@ -77,6 +80,7 @@ function run_image() {
     -monitor stdio
 }
 
+#使い方
 function usage() {
     echo ""
     echo "NextOS Build Tools - Help"
@@ -85,8 +89,25 @@ function usage() {
     echo ""
 }
 
+#クリーン
 function trouble() {
     rm -f ${IMAGE_PATH} ${IMAGE_PATH}.dmg
+}
+
+#カーネルのビルド
+function build_kernel() {
+    #カーネルのビルド
+    clang -O2 -Wall -g --target=x86_64-elf -ffreestanding -mno-red-zone -fno-exceptions -fshort-wchar -fno-rtti -I ../include/ -c $(cat ${KERNEL_SOURCE_DIR}/complile_file.list)
+    ld.lld --entry kernel_main -z norelro --image-base 0x100000 --static -o ${KERNEL_PATH} $(cat ${KERNEL_SOURCE_DIR}/objs_file.list)
+
+    #ビルドエラーのチェック
+    if [$? = 0]; then
+        rm $(cat ${KERNEL_SOURCE_DIR}/objs_file.list)
+    else 
+        echo -e "\e[31m[ ERROR ]"
+        echo -e "\e[37m Failed to build the kernel"
+        exit
+    fi
 }
 
 while (( $# > 0 ))
@@ -100,12 +121,11 @@ do
       run_image
       ;;
     help | HELP)
-        echo "削除完了"
         usage
         ;;
     clean | trouble | CLEAN | TROUBLE)
         trouble
-        usage
+        echo "削除完了"
         ;;
     *)
       usage

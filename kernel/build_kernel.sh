@@ -5,7 +5,6 @@
 script_dir="$(dirname "$(readlink -f "$0")")"
 
 # First, build the kernel file
-cp ${script_dir}/hankaku.bak ${script_dir}/hankaku.o
 clang -O2 -Wall -g --target=x86_64-elf -ffreestanding -mno-red-zone -fno-exceptions -fshort-wchar -fno-rtti -I ../include/ -c $(cat ${script_dir}/complile_file.list)
 ld.lld --entry kernel_main -z norelro --image-base 0x100000 --static -o kernel.elf $(cat ${script_dir}/objs_file.list)
 
