@@ -93,7 +93,8 @@ while (( $# > 0 ))
 do
   case $1 in
     release | RELEASE)
-      echo -e "\e[32m[RELEASE] RELEASE VERSION]"
+      echo -e "\e[32m[RELEASE] RELEASE VERSION"
+      echo -e "\e[37m"
       make_image
       kill_proc
       run_image
