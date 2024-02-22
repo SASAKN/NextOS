@@ -2,12 +2,13 @@
 .vscode/*
 .DS_Store
 *.o
-*.efi
+neoboot/*.efi
 *.fd
 *.a
 *.lib
 *.dmg
-*.elf
+neoboot/*.elf
+kernel/*.elf
 test.c
 *.img
 *.cdr
