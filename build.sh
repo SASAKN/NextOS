@@ -91,18 +91,21 @@ function usage() {
 
 #クリーン
 function trouble() {
+    rm -f ${KERNEL_PATH}
     rm -f ${IMAGE_PATH} ${IMAGE_PATH}.dmg
 }
 
 #カーネルのビルド
 function build_kernel() {
     #カーネルのビルド
-    clang -O2 -Wall -g --target=x86_64-elf -ffreestanding -mno-red-zone -fno-exceptions -fshort-wchar -fno-rtti -I ../include/ -c $(cat ${KERNEL_SOURCE_DIR}/complile_file.list)
+    cd ${KERNEL_SOURCE_DIR}
+    clang -O2 -Wall -g --target=x86_64-elf -ffreestanding -mno-red-zone -fno-exceptions -fshort-wchar -fno-rtti -I ${KERNEL_SOURCE_DIR}/../include/ -c $(cat ${KERNEL_SOURCE_DIR}/complile_file.list)
     ld.lld --entry kernel_main -z norelro --image-base 0x100000 --static -o ${KERNEL_PATH} $(cat ${KERNEL_SOURCE_DIR}/objs_file.list)
 
     #ビルドエラーのチェック
-    if [$? = 0]; then
+    if [ $? = 0 ]; then
         rm $(cat ${KERNEL_SOURCE_DIR}/objs_file.list)
+        cd ${script_dir}
     else 
         echo -e "\e[31m[ ERROR ]"
         echo -e "\e[37m Failed to build the kernel"
@@ -116,10 +119,14 @@ do
     release | RELEASE)
       echo -e "\e[32m[RELEASE] RELEASE VERSION"
       echo -e "\e[37m"
+      build_kernel
       make_image
       kill_proc
       run_image
       ;;
+    kernel | KERNEL)
+        build_kernel
+        ;;
     help | HELP)
         usage
         ;;
