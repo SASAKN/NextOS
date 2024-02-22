@@ -18,3 +18,4 @@ my-operating-system.code-workspace
 *.so
 uefilib/
 MyBootLoader/
+*.bdf
