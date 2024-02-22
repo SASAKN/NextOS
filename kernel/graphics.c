@@ -8,7 +8,7 @@
 extern char font[4096];
 
 // Write Pixel
-void write_pixel(const fb_config *fb_con, uint32_t x, uint32_t y, const color *color) {
+void write_pixel(const fb_config *fb_con, uint32_t x, uint32_t y, const fb *color) {
     const int pixel_position = fb_con->pixels_per_scan_line * y + x;
     // PixelRedGreenBlueReserved8BitPerColor
     if (fb_con->pf == efi_rgb) {
@@ -22,21 +22,6 @@ void write_pixel(const fb_config *fb_con, uint32_t x, uint32_t y, const color *c
         pixel[0] = color->b; // BLUE
         pixel[1] = color->g; // GREEN
         pixel[2] = color->r; // RED
-    }
-}
-
-const char *get_font(char c) {
-    int ascii_code = (int)c; // Asciiコードに変換
-    return font[65 * 16];
-}
-
-void putfont(const fb_config *fb_con, uint32_t x, uint32_t y, const color *color, char c) {
-    for (int dy = 0; dy < 16; dy++) {
-        for (int dx = 0; dx < 8; dx++) {
-            if ((font[dy] << dx) & 0x80u) {
-                write_pixel(x + dx, y + dy, color);
-            }
-        }
     }
 }
 
