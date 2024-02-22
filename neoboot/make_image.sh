@@ -11,9 +11,8 @@ function usage() {
     echo "Developerがこれをせず、実行し、neobootディレクトリーをコピーして起動させてしまい、失敗する人がいます"
 }
 
-#ルートファイルシステムを作成
+#使い方の表示
 usage
-source ${script_dir}/make_root_fs.sh
 
 #DMGファイルの作成
 hdiutil create -size 1g -fs MS-DOS -volname NEOS neos.img
