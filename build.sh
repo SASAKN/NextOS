@@ -34,7 +34,7 @@ function make_image() {
     cd /Volumes/${VOLUME_NAME}
 
     # ファイル構成の作成
-    mkdir -p EFI/BOOT
+    mkdir -p /Volumes/${VOLUME_NAME}/EFI/BOOT
 
     # EFI/BOOTに移動
     cd /Volumes/${VOLUME_NAME}/EFI/BOOT
@@ -47,6 +47,9 @@ function make_image() {
 
     # 作業フォルダーに戻る
     cd ${script_dir}
+
+    #作業ファイルの削除
+    rm *.img.dmg
 
     # アンマウント
     hdiutil unmount /Volumes/${VOLUME_NAME} -force
@@ -83,19 +86,20 @@ function usage() {
 }
 
 function trouble() {
-    rm -f ${IMAGE_PATH}
+    rm -f ${IMAGE_PATH} ${IMAGE_PATH}.dmg
 }
 
 while (( $# > 0 ))
 do
   case $1 in
     release | RELEASE)
-      echo -e "\e[32m[RELEASE] RELEASE VERSION\e"
+      echo -e "\e[32m[RELEASE] RELEASE VERSION]"
       make_image
       kill_proc
       run_image
       ;;
     help | HELP)
+        echo "削除完了"
         usage
         ;;
     clean | trouble | CLEAN | TROUBLE)
