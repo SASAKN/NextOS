@@ -40,7 +40,7 @@ typedef uint64_t u64;
 
 
 /* Neosが使うマクロ */
-typedef error_t int32_t
+typedef int32_t error_t;
 
 /* Process */
 

@@ -109,7 +109,6 @@ function build_kernel() {
     else 
         echo -e "\e[31m[ ERROR ]"
         echo -e "\e[37m Failed to build the kernel"
-        exit
     fi
 }
 
